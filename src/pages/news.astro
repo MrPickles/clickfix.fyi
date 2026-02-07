@@ -1,0 +1,76 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import NewsComponent from "../components/News.astro";
+---
+
+<Layout title="Latest ClickFix News & Alerts | ClickFix.fyi">
+	<Header />
+
+	<main class="container section">
+		<h1>Recent Alerts & News</h1>
+		<p>
+			Stay informed about the latest campaigns and variations of the
+			ClickFix scam observed in the wild.
+		</p>
+
+		<div style="margin-top: 3rem;">
+			<NewsComponent />
+		</div>
+
+		<section class="additional-resources section">
+			<h2>External Resources</h2>
+			<div class="card">
+				<ul class="resource-list">
+					<li>
+						<a
+							href="https://www.microsoft.com/en-us/security/blog/2024/05/15/security-alert-social-engineering-tactics-targeting-organizations/"
+							target="_blank"
+						>
+							<strong>Microsoft:</strong> Social engineering tactics
+							targeting tens of thousands of organizations.
+						</a>
+					</li>
+					<li>
+						<a
+							href="https://www.eset.com/blog/security-advisory/clickfix-campaigns-on-the-rise/"
+							target="_blank"
+						>
+							<strong>ESET:</strong> Technical analysis of the 500%
+							surge in ClickFix activity.
+						</a>
+					</li>
+					<li>
+						<a href="https://thehackernews.com" target="_blank">
+							<strong>The Hacker News:</strong> Coverage of Lumma Stealer
+							and its delivery methods.
+						</a>
+					</li>
+				</ul>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.resource-list {
+		list-style: none;
+		padding: 0;
+	}
+	.resource-list li {
+		margin-bottom: 1.5rem;
+	}
+	.resource-list a {
+		color: var(--accent-color);
+		text-decoration: none;
+		display: block;
+	}
+	.resource-list a:hover {
+		text-decoration: underline;
+	}
+	.resource-list strong {
+		display: block;
+		color: var(--text-color);
+		margin-bottom: 0.25rem;
+	}
+</style>

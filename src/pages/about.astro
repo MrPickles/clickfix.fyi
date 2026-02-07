@@ -1,0 +1,356 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+---
+
+<Layout title="About ClickFix | ClickFix.fyi">
+	<Header />
+
+	<main class="container section">
+		<h1>What is ClickFix?</h1>
+
+		<p class="lead">
+			ClickFix is a scam that tricks people into running malicious
+			software on their own computers. It works by making you think your
+			browser or computer has a problem that needs fixing.
+		</p>
+
+		<h2>How is it different from other scams?</h2>
+		<p>
+			Most computer scams try to get you to download a file. Your browser
+			usually warns you about suspicious downloads. ClickFix is
+			sneakier—it gets around these warnings by making <strong>you</strong
+			> run the malicious code yourself using your computer's built-in tools.
+		</p>
+
+		<div class="info-box">
+			<h3>The key trick:</h3>
+			<p>Instead of downloading a file, ClickFix tells you to:</p>
+			<ol>
+				<li>
+					Press <strong>Windows + R</strong> (opens a system command window)
+				</li>
+				<li>
+					Press <strong>Ctrl + V</strong> (pastes a hidden command)
+				</li>
+				<li>Press <strong>Enter</strong> (runs the malicious code)</li>
+			</ol>
+			<p>
+				Because <em>you're</em> the one pressing the keys, your computer's
+				security software doesn't stop it.
+			</p>
+		</div>
+
+		<h2>Who gets targeted?</h2>
+		<p>
+			Anyone can encounter ClickFix, but attackers have specifically
+			targeted:
+		</p>
+		<ul>
+			<li>
+				<strong>Healthcare workers</strong> - Through compromised medical
+				resource websites
+			</li>
+			<li><strong>Hotel staff</strong> - Via fake Booking.com emails</li>
+			<li>
+				<strong>Office workers</strong> - Through fake Google Meet or Microsoft
+				Teams links
+			</li>
+			<li>
+				<strong>Online shoppers</strong> - On compromised e-commerce sites
+			</li>
+		</ul>
+
+		<h2>How big is the problem?</h2>
+		<div class="stats-grid">
+			<div class="stat-card card">
+				<div class="stat-number">517%</div>
+				<div class="stat-label">
+					Increase in ClickFix attacks in early 2025 (ESET)
+				</div>
+			</div>
+			<div class="stat-card card">
+				<div class="stat-number">400%</div>
+				<div class="stat-label">
+					Growth in malicious ClickFix URLs from 2024 to 2025
+					(Proofpoint)
+				</div>
+			</div>
+			<div class="stat-card card">
+				<div class="stat-number">#2</div>
+				<div class="stat-label">
+					Most common attack method after phishing (ESET, 2025)
+				</div>
+			</div>
+		</div>
+
+		<h2>What happens if you fall for it?</h2>
+		<p>
+			The malicious code typically installs "infostealer" software that:
+		</p>
+		<ul>
+			<li>Steals all your saved passwords from your browser</li>
+			<li>
+				Takes your login cookies (so attackers can access your accounts)
+			</li>
+			<li>Searches for cryptocurrency wallet files</li>
+			<li>Captures screenshots of your screen</li>
+			<li>Sometimes installs ransomware or remote access tools</li>
+		</ul>
+
+		<div class="malware-box card">
+			<h3>Common Malware Families</h3>
+			<p>
+				These are the actual malware programs distributed through
+				ClickFix attacks:
+			</p>
+			<ul>
+				<li>
+					<strong>Lumma Stealer (LummaC2)</strong> - The most common. Steals
+					passwords, cookies, and cryptocurrency wallets.
+				</li>
+				<li>
+					<strong>Vidar Stealer</strong> - Similar to Lumma, focuses on
+					browser data and crypto.
+				</li>
+				<li>
+					<strong>DarkGate</strong> - A "Remote Access Trojan" that gives
+					attackers full control of your computer.
+				</li>
+				<li>
+					<strong>AsyncRAT / DCRAT</strong> - Tools that let attackers
+					spy on you and control your PC remotely.
+				</li>
+			</ul>
+		</div>
+
+		<div class="timeline-box">
+			<h2>Timeline: How ClickFix Evolved</h2>
+			<div class="timeline">
+				<div class="timeline-item">
+					<div class="timeline-date">Early 2024</div>
+					<div class="timeline-content">
+						<strong>First Detection</strong>
+						<p>
+							Security researchers first identify the ClickFix
+							technique being used in the wild.
+						</p>
+					</div>
+				</div>
+				<div class="timeline-item">
+					<div class="timeline-date">May 2024</div>
+					<div class="timeline-content">
+						<strong>Microsoft Warning</strong>
+						<p>
+							Microsoft Threat Intelligence warns of Storm-1607
+							campaigns targeting tens of thousands of
+							organizations.
+						</p>
+					</div>
+				</div>
+				<div class="timeline-item">
+					<div class="timeline-date">Aug 2024</div>
+					<div class="timeline-content">
+						<strong>Organized Crime Involvement</strong>
+						<p>
+							Cybercrime groups Slavic Nation Empire and
+							Scamquerteo begin using ClickFix for cryptocurrency
+							scams.
+						</p>
+					</div>
+				</div>
+				<div class="timeline-item">
+					<div class="timeline-date">Late 2024</div>
+					<div class="timeline-content">
+						<strong>DIY Kits Available</strong>
+						<p>
+							"ClickFix builders" start being sold on hacker
+							forums, making the attack accessible to less-skilled
+							criminals.
+						</p>
+					</div>
+				</div>
+				<div class="timeline-item">
+					<div class="timeline-date">Early 2025</div>
+					<div class="timeline-content">
+						<strong>Massive Surge</strong>
+						<p>
+							Attacks increase by over 500%, becoming the second
+							most common attack method globally.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="learn-more card">
+			<h3>Want to learn more?</h3>
+			<p>
+				See exactly how the attack works, step by step, with real
+				examples.
+			</p>
+			<a href="/how-it-works" class="btn btn-primary">See How It Works</a>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.lead {
+		font-size: 1.35rem;
+		font-weight: 500;
+		margin-bottom: 2.5rem;
+		line-height: 1.6;
+		color: #374151;
+	}
+
+	.info-box {
+		background: #eff6ff;
+		border-left: 4px solid var(--accent-color);
+		padding: 1.5rem;
+		margin: 2rem 0;
+		border-radius: 4px;
+	}
+
+	.info-box h3 {
+		margin-top: 0;
+		color: var(--accent-color);
+	}
+
+	.info-box ol {
+		margin: 1rem 0;
+		padding-left: 1.5rem;
+	}
+
+	.info-box li {
+		margin-bottom: 0.5rem;
+	}
+
+	.stats-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 1.5rem;
+		margin: 2rem 0 3rem;
+	}
+
+	.stat-card {
+		text-align: center;
+		padding: 2rem 1.5rem;
+		background: #f9fafb;
+	}
+
+	.stat-number {
+		font-size: 3rem;
+		font-weight: 800;
+		color: var(--accent-color);
+		line-height: 1;
+		margin-bottom: 0.75rem;
+	}
+
+	.stat-label {
+		font-size: 0.9rem;
+		color: #6b7280;
+		line-height: 1.4;
+	}
+
+	.malware-box {
+		background: #fef2f2;
+		border-left: 4px solid #dc2626;
+		margin: 2rem 0;
+	}
+
+	.malware-box h3 {
+		margin-top: 0;
+		color: #991b1b;
+	}
+
+	.malware-box ul {
+		margin-top: 1rem;
+	}
+
+	.malware-box li {
+		margin-bottom: 0.75rem;
+	}
+
+	.timeline-box {
+		margin: 4rem 0;
+		padding: 2rem 0;
+		border-top: 2px solid var(--border-color);
+		border-bottom: 2px solid var(--border-color);
+	}
+
+	.timeline {
+		margin-top: 2rem;
+		position: relative;
+		padding-left: 2rem;
+	}
+
+	.timeline:before {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 0;
+		bottom: 0;
+		width: 2px;
+		background: var(--border-color);
+	}
+
+	.timeline-item {
+		position: relative;
+		margin-bottom: 2rem;
+		padding-left: 2rem;
+	}
+
+	.timeline-item:before {
+		content: "";
+		position: absolute;
+		left: -2rem;
+		top: 0.25rem;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		background: var(--accent-color);
+		border: 2px solid white;
+		box-shadow: 0 0 0 2px var(--accent-color);
+	}
+
+	.timeline-date {
+		font-size: 0.85rem;
+		font-weight: 700;
+		color: var(--accent-color);
+		text-transform: uppercase;
+		margin-bottom: 0.5rem;
+	}
+
+	.timeline-content strong {
+		display: block;
+		font-size: 1.1rem;
+		margin-bottom: 0.25rem;
+	}
+
+	.timeline-content p {
+		margin: 0;
+		color: #6b7280;
+	}
+
+	.learn-more {
+		margin-top: 4rem;
+		text-align: center;
+		background: #f0fdf4;
+		border: 2px solid #22c55e;
+	}
+
+	.learn-more h3 {
+		margin-top: 0;
+		color: #15803d;
+		border: none;
+	}
+
+	ul {
+		margin-bottom: 1.5rem;
+		padding-left: 1.5rem;
+	}
+
+	li {
+		margin-bottom: 0.5rem;
+	}
+</style>

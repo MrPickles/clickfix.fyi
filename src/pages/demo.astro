@@ -1,0 +1,54 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import InteractiveDemo from "../components/Demo.astro";
+---
+
+<Layout title="Interactive Demo | ClickFix.fyi">
+	<Header />
+
+	<main class="container section">
+		<h1>Interactive Demo</h1>
+		<p>
+			Experience a safe version of the scam to learn how to recognize
+			deceptive prompts in the wild.
+		</p>
+
+		<div class="demo-wrapper" style="margin-top: 2rem;">
+			<InteractiveDemo />
+		</div>
+
+		<div class="card info-box" style="margin-top: 4rem;">
+			<h3>What to remember:</h3>
+			<ul>
+				<li>
+					<strong>System tools are for you, not websites:</strong> No legitimate
+					service will ever ask you to paste code into your Run dialog
+					or Terminal.
+				</li>
+				<li>
+					<strong>"Errors" can be faked:</strong> A website can display
+					anything to make it look like your browser is broken.
+				</li>
+				<li>
+					<strong>Verify the source:</strong> If you see a prompt like
+					this on a site you weren't expecting, close the tab immediately.
+				</li>
+			</ul>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.info-box {
+		background: #fdfcea;
+		border-color: #fef08a;
+	}
+	.info-box ul {
+		padding-left: 1.5rem;
+		margin-top: 1rem;
+	}
+	.info-box li {
+		margin-bottom: 0.75rem;
+	}
+</style>

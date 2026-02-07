@@ -1,0 +1,108 @@
+---
+interface Props {
+    code: string;
+    language?: string;
+    caption?: string;
+    showLineNumbers?: boolean;
+    dangerous?: boolean;
+}
+
+const {
+    code,
+    language = "powershell",
+    caption,
+    showLineNumbers = true,
+    dangerous = false,
+} = Astro.props;
+
+const lines = code.trim().split("\n");
+---
+
+<div class="code-block-wrapper">
+    {caption && <div class="code-caption">{caption}</div>}
+    {
+        dangerous && (
+            <div class="code-warning">
+                ⚠️ <strong>Malicious Code Example</strong> - This is a
+                real-world attack payload (defanged for safety). Do not execute.
+            </div>
+        )
+    }
+    <div class="code-block" data-language={language}>
+        <pre><code>{lines.map((line, i) => (
+      <div class="code-line">
+        {showLineNumbers && <span class="line-number">{i + 1}</span>}
+        <span class="line-content">{line}</span>
+      </div>
+    ))}</code></pre>
+    </div>
+</div>
+
+<style>
+    .code-block-wrapper {
+        margin: 1.5rem 0;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .code-caption {
+        background: #f3f4f6;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #4b5563;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .code-warning {
+        background: #fef2f2;
+        border-bottom: 2px solid #dc2626;
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+        color: #991b1b;
+    }
+
+    .code-block {
+        background: #1f2937;
+        overflow-x: auto;
+    }
+
+    .code-block pre {
+        margin: 0;
+        padding: 1rem;
+    }
+
+    .code-block code {
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.9rem;
+        color: #e5e7eb;
+        background: transparent;
+        padding: 0;
+    }
+
+    .code-line {
+        display: flex;
+        min-height: 1.5rem;
+    }
+
+    .line-number {
+        display: inline-block;
+        width: 3rem;
+        text-align: right;
+        padding-right: 1rem;
+        color: #6b7280;
+        user-select: none;
+        flex-shrink: 0;
+    }
+
+    .line-content {
+        color: #10b981;
+        white-space: pre;
+    }
+
+    /* PowerShell syntax highlighting */
+    .code-block[data-language="powershell"] .line-content {
+        color: #e5e7eb;
+    }
+</style>

@@ -65,48 +65,32 @@ import Header from "../components/Header.astro";
 		</section>
 
 		<section class="section container">
-			<div class="intro-grid">
-				<div class="intro-card card">
-					<h3>Who Gets Targeted?</h3>
-					<ul>
-						<li>
-							<strong>Healthcare workers</strong> - Via compromised
-							medical sites
-						</li>
-						<li>
-							<strong>Hotel staff</strong> - Via fake Booking.com emails
-						</li>
-						<li>
-							<strong>Office workers</strong> - Via fake Google Meet
-							links
-						</li>
-						<li>
-							<strong>Online shoppers</strong> - Via compromised e-commerce
-							sites
-						</li>
-					</ul>
-				</div>
-
-				<div class="intro-card card">
-					<h3>What Happens?</h3>
-					<p>The malicious code typically installs software that:</p>
-					<ul>
-						<li>Steals all saved browser passwords</li>
-						<li>Takes login cookies (session hijacking)</li>
-						<li>Steals cryptocurrency wallets</li>
-						<li>Captures screenshots</li>
-						<li>Installs ransomware or RATs</li>
-					</ul>
-				</div>
-			</div>
-		</section>
-
-		<section class="section container">
-			<div class="malware-box card">
-				<h3>Common Malware Families</h3>
+			<div class="malware-box">
+				<h2>What Happens When You Run It?</h2>
 				<p>
-					These are the actual malware programs distributed through
-					ClickFix attacks:
+					The malicious code executes immediately and installs "infostealer"
+					malware that silently:
+				</p>
+				<ul>
+					<li>
+						<strong>Steals all saved passwords</strong> from your browser
+					</li>
+					<li>
+						<strong>Hijacks your active sessions</strong> (steals login
+						cookies)
+					</li>
+					<li>
+						<strong>Drains cryptocurrency wallets</strong> found on the
+						device
+					</li>
+					<li>
+						<strong>Captures screenshots</strong> of your data
+					</li>
+				</ul>
+
+				<h3 style="margin-top: 2rem; color: #991b1b;">Common Malware Families Used</h3>
+				<p>
+					These attacks typically distribute notorious malware families including:
 				</p>
 				<ul>
 					<li>
@@ -147,34 +131,29 @@ import Header from "../components/Header.astro";
 			<h2>Timeline: How ClickFix Evolved</h2>
 			<div class="timeline">
 				<div class="timeline-item">
-					<div class="timeline-date">Early 2024</div>
+					<div class="timeline-date">March 2024</div>
 					<div class="timeline-content">
-						<strong>First Detection</strong>
+						<strong>First Major Campaigns</strong>
 						<p>
-							Security researchers first identify the ClickFix
-							technique being used in the wild.
+							Proofpoint and Microsoft detect TA571 and Storm-1811 using ClickFix techniques in the wild.
 						</p>
 					</div>
 				</div>
 				<div class="timeline-item">
 					<div class="timeline-date">May 2024</div>
 					<div class="timeline-content">
-						<strong>Microsoft Warning</strong>
+						<strong>ClearFake Adoption</strong>
 						<p>
-							Microsoft Threat Intelligence warns of Storm-1607
-							campaigns targeting tens of thousands of
-							organizations.
+							The "ClearFake" cybercrime cluster adopts ClickFix, injecting fake browser updates into compromised sites.
 						</p>
 					</div>
 				</div>
 				<div class="timeline-item">
-					<div class="timeline-date">Late 2024</div>
+					<div class="timeline-date">Aug 2024</div>
 					<div class="timeline-content">
-						<strong>DIY Kits Available</strong>
+						<strong>Google Meet & Mac Variants</strong>
 						<p>
-							"ClickFix builders" start being sold on hacker
-							forums, making the attack accessible to less-skilled
-							criminals.
+							Groups like "Slavic Nation Empire" launch fake Google Meet campaigns targeting both Windows and macOS.
 						</p>
 					</div>
 				</div>
@@ -183,8 +162,7 @@ import Header from "../components/Header.astro";
 					<div class="timeline-content">
 						<strong>Massive Surge</strong>
 						<p>
-							Attacks increase by over 500%, becoming the second
-							most common attack method globally.
+							Attacks increase by over 500% in H1 2025, becoming the second most common attack method globally.
 						</p>
 					</div>
 				</div>
@@ -192,7 +170,7 @@ import Header from "../components/Header.astro";
 		</section>
 
 		<section class="section container">
-			<div class="protection-card card">
+			<div class="protection-card">
 				<h2>How to Protect Yourself</h2>
 				<ul class="protection-list">
 					<li>
@@ -276,55 +254,16 @@ import Header from "../components/Header.astro";
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 		gap: 1.5rem;
-		margin: 2rem 0 3rem;
-	}
-
-	.stat-card {
-		text-align: center;
-		padding: 2rem 1.5rem;
-		background: #f9fafb;
-	}
-
-	.stat-number {
-		font-size: 3rem;
-		font-weight: 800;
-		color: var(--accent-color);
-		line-height: 1;
-		margin-bottom: 0.75rem;
-	}
-
-	.stat-label {
-		font-size: 0.9rem;
-		color: #6b7280;
-		line-height: 1.4;
-	}
-
-	/* Intro/Info Grid */
-	.intro-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-		gap: 2rem;
-	}
-
-	.intro-card ul {
-		padding-left: 1.25rem;
-		margin-bottom: 0;
-	}
-	
-	.intro-card li {
-		margin-bottom: 0.5rem;
+		margin: 2rem 0;
 	}
 
 	/* Malware Box */
 	.malware-box {
-		background: #fef2f2;
-		border-left: 4px solid #dc2626;
 		margin: 2rem 0;
-		padding: 1.5rem;
 	}
 
 	.malware-box h3 {
-		margin-top: 0;
+		margin-top: 2rem;
 		color: #991b1b;
 	}
 
@@ -339,7 +278,7 @@ import Header from "../components/Header.astro";
 
 	/* Timeline */
 	.timeline-box {
-		margin: 4rem auto;
+		margin: 3rem auto;
 		padding: 2rem 1rem;
 		border-top: 1px solid var(--border-color);
 		border-bottom: 1px solid var(--border-color);
@@ -355,7 +294,7 @@ import Header from "../components/Header.astro";
 	.timeline:before {
 		content: "";
 		position: absolute;
-		left: 0;
+		left: 6px;
 		top: 0;
 		bottom: 0;
 		width: 2px;
@@ -403,7 +342,7 @@ import Header from "../components/Header.astro";
 	/* CTA */
 	.demo-cta {
 		text-align: center;
-		padding: 4rem 0;
+		padding: 2rem 0;
 	}
 	
 	.demo-cta-content {
@@ -421,9 +360,7 @@ import Header from "../components/Header.astro";
 
 	/* Protection */
 	.protection-card {
-		background: #fff;
-		border: 1px solid var(--border-color);
-		padding: 2rem;
+		margin: 2rem 0;
 	}
 	
 	.protection-list {

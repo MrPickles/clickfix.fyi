@@ -30,20 +30,19 @@ import CodeBlock from "../components/CodeBlock.astro";
 					<h3>Common Scenarios:</h3>
 					<ul>
 						<li>
-							<strong>Fake CAPTCHA:</strong> "Click here to verify
-							you're human"
+							<strong>Fake CAPTCHA:</strong> "Verify you are human" (often mimics Cloudflare)
 						</li>
 						<li>
-							<strong>Browser Error:</strong> "Your browser needs an
-							update to view this page"
+							<strong>Browser Update:</strong> "Chrome is missing a critical security update"
 						</li>
 						<li>
-							<strong>Video Conference:</strong> "Connection error
-							- please fix to join the meeting"
+							<strong>Google Meet/Zoom:</strong> "Microphone format not supported - fix to join"
 						</li>
 						<li>
-							<strong>Document Viewer:</strong> "This PDF cannot be
-							displayed. Click to fix."
+							<strong>FileFix:</strong> "Display Error - paste path into File Explorer to fix"
+						</li>
+						<li>
+							<strong>ConsentFix:</strong> "Verify identity to access document" (OAuth abuse)
 						</li>
 					</ul>
 				</div>
@@ -171,20 +170,18 @@ import CodeBlock from "../components/CodeBlock.astro";
 					<h3>Real Malware Families Distributed via ClickFix:</h3>
 					<ul>
 						<li>
-							<strong>Lumma Stealer</strong> - Most common, steals
-							passwords and cryptocurrency
+							<strong>Lumma Stealer</strong> - The most common payload in 2025. Steals
+							passwords, session cookies, and crypto wallets.
 						</li>
 						<li>
-							<strong>Vidar Stealer</strong> - Targets browser data
-							and crypto wallets
+							<strong>DarkGate</strong> - A sophisticated loader used by groups like
+                            <strong>Storm-0249</strong> to deploy ransomware.
 						</li>
 						<li>
-							<strong>DarkGate</strong> - Remote access trojan that
-							gives full control of your PC
+							<strong>AsyncRAT</strong> - Open-source remote access tool modified for surveillance.
 						</li>
 						<li>
-							<strong>AsyncRAT</strong> - Another remote access tool
-							used for surveillance
+							<strong>StealC</strong> - A lightweight stealer often dropped via "FileFix" lures.
 						</li>
 					</ul>
 				</div>

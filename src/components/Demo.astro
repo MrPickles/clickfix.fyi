@@ -667,8 +667,11 @@ const SAFE_SCRIPT_UNIX = `${baseUrl}/static/example.sh`;
 
 <script define:vars={{ SAFE_SCRIPT_WIN, SAFE_SCRIPT_UNIX, baseUrl }}>
   // Application State
+  const scenarioKeys = ['meet', 'cloudflare', 'recaptcha', 'browser'];
+  const randomScenario = scenarioKeys[Math.floor(Math.random() * scenarioKeys.length)];
+
   const state = {
-    scenario: 'meet',
+    scenario: randomScenario,
     platform: 'windows',
     variant: 'powershell-hidden' // default
   };
@@ -893,6 +896,7 @@ const SAFE_SCRIPT_UNIX = `${baseUrl}/static/example.sh`;
   const detected = detectOS();
   state.platform = detected;
   els.platformSelect.value = detected;
+  els.scenarioSelect.value = state.scenario;
   updateVariants();
   update();
 

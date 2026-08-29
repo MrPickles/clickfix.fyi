@@ -1,25 +1,15 @@
-#!/bin/bash
+#!/bin/sh
 
-# ClickFix.fyi Educational Demo Script
-# Using printf for better portability and colors for specific impact
+# ClickFix.fyi educational demonstration
+# This script only writes text to the terminal and exits.
 
-# Define colors
-Y='\033[1;33m' # Yellow
-R='\033[0;31m' # Red
-G='\033[0;32m' # Green
-C='\033[0;36m' # Cyan
-NC='\033[0m'   # No Color
-
-printf "\n"
-printf "${Y}! This is a SAFE demonstration script from ClickFix.fyi${NC}\n"
-printf "\n"
-printf "If this were a real ClickFix attack, malware would now be:\n"
-printf "${R}  • Stealing your browser passwords${NC}\n"
-printf "${R}  • Copying your cryptocurrency wallets${NC}\n"
-printf "${R}  • Harvesting your session cookies${NC}\n"
-printf "${R}  • Installing persistent backdoors${NC}\n"
-printf "\n"
-printf "${G}✓ But this is just an educational demo. You're safe!${NC}\n"
-printf "\n"
-printf "${C}🛡 Remember: NEVER copy and run commands from websites you don't trust.${NC}\n"
-printf "\n"
+printf '\n\033[1;33mClickFix.fyi safe demonstration\033[0m\n\n'
+printf 'A website-provided command successfully downloaded and ran this script.\n'
+printf 'In a real ClickFix attack, the same step could run malware instead.\n\n'
+printf '\033[0;36mThis demonstration did not:\033[0m\n'
+printf '  - collect or transmit data\n'
+printf '  - create or modify files\n'
+printf '  - change system settings\n'
+printf '  - install persistence\n'
+printf '  - download additional content\n\n'
+printf '\033[0;32mThe script is finished. You may close this terminal.\033[0m\n\n'

@@ -1,170 +1,95 @@
 ---
-const news = [
-  {
-    date: "Feb 2026",
-    title: "New 'CrashFix' Variant Deploys Python RATs",
-    description:
-      "Microsoft Security reports a new specific variant called 'CrashFix' that tricks users into installing a Python-based Remote Access Trojan.",
-    source: "Microsoft Security",
-    url: "https://www.microsoft.com/en-us/security/blog/2026/02/05/clickfix-variant-crashfix-deploying-python-rat-trojan/",
-  },
-  {
-    date: "Dec 2025",
-    title: "ConsentFix: Abusing OAuth for Account Takeover",
-    description:
-      "Push Security details 'ConsentFix', a variant targeting Microsoft 365 OAuth flows to bypass MFA without stealing passwords.",
-    source: "Push Security",
-    url: "https://pushsecurity.com/blog/consentfix",
-  },
-  {
-    date: "Nov 2025",
-    title: "The Most Advanced ClickFix Yet",
-    description:
-      "Push Security analyzes highly sophisticated ClickFix lures including fake Google Meet pages that look identical to the real thing.",
-    source: "Push Security",
-    url: "https://pushsecurity.com/blog/the-most-advanced-clickfix-yet",
-  },
+const resources = [
   {
     date: "Aug 2025",
-    title: "Think Before You ClickFix",
-    description:
-      "Microsoft Threat Intelligence analyzes the rapid flooding of the threat landscape with ClickFix social engineering techniques.",
-    source: "Microsoft",
+    title: "Think before you Click(Fix): analyzing the ClickFix social engineering technique",
+    source: "Microsoft Threat Intelligence",
     url: "https://www.microsoft.com/en-us/security/blog/2025/08/21/think-before-you-clickfix-analyzing-the-clickfix-social-engineering-technique/",
   },
   {
-    date: "Aug 2025",
-    title: "Phishing URLs Quadruple in One Year",
-    description:
-      "Proofpoint's specific report 'The Human Factor 2025 Vol. 2' highlights a 400% increase in malicious links associated with ClickFix.",
-    source: "Proofpoint",
-    url: "https://www.proofpoint.com/us/blog/email-and-cloud-threats/human-factor-vol-2-offers-new-insights-phishing",
-  },
-  {
-    date: "July 2025",
-    title: "FileFix: The New Explorer-Based Attack",
-    description:
-      "Check Point Research uncovers 'FileFix', a social engineering attack building on ClickFix that exploits the Windows File Explorer address bar.",
+    date: "Jul 2025",
+    title: "FileFix: the new social engineering attack building on ClickFix",
     source: "Check Point Research",
     url: "https://blog.checkpoint.com/research/filefix-the-new-social-engineering-attack-building-on-clickfix-tested-in-the-wild/",
   },
   {
-    date: "June 2025",
-    title: "ClickFix Attacks Surge by 517% in H1 2025",
-    description:
-      "ESET's H1 2025 Threat Report details a massive increase in ClickFix detections, identifying it as a top tier threat vector.",
-    source: "ESET",
-    url: "https://www.eset.com/us/about/newsroom/research/eset-threat-report-clickfix-fake-error-surges-spreads-ransomware-and-other-malware/",
+    date: "Jun 2025",
+    title: "ESET Threat Report H1 2025",
+    source: "ESET Research",
+    url: "https://www.welivesecurity.com/en/eset-research/eset-threat-report-h1-2025/",
   },
   {
-    date: "Jan 2025",
-    title: "Lumma Stealer Distributed via Fake CAPTCHAs",
-    description:
-      "Attackers are using fake verification pages to trick users into running PowerShell commands that install the Lumma Stealer infostealer.",
-    source: "The Hacker News",
-    url: "https://thehackernews.com/2025/01/beware-fake-captcha-campaign-spreads.html",
+    date: "May 2025",
+    title: "Behavior:Win32/ClickFix",
+    source: "Microsoft Security Intelligence",
+    url: "https://www.microsoft.com/en-us/wdsi/threats/malware-encyclopedia-description?Name=Behavior%3AWin32%2FClickFix",
   },
   {
     date: "Nov 2024",
-    title: "ClickFix Floods Threat Landscape",
-    description:
-      "Proofpoint Security Brief on how the ClickFix social engineering technique is dominating the threat landscape.",
-    source: "Proofpoint",
+    title: "Security brief: ClickFix social engineering technique floods threat landscape",
+    source: "Proofpoint Threat Research",
     url: "https://www.proofpoint.com/us/blog/threat-insight/security-brief-clickfix-social-engineering-technique-floods-threat-landscape",
   },
   {
     date: "Oct 2024",
-    title: "HHS Sector Alert: ClickFix Attacks",
-    description:
-      "The U.S. Health and Human Services issues a sector alert regarding the rising threat of ClickFix attacks against healthcare organizations.",
-    source: "HHS.gov",
+    title: "ClickFix attacks: health sector alert",
+    source: "U.S. HHS HC3",
     url: "https://www.hhs.gov/sites/default/files/clickfix-attacks-sector-alert-tlpclear.pdf",
-  },
-  {
-    date: "May 2024",
-    title: "Microsoft Warns of Quick Assist Abuse (Storm-1811)",
-    description:
-      "Microsoft detects Storm-1811 using 'vishing' and Quick Assist tool abuse to deploy Black Basta ransomware—a key precursor to modern ClickFix tactics.",
-    source: "Microsoft",
-    url: "https://www.microsoft.com/en-us/security/blog/2024/05/15/threat-actors-misusing-quick-assist-in-social-engineering-attacks-leading-to-ransomware/",
   },
 ];
 ---
 
-<div class="news-grid">
-  {
-    news.map((item) => (
-      <article class="news-card card">
-        <div class="news-date">{item.date}</div>
-        <h3>{item.title}</h3>
-        <p>{item.description}</p>
-        <div class="news-footer">
-          <span class="news-source">Source: {item.source}</span>
-          <a
-            href={item.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="news-link"
-          >
-            Read Article →
-          </a>
-        </div>
-      </article>
-    ))
-  }
-</div>
+<ul class="resource-list">
+  {resources.map((item) => (
+    <li class="resource-item">
+      <time>{item.date}</time>
+      <div>
+        <a class="resource-title" href={item.url} target="_blank" rel="noopener noreferrer">{item.title}</a>
+        <span>{item.source}</span>
+      </div>
+    </li>
+  ))}
+</ul>
 
 <style>
-  .news-grid {
+  .resource-list {
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    padding: 0;
+    list-style: none;
+  }
+
+  .resource-item {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-  }
-  .news-card {
-    transition: transform 0.2s;
-    display: flex;
-    flex-direction: column;
-  }
-  .news-date {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--accent-color);
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-  }
-  .news-card h3 {
-    font-size: 1.2rem;
-    margin-top: 0;
-    margin-bottom: 0.75rem;
-    line-height: 1.3;
-  }
-  .news-card p {
-    font-size: 0.95rem;
-    opacity: 0.8;
-    margin-bottom: 1rem;
-    flex-grow: 1;
-  }
-  .news-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid var(--border-color);
-    padding-top: 0.75rem;
+    grid-template-columns: 90px 1fr;
     gap: 1rem;
+    border-bottom: 1px solid var(--line);
+    padding-block: 1rem;
   }
-  .news-source {
-    font-size: 0.75rem;
-    opacity: 0.5;
-    font-weight: 600;
+
+  .resource-item time,
+  .resource-item span {
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
   }
-  .news-link {
-    color: var(--accent-color);
+
+  .resource-item > div {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .resource-title {
+    font-size: 1.08rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
     text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    white-space: nowrap;
   }
-  .news-link:hover {
-    text-decoration: underline;
+
+  .resource-title:hover { color: var(--signal); }
+
+  @media (max-width: 520px) {
+    .resource-item { grid-template-columns: 1fr; gap: 0.3rem; }
   }
 </style>

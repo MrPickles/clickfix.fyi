@@ -1,43 +1,32 @@
-# Astro Starter Kit: Minimal
+# ClickFix.fyi
+
+An interactive technical field note on ClickFix social-engineering campaigns. The site reproduces the browser-to-clipboard-to-interpreter flow with a benign runnable payload, then documents detection heuristics, execution stages, incident response, and primary sources.
+
+## Local development
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+The production build is generated with:
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```sh
+npm run build
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Safety principles
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- The simulation writes a clearly displayed educational command to the clipboard only after a user clicks the copy button.
+- The command downloads a public, inspectable demo script that only prints text and exits. It does not collect data, persist, change settings, or retrieve additional files.
+- Any command fragments shown are deliberately defanged.
+- Recovery guidance links to Microsoft and CISA source material.
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Content structure
 
-## 🧞 Commands
+- `/` — runnable demo, execution model, detection heuristics, response, and technical notes
+- `/demo` — guided safe simulation
+- `/how-it-works` — complete and more technical attack-chain explanation
+- `/news` — curated research and source library
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+The site is built with Astro and is intentionally static: no analytics, forms, accounts, or backend services. The production build adds a minimal Cloudflare-compatible asset worker so the same static output can be hosted by Sites.

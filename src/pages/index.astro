@@ -4,7 +4,6 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Demo from "../components/Demo.astro";
 import Lures from "../components/Lures.astro";
-import Reading from "../components/Reading.astro";
 
 const reviewed = "November 2026";
 
@@ -16,7 +15,7 @@ const keys = [
 
 const timeline = [
   {
-    when: "2024",
+    when: "Early 2024",
     name: "ClickFix appears",
     what: "Fake Word and Chrome errors; PowerShell pasted into Run.",
     source: "Proofpoint",
@@ -24,7 +23,7 @@ const timeline = [
   },
   {
     when: "Late 2024",
-    name: "State hackers adopt it",
+    name: "State hackers try it",
     what: "Russia’s APT28, North Korea’s Kimsuky, Iran’s MuddyWater.",
     source: "Proofpoint",
     url: "https://www.proofpoint.com/us/blog/threat-insight/around-world-90-days-state-sponsored-actors-try-clickfix",
@@ -37,9 +36,9 @@ const timeline = [
     url: "https://www.kaspersky.com/blog/filefix-attack-windows-file-explorer/54752/",
   },
   {
-    when: "2025",
-    name: "Macs",
-    what: "Encoded one-liners pasted into Terminal; mostly Atomic Stealer.",
+    when: "Jun 2025",
+    name: "Macs targeted",
+    what: "A campaign delivers Atomic Stealer to macOS users.",
     source: "Microsoft",
     url: "https://www.microsoft.com/en-us/security/blog/2025/08/21/think-before-you-clickfix-analyzing-the-clickfix-social-engineering-technique/",
   },
@@ -109,7 +108,7 @@ const timeline = [
 
       <div class="measure">
         <p class="lead">
-          If a page asks you to, close it. It’s a scam called ClickFix, and that command installs malware.
+          If a page asks you to, close it. It’s a scam called ClickFix: those keys run a command that installs malware.
         </p>
         <p class="mac-note">On a Mac it’s Terminal and <kbd>⌘</kbd> + <kbd>V</kbd>. Same scam.</p>
         <p class="hero-links">
@@ -168,12 +167,6 @@ const timeline = [
       </p>
     </section>
 
-    <section class="block wrap" id="reading" aria-labelledby="reading-title">
-      <h2 id="reading-title">Sources</h2>
-      <div class="measure">
-        <Reading />
-      </div>
-    </section>
   </main>
 
   <Footer reviewed={reviewed} />

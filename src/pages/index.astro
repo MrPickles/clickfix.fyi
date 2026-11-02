@@ -195,27 +195,10 @@ const timeline = [
         </table>
       </div>
 
-      <h3>Defenses</h3>
-      <ul class="defenses measure">
-        <li><strong>Train one rule:</strong> no legitimate site asks you to paste into Run, Terminal or an address bar.</li>
-        <li>
-          <strong>Disable the Run box</strong> (<code>NoRun</code>) where unneeded, knowing Terminal and Explorer stay
-          open.
-        </li>
-        <li>
-          <strong>Block LOLBins users don’t need</strong> with App Control or AppLocker: <code>mshta</code>,
-          <code>wscript</code>, <code>finger</code>, PowerShell.
-        </li>
-        <li>
-          <strong>Hunt</strong> <code>explorer.exe</code>/<code>WindowsTerminal.exe</code> spawning shells with
-          network activity, <code>RunMRU</code> entries, outbound TCP 79, new WebDAV mounts.
-        </li>
-        <li>
-          <strong>Devalue stolen sessions:</strong> phishing-resistant MFA, token protection, no browser-saved
-          passwords. Restrict Azure CLI sign-ins against ConsentFix.
-        </li>
-        <li><strong>Keep Macs on macOS 26.4+</strong> for Terminal’s paste warning.</li>
-      </ul>
+      <p class="measure more">
+        For mitigations and hunting queries, see
+        <a href="https://www.microsoft.com/en-us/security/blog/2025/08/21/think-before-you-clickfix-analyzing-the-clickfix-social-engineering-technique/" rel="noopener noreferrer">Microsoft’s ClickFix analysis</a>.
+      </p>
     </section>
 
     <section class="block wrap" id="reading" aria-labelledby="reading-title">
@@ -379,10 +362,8 @@ const timeline = [
   }
 
   /* ---------- Technical ---------- */
-  .defenses {
-    display: grid;
-    gap: 0.9rem;
-    padding-left: 1.4rem;
+  .more {
+    margin-top: 2rem;
   }
 
   .sample {

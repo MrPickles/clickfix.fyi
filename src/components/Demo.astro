@@ -31,7 +31,7 @@
               <button class="fake-copy" type="button" data-copy>Copy</button>
             </div>
             <ol class="fake-steps">
-              <li>Press <kbd>Win</kbd> + <kbd>R</kbd></li>
+              <li>Press <kbd>Win</kbd> + <kbd>X</kbd>, then <kbd>I</kbd></li>
               <li>Press <kbd>Ctrl</kbd> + <kbd>V</kbd></li>
               <li>Press <kbd>Enter</kbd></li>
             </ol>
@@ -40,16 +40,13 @@
       </div>
 
       <div class="practice" data-practice hidden>
-        <p class="practice-label">
-          Paste here, not in your real Run box. Nothing here can run.
-        </p>
+        <p class="practice-label">Paste here, not in your real terminal. Nothing here can run.</p>
 
-        <div class="run-dialog">
-          <p class="run-title">Run</p>
-          <p class="run-help">Type the name of a program, folder, document, or Internet resource, and Windows will open it for you.</p>
-          <label class="run-row">
-            <span>Open:</span>
-            <input type="text" spellcheck="false" autocomplete="off" data-paste aria-label="Practice Run box" />
+        <div class="term">
+          <p class="term-title" aria-hidden="true">Windows PowerShell</p>
+          <label class="term-body">
+            <span class="term-prompt" aria-hidden="true">PS C:\Users\you&gt;</span>
+            <textarea rows="3" spellcheck="false" autocomplete="off" data-paste aria-label="Practice terminal"></textarea>
           </label>
         </div>
 
@@ -59,7 +56,9 @@
       <div class="reveal" data-reveal hidden aria-live="polite">
         <p class="reveal-label">What you actually copied:</p>
         <p class="clip" data-clip></p>
-        <dl class="parts" data-parts></dl>
+        <p class="reveal-label">Decoded, it says:</p>
+        <p class="clip decoded" data-decoded></p>
+        <p class="mismatch" data-mismatch hidden>That’s not what the demo copied; your clipboard held something else. Above is what it copied.</p>
       </div>
     </div>
 
@@ -74,11 +73,11 @@
 <script>
   type Step = 1 | 2 | 3 | 4;
 
-  const MESSAGE = "clickfix.fyi: a web page just got you to run this. This one only prints text.";
-  const COMMAND = `powershell -NoExit -Command "Write-Host '${MESSAGE}'"`;
-  const PADDING = 60;
-  const DECOY = "# ✅ I am not a robot - Verification ID: 4821";
-  const CLIPBOARD = `${COMMAND}${" ".repeat(PADDING)}${DECOY}`;
+  const DECODED = "Write-Host 'clickfix.fyi: a web page just got you to run this. This one only prints text.'";
+  // PowerShell's -EncodedCommand takes Base64 of UTF-16LE text, the same obfuscation real lures use.
+  const ENCODED = btoa(Array.from(DECODED, (ch) => ch + "\0").join(""));
+  const PROGRAM = "powershell -e ";
+  const CLIPBOARD = PROGRAM + ENCODED;
 
   const notes: Record<Step, [string, string]> = {
     1: ["The lure", "<p>A fake check, like the ones planted on hacked sites. Click it.</p>"],
@@ -86,7 +85,7 @@
     3: ["The switch", "<p>You didn’t copy <code>HUMAN-4821</code>. You copied a command. Paste it below to see.</p>"],
     4: [
       "The disguise",
-      "<p>The Run box shows only the decoy at the end. <kbd>Enter</kbd> would run everything in front of it.</p><p>On a Mac the page sends you to Terminal instead. Same trick.</p>",
+      "<p>The command is scrambled so you can’t tell what it does. <kbd>Enter</kbd> would run it.</p><p>This one only prints a message. A real one downloads malware. On a Mac, the page sends you to Terminal instead.</p>",
     ],
   };
 
@@ -94,7 +93,7 @@
 
   if (root) {
     const $ = <T extends Element = HTMLElement>(s: string) => root.querySelector<T>(s)!;
-    const input = $<HTMLInputElement>("[data-paste]");
+    const input = $<HTMLTextAreaElement>("[data-paste]");
     let copied = false;
 
     function setStep(step: Step) {
@@ -116,48 +115,18 @@
       setStep(1);
     }
 
-    function renderReveal(pasted: string | null) {
-      const clip = $("[data-clip]");
-      clip.replaceChildren();
-      for (const [cls, text] of [
-        ["part-cmd", COMMAND],
-        ["part-pad", "·".repeat(PADDING)],
-        ["part-decoy", DECOY],
-      ]) {
-        const span = document.createElement("span");
-        span.className = cls;
-        span.textContent = text;
-        clip.append(span);
-      }
-
-      const dl = $("[data-parts]");
-      dl.replaceChildren();
-      for (const [cls, label] of [
-        ["part-cmd", "The command that runs"],
-        ["part-pad", `${PADDING} spaces to push it out of view`],
-        ["part-decoy", "The decoy you see"],
-      ]) {
-        const dt = document.createElement("dt");
-        dt.className = cls;
-        dt.setAttribute("aria-hidden", "true");
-        const dd = document.createElement("dd");
-        dd.textContent = label;
-        dl.append(dt, dd);
-      }
-      if (pasted !== null && pasted.trim() !== CLIPBOARD.trim()) {
-        const dd = document.createElement("dd");
-        dd.className = "mismatch";
-        dd.textContent = "That’s not what the demo copied; your clipboard held something else. Above is what it copied.";
-        dl.append(dd);
-      }
-    }
-
     function showPasted(pasted: string | null) {
-      requestAnimationFrame(() => {
-        input.scrollLeft = input.scrollWidth;
-        renderReveal(pasted);
-        setStep(4);
-      });
+      const clip = $("[data-clip]");
+      const program = document.createElement("span");
+      program.className = "part-cmd";
+      program.textContent = PROGRAM;
+      const blob = document.createElement("span");
+      blob.className = "part-blob";
+      blob.textContent = ENCODED;
+      clip.replaceChildren(program, blob);
+      $("[data-decoded]").textContent = DECODED;
+      $("[data-mismatch]").hidden = pasted === null || pasted.trim() === CLIPBOARD;
+      setStep(4);
     }
 
     $("[data-check]").addEventListener("click", () => setStep(2));
@@ -355,40 +324,48 @@
     font-size: 1rem;
   }
 
-  .run-dialog {
-    max-width: 26rem;
-    border: 1px solid #b8bec5;
+  .term {
+    max-width: 36rem;
+    overflow: hidden;
     border-radius: 8px;
-    padding: 0.9rem 1rem 1.1rem;
-    background: #f7f8fa;
-    font-family: var(--ui);
-    font-size: 0.85rem;
+    background: #0c1a2b;
+    color: #e6e9ec;
   }
 
-  .run-title {
-    font-weight: 600;
+  .term-title {
+    padding: 0.4rem 0.8rem;
+    background: #1f2b3a;
+    color: #b8c2cc;
+    font: 0.78rem var(--ui);
   }
 
-  .run-help {
-    margin: 0.5rem 0 0.8rem;
-    color: #4a525c;
-    line-height: 1.4;
+  .term-body {
+    display: block;
+    padding: 0.8rem 0.9rem;
+    font: 0.88rem/1.5 var(--mono);
   }
 
-  .run-row {
-    display: flex;
-    gap: 0.6rem;
-    align-items: center;
+  .term-prompt {
+    display: block;
+    color: #e6e9ec;
   }
 
-  .run-row input {
-    flex: 1;
-    min-width: 0;
-    border: 1px solid #8b939c;
-    border-radius: 3px;
-    padding: 0.35rem 0.45rem;
-    background: #fff;
-    font: 0.9rem var(--ui);
+  .term-body textarea {
+    width: 100%;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    field-sizing: content;
+    word-break: break-all;
+    resize: none;
+    caret-color: #e6e9ec;
+  }
+
+  .term-body textarea:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 4px;
   }
 
   .plain-button {
@@ -428,55 +405,27 @@
     color: var(--stop-deep);
   }
 
-  .clip :global(.part-pad) {
-    color: #a3aab2;
-    letter-spacing: -0.12em;
-  }
-
-  .clip :global(.part-decoy) {
+  .clip :global(.part-blob) {
     color: var(--muted);
+    word-break: break-all;
   }
 
-  .parts {
-    display: grid;
-    grid-template-columns: 1.5rem 1fr;
-    gap: 0.45rem 0.75rem;
-    margin: 1rem 0 0;
-    font-size: 0.95rem;
-    line-height: 1.45;
+  .decoded {
+    color: var(--ink);
   }
 
-  .parts :global(dt) {
-    width: 1.5rem;
-    height: 0.9rem;
-    margin-top: 0.25rem;
-    border-radius: 2px;
+  .reveal .reveal-label + .decoded {
+    margin-top: 0;
   }
 
-  .parts :global(dt.part-cmd) {
-    background: var(--stop-wash);
+  .clip + .reveal-label {
+    margin-top: 1.25rem;
   }
 
-  .parts :global(dt.part-pad) {
-    background: repeating-linear-gradient(90deg, #a3aab2 0 2px, transparent 2px 5px);
-    background-size: 100% 2px;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
-
-  .parts :global(dt.part-decoy) {
-    background: var(--wash);
-    box-shadow: inset 0 0 0 1px var(--rule);
-  }
-
-  .parts :global(dd) {
-    margin: 0;
-  }
-
-  .parts :global(.mismatch) {
-    grid-column: 1 / -1;
-    margin-top: 0.5rem;
+  .mismatch {
+    margin-top: 0.75rem;
     color: var(--stop-deep);
+    font-size: 0.95rem;
   }
 
   /* ---------- Notes ---------- */

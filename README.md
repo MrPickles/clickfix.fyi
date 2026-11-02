@@ -17,8 +17,8 @@ npm run build
 
 ## Safety principles
 
-- The demo writes to the clipboard only when you click its Copy button. What it writes contacts no server: it opens PowerShell and prints a message (on a Mac or Linux it normally just fails with "command not found").
-- The "Run box" in the demo is a text input on the page. Nothing pasted there is executed.
+- The demo writes to the clipboard only when you click its Copy button. What it writes contacts no server: it is a Base64-encoded PowerShell command (`powershell -e …`) that only prints a message, mimicking how real lures obfuscate theirs (on a Mac or Linux it normally just fails with "command not found").
+- The terminal in the demo is a text box on the page. Nothing pasted there is executed.
 - Command examples outside the demo are defanged (`hxxps`, `[.]`, `.example`) so they can't run.
 - The site is static: no analytics, cookies, forms or third-party requests. Fonts are self-hosted.
 

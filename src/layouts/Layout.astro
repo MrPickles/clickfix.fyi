@@ -1,17 +1,12 @@
 ---
 import "../styles/global.css";
-import Footer from "../components/Footer.astro";
 
 interface Props {
   title: string;
-  description?: string;
+  description: string;
 }
 
-const {
-  title,
-  description = "ClickFix scams copy malicious commands to the clipboard and tell people to run them.",
-} = Astro.props;
-
+const { title, description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
 const socialImage = new URL("/og.png", Astro.site ?? Astro.url.origin);
 ---
@@ -21,48 +16,44 @@ const socialImage = new URL("/og.png", Astro.site ?? Astro.url.origin);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#f7f8f9" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=9" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="canonical" href={canonical} />
-    <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="ClickFix.fyi" />
+    <meta property="og:site_name" content="clickfix.fyi" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={socialImage} />
-    <meta property="og:image:width" content="1734" />
-    <meta property="og:image:height" content="907" />
-    <meta property="og:image:alt" content="ClickFix browser-to-shell execution — ClickFix.fyi" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Keyboard keys Win + R, Ctrl + V, Enter, with the text: no real website will ask you to press these keys." />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={socialImage} />
   </head>
   <body>
-    <a class="skip-link" href="#main-content">Skip to content</a>
+    <a class="skip" href="#main">Skip to content</a>
     <slot />
-    <Footer />
   </body>
 </html>
 
-<style is:global>
-  .skip-link {
-    position: fixed;
-    top: 0.75rem;
-    left: 0.75rem;
-    z-index: 100;
-    transform: translateY(-160%);
-    border-radius: 999px;
-    padding: 0.7rem 1rem;
+<style>
+  .skip {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 10;
+    padding: 0.6rem 0.9rem;
     background: var(--ink);
-    color: white;
-    font-weight: 800;
+    color: var(--paper);
+    font-family: var(--ui);
+    font-size: 0.9rem;
+    transform: translateY(-200%);
   }
 
-  .skip-link:focus {
-    transform: translateY(0);
+  .skip:focus {
+    transform: none;
   }
 </style>

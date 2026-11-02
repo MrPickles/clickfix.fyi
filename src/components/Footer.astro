@@ -1,71 +1,32 @@
+---
+interface Props {
+  reviewed: string;
+}
+const { reviewed } = Astro.props;
+---
+
 <footer class="site-footer">
-  <div class="container footer-grid">
-    <div>
-      <a href="/" class="footer-brand">clickfix<span>.fyi</span></a>
-      <p>ClickFix tricks users into running commands copied from a web page.</p>
-    </div>
-    <div class="footer-links">
-      <a href="/#demo">Demo</a>
-      <a href="/#how-it-works">How it works</a>
-      <a href="/#sources">News</a>
-    </div>
+  <div class="wrap">
+    <p class="measure">
+      clickfix.fyi explains one scam so people can recognize it. It has no ads, analytics, accounts or cookies.
+      The demo only puts harmless text on your clipboard.
+    </p>
+    <p class="meta">Last reviewed {reviewed}.</p>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    border-top: 1px solid var(--line);
-    padding-block: 4rem;
-    background: var(--paper-deep);
-    color: var(--ink);
+    margin-top: clamp(4rem, 10vw, 7rem);
+    border-top: 1px solid var(--rule);
+    padding-block: 2.5rem 3rem;
+    color: var(--muted);
+    font-size: 1rem;
   }
 
-  .footer-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 3rem;
-  }
-
-  .footer-brand {
-    display: inline-block;
-    margin-bottom: 0.8rem;
-    font-size: 1.25rem;
-    font-weight: 900;
-    letter-spacing: -0.04em;
-    text-decoration: none;
-  }
-
-  .footer-brand span,
-  .footer-grid > div:first-child p {
-    color: var(--ink-soft);
-  }
-
-  .footer-grid p {
-    max-width: 24rem;
-    margin-bottom: 0.7rem;
-    font-size: 0.86rem;
-  }
-
-  .footer-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-  }
-
-  .footer-links a {
-    font-size: 0.9rem;
-    font-weight: 750;
-    text-decoration: none;
-  }
-
-  .footer-links a:hover {
-    color: var(--signal);
-  }
-
-  @media (max-width: 760px) {
-    .footer-grid {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-    }
+  .meta {
+    margin-top: 0.75rem;
+    font-family: var(--ui);
+    font-size: 0.875rem;
   }
 </style>

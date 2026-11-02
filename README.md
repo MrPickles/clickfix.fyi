@@ -1,6 +1,6 @@
 # ClickFix.fyi
 
-An interactive technical field note on ClickFix social-engineering campaigns. The site reproduces the browser-to-clipboard-to-interpreter flow with a benign runnable payload, then documents detection heuristics, execution stages, incident response, and primary sources.
+A one-page guide to ClickFix, the scam where a web page tricks you into pasting a command that installs malware. It leads with the one rule people need, has a safe in-page demo, says what to do if you already ran a command, and has a technical section and sources for IT teams.
 
 ## Local development
 
@@ -17,16 +17,13 @@ npm run build
 
 ## Safety principles
 
-- The simulation writes a clearly displayed educational command to the clipboard only after a user clicks the copy button.
-- The command downloads a public, inspectable demo script that only prints text and exits. It does not collect data, persist, change settings, or retrieve additional files.
-- Any command fragments shown are deliberately defanged.
-- Recovery guidance links to Microsoft and CISA source material.
+- The demo writes to the clipboard only after a click, and what it writes contacts no server: on Windows it opens PowerShell and prints a message, on macOS and Linux it runs `echo`.
+- The "Run box" and "terminal" in the demo are text inputs on the page. Nothing pasted there is executed.
+- Command examples outside the demo are defanged (`hxxps`, `[.]`, `.example`) so they can't run.
+- The site is static: no analytics, cookies, forms or third-party requests. Fonts are self-hosted.
 
-## Content structure
+## Content
 
-- `/` — runnable demo, execution model, detection heuristics, response, and technical notes
-- `/demo` — guided safe simulation
-- `/how-it-works` — complete and more technical attack-chain explanation
-- `/news` — curated research and source library
+Everything lives on `/`. `/demo`, `/how-it-works` and `/news` are kept as redirects to the matching sections for old links. Facts and sources are in `src/pages/index.astro` and `src/components/Reading.astro`; update the `reviewed` date in `index.astro` when you re-check them.
 
-The site is built with Astro and is intentionally static: no analytics, forms, accounts, or backend services. The production build adds a minimal Cloudflare-compatible asset worker so the same static output can be hosted by Sites.
+`npm run build:sites` additionally wraps the output in a small Cloudflare-compatible asset worker (`src/sites-worker.js`).

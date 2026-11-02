@@ -1,6 +1,6 @@
 # ClickFix.fyi
 
-A one-page guide to ClickFix, the scam where a web page tricks you into pasting a command that installs malware. It leads with the one rule people need, has a safe in-page demo, says what to do if you already ran a command, and has a technical section and sources for IT teams.
+A one-page guide to ClickFix, the scam where a web page tricks you into pasting a command that installs malware. It leads with the one rule people need, has a safe in-page demo, says what to do if you already ran a command, and has a timeline of how the scam has changed, with sources.
 
 ## Local development
 

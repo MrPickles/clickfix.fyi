@@ -25,5 +25,3 @@ npm run build
 ## Content
 
 Everything lives on `/`. `/demo`, `/how-it-works` and `/news` are kept as redirects to the matching sections for old links. Facts and their sources live in the timeline in `src/pages/index.astro`; update the `reviewed` date in `index.astro` when you re-check them.
-
-`npm run build:sites` additionally wraps the output in a small Cloudflare-compatible asset worker (`src/sites-worker.js`).

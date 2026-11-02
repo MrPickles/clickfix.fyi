@@ -1,0 +1,247 @@
+---
+// Drawn mockups of common ClickFix lures. Deliberately generic: no real logos or brand names.
+---
+
+<ul class="lures">
+  <li>
+    <div class="shot shot-check" aria-hidden="true">
+      <div class="chk-card">
+        <span class="chk-box"></span>
+        <span>Verify you are human</span>
+      </div>
+      <div class="chk-steps">
+        <p>Verification steps</p>
+        <ol>
+          <li>Press <b>Win</b> + <b>R</b></li>
+          <li>Press <b>Ctrl</b> + <b>V</b></li>
+          <li>Press <b>Enter</b></li>
+        </ol>
+      </div>
+    </div>
+    <p class="cap"><strong>A human check</strong> that “fails” and asks you to verify by pasting.</p>
+  </li>
+
+  <li>
+    <div class="shot shot-error" aria-hidden="true">
+      <div class="err-icon">!</div>
+      <p class="err-title">This page can’t be displayed</p>
+      <p class="err-sub">A font or plugin is missing.</p>
+      <span class="err-btn">Copy fix</span>
+    </div>
+    <p class="cap"><strong>A browser or document error</strong> with a “fix” to copy.</p>
+  </li>
+
+  <li>
+    <div class="shot shot-call" aria-hidden="true">
+      <div class="call-tiles"><span></span><span></span></div>
+      <div class="call-alert">
+        <p>Microphone not detected</p>
+        <span>Fix and join</span>
+      </div>
+    </div>
+    <p class="cap"><strong>A video call that won’t connect</strong> until you “fix” your mic or camera.</p>
+  </li>
+
+  <li>
+    <div class="shot shot-update" aria-hidden="true">
+      <div class="upd-spinner"></div>
+      <p>Working on updates 98%</p>
+      <p class="upd-small">To finish, press Win + R, then Ctrl + V</p>
+    </div>
+    <p class="cap"><strong>A fake Windows update</strong> that takes over the whole screen.</p>
+  </li>
+</ul>
+
+<p class="also">
+  Also seen: file-sharing pages that ask you to paste a “file path” into File Explorer, and Microsoft sign-ins that
+  ask you to paste a link back into the page.
+</p>
+
+<style>
+  .lures {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+    gap: 2rem 1.5rem;
+    margin-top: 2rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .shot {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border: 1px solid #c4c9cf;
+    border-radius: 10px;
+    font-family: var(--ui);
+  }
+
+  .cap {
+    margin-top: 0.75rem;
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+
+  .also {
+    max-width: var(--measure);
+    margin-top: 2rem;
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  /* Human check */
+  .shot-check {
+    display: grid;
+    align-content: center;
+    gap: 0.6rem;
+    padding: 1rem;
+    background: #f6f7f9;
+  }
+
+  .chk-card {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    border: 1px solid #d3d7dc;
+    border-radius: 4px;
+    padding: 0.6rem 0.7rem;
+    background: #fff;
+    font-size: 0.8rem;
+  }
+
+  .chk-box {
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 2px solid #8b939c;
+    border-radius: 3px;
+  }
+
+  .chk-steps {
+    border-left: 3px solid var(--lure);
+    padding: 0.4rem 0.6rem;
+    background: #fff;
+    font-size: 0.72rem;
+    line-height: 1.5;
+  }
+
+  .chk-steps p {
+    font-weight: 600;
+  }
+
+  .chk-steps ol {
+    padding-left: 1rem;
+  }
+
+  /* Browser error */
+  .shot-error {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 0.3rem;
+    padding: 1rem;
+    background: #fff;
+    text-align: center;
+  }
+
+  .err-icon {
+    width: 2rem;
+    height: 2rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #e9ebee;
+    color: #5b636d;
+    font-weight: 700;
+  }
+
+  .err-title {
+    margin-top: 0.3rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .err-sub {
+    color: #5b636d;
+    font-size: 0.72rem;
+  }
+
+  .err-btn {
+    margin-top: 0.5rem;
+    border-radius: 4px;
+    padding: 0.35rem 0.8rem;
+    background: var(--lure);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  /* Video call */
+  .shot-call {
+    position: relative;
+    padding: 0.6rem;
+    background: #202428;
+  }
+
+  .call-tiles {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+
+  .call-tiles span {
+    border-radius: 6px;
+    background: #353b42;
+  }
+
+  .call-alert {
+    position: absolute;
+    inset: 50% 1.25rem auto;
+    transform: translateY(-50%);
+    border-radius: 8px;
+    padding: 0.7rem;
+    background: #fff;
+    font-size: 0.78rem;
+    text-align: center;
+  }
+
+  .call-alert p {
+    font-weight: 600;
+  }
+
+  .call-alert span {
+    display: inline-block;
+    margin-top: 0.45rem;
+    border-radius: 999px;
+    padding: 0.25rem 0.7rem;
+    background: var(--lure);
+    color: #fff;
+    font-size: 0.72rem;
+  }
+
+  /* Windows update */
+  .shot-update {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 0.4rem;
+    padding: 1rem;
+    background: #0f4c8a;
+    color: #fff;
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  .upd-spinner {
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-bottom: 0.3rem;
+    border: 3px solid rgb(255 255 255 / 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+  }
+
+  .upd-small {
+    color: rgb(255 255 255 / 0.75);
+    font-size: 0.68rem;
+  }
+</style>

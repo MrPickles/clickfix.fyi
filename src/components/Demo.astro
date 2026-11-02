@@ -4,14 +4,7 @@
 // That command contacts no server: it only prints a message.
 ---
 
-<div class="demo" data-demo data-os="windows" data-step="1">
-  <fieldset class="os-picker">
-    <legend>Show the version for</legend>
-    <label><input type="radio" name="demo-os" value="windows" checked /> Windows</label>
-    <label><input type="radio" name="demo-os" value="macos" /> Mac</label>
-    <label><input type="radio" name="demo-os" value="linux" /> Linux</label>
-  </fieldset>
-
+<div class="demo" data-demo data-step="1">
   <div class="demo-grid">
     <div class="stage">
       <div class="fake-browser" aria-label="A fake website, part of the demo" role="group">
@@ -37,19 +30,9 @@
               <code>HUMAN-4821</code>
               <button class="fake-copy" type="button" data-copy>Copy</button>
             </div>
-            <ol class="fake-steps" data-for="windows">
+            <ol class="fake-steps">
               <li>Press <kbd>Win</kbd> + <kbd>R</kbd></li>
               <li>Press <kbd>Ctrl</kbd> + <kbd>V</kbd></li>
-              <li>Press <kbd>Enter</kbd></li>
-            </ol>
-            <ol class="fake-steps" data-for="macos">
-              <li>Press <kbd>⌘</kbd> + <kbd>Space</kbd>, type <b>Terminal</b>, press <kbd>Return</kbd></li>
-              <li>Press <kbd>⌘</kbd> + <kbd>V</kbd></li>
-              <li>Press <kbd>Return</kbd></li>
-            </ol>
-            <ol class="fake-steps" data-for="linux">
-              <li>Press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd></li>
-              <li>Press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd></li>
               <li>Press <kbd>Enter</kbd></li>
             </ol>
           </div>
@@ -58,22 +41,15 @@
 
       <div class="practice" data-practice hidden>
         <p class="practice-label">
-          Paste here, not in your real <span data-tool-name>Run box</span>. Nothing here can run.
+          Paste here, not in your real Run box. Nothing here can run.
         </p>
 
-        <div class="run-dialog" data-for="windows">
+        <div class="run-dialog">
           <p class="run-title">Run</p>
           <p class="run-help">Type the name of a program, folder, document, or Internet resource, and Windows will open it for you.</p>
           <label class="run-row">
             <span>Open:</span>
             <input type="text" spellcheck="false" autocomplete="off" data-paste aria-label="Practice Run box" />
-          </label>
-        </div>
-
-        <div class="term" data-for="macos linux">
-          <label class="term-row">
-            <span class="term-prompt" aria-hidden="true" data-prompt>%</span>
-            <input type="text" spellcheck="false" autocomplete="off" data-paste aria-label="Practice terminal" />
           </label>
         </div>
 
@@ -96,66 +72,30 @@
 </div>
 
 <script>
-  type OS = "windows" | "macos" | "linux";
   type Step = 1 | 2 | 3 | 4;
 
   const MESSAGE = "clickfix.fyi: a web page just got you to run this. This one only prints text.";
-  const DECOY = "✅ I am not a robot - Verification ID: 4821";
+  const COMMAND = `powershell -NoExit -Command "Write-Host '${MESSAGE}'"`;
   const PADDING = 60;
+  const DECOY = "# ✅ I am not a robot - Verification ID: 4821";
+  const CLIPBOARD = `${COMMAND}${" ".repeat(PADDING)}${DECOY}`;
 
-  const payloads: Record<OS, { command: string; padding: number; decoy: string }> = {
-    windows: {
-      command: `powershell -NoExit -Command "Write-Host '${MESSAGE}'"`,
-      padding: PADDING,
-      decoy: `# ${DECOY}`,
-    },
-    macos: { command: `echo "${MESSAGE}"`, padding: 0, decoy: "" },
-    linux: { command: `echo "${MESSAGE}"`, padding: 0, decoy: "" },
-  };
-
-  const toolName: Record<OS, string> = { windows: "Run box", macos: "Terminal", linux: "terminal" };
-
-  const common: Record<1 | 2, [string, string]> = {
+  const notes: Record<Step, [string, string]> = {
     1: ["The lure", "<p>A fake check, like the ones planted on hacked sites. Click it.</p>"],
     2: ["The ask", "<p>The check “fails” and asks you to copy a code. Click Copy.</p>"],
-  };
-
-  const later: Record<OS, Record<3 | 4, [string, string]>> = {
-    windows: {
-      3: ["The switch", "<p>You didn’t copy <code>HUMAN-4821</code>. You copied a command. Paste it below to see.</p>"],
-      4: ["The disguise", "<p>The Run box shows only the decoy at the end. <kbd>Enter</kbd> would run everything in front of it.</p><p>Ran it for real? It only printed a message.</p>"],
-    },
-    macos: {
-      3: ["The switch", "<p>You didn’t copy <code>HUMAN-4821</code>. You copied a command. Paste it below to see.</p>"],
-      4: ["The disguise", "<p>Terminal shows the whole command, so real ones are scrambled to look like gibberish.</p><p>Ran it for real? It only printed a message.</p>"],
-    },
-    linux: {
-      3: ["The switch", "<p>You didn’t copy <code>HUMAN-4821</code>. You copied a command. Paste it below to see.</p>"],
-      4: ["The disguise", "<p>A terminal shows the whole command, so real ones are scrambled to look like gibberish.</p><p>Ran it for real? It only printed a message.</p>"],
-    },
+    3: ["The switch", "<p>You didn’t copy <code>HUMAN-4821</code>. You copied a command. Paste it below to see.</p>"],
+    4: [
+      "The disguise",
+      "<p>The Run box shows only the decoy at the end. <kbd>Enter</kbd> would run everything in front of it.</p><p>On a Mac the page sends you to Terminal instead. Same trick.</p>",
+    ],
   };
 
   const root = document.querySelector<HTMLElement>("[data-demo]");
 
   if (root) {
     const $ = <T extends Element = HTMLElement>(s: string) => root.querySelector<T>(s)!;
-    const $$ = <T extends Element = HTMLElement>(s: string) => Array.from(root.querySelectorAll<T>(s));
-
-    let os: OS = detectOS();
+    const input = $<HTMLInputElement>("[data-paste]");
     let copied = false;
-
-    function detectOS(): OS {
-      const nav = navigator as Navigator & { userAgentData?: { platform?: string } };
-      const hint = `${nav.userAgentData?.platform ?? ""} ${navigator.platform ?? ""} ${navigator.userAgent}`.toLowerCase();
-      if (hint.includes("mac") || hint.includes("iphone") || hint.includes("ipad")) return "macos";
-      if (hint.includes("linux") && !hint.includes("android")) return "linux";
-      return "windows";
-    }
-
-    function clipboardText(target: OS = os) {
-      const p = payloads[target];
-      return p.padding ? `${p.command}${" ".repeat(p.padding)}${p.decoy}` : p.command;
-    }
 
     function setStep(step: Step) {
       root!.dataset.step = String(step);
@@ -165,53 +105,38 @@
       $("[data-reveal]").hidden = step !== 4;
       $("[data-reset]").hidden = step === 1;
       $("[data-fill]").hidden = !(step === 3 && !copied);
-      const copy = $<HTMLButtonElement>("[data-copy]");
-      copy.textContent = step >= 3 ? "Copied" : "Copy";
-      const [title, body] = step <= 2 ? common[step as 1 | 2] : later[os][step as 3 | 4];
-      $("[data-note-title]").textContent = title;
-      $("[data-note-body]").innerHTML = body;
-    }
-
-    function setOS(next: OS) {
-      os = next;
-      root!.dataset.os = next;
-      $$<HTMLInputElement>("input[name=demo-os]").forEach((r) => (r.checked = r.value === next));
-      $$("[data-for]").forEach((el) => (el.hidden = !el.dataset.for!.split(" ").includes(next)));
-      $("[data-tool-name]").textContent = toolName[next];
-      $("[data-prompt]").textContent = next === "macos" ? "%" : "$";
-      reset();
+      $("[data-copy]").textContent = step >= 3 ? "Copied" : "Copy";
+      $("[data-note-title]").textContent = notes[step][0];
+      $("[data-note-body]").innerHTML = notes[step][1];
     }
 
     function reset() {
       copied = false;
-      $$<HTMLInputElement>("[data-paste]").forEach((i) => (i.value = ""));
+      input.value = "";
       setStep(1);
     }
 
     function renderReveal(pasted: string | null) {
-      const p = payloads[os];
       const clip = $("[data-clip]");
       clip.replaceChildren();
-      const add = (cls: string, text: string) => {
+      for (const [cls, text] of [
+        ["part-cmd", COMMAND],
+        ["part-pad", "·".repeat(PADDING)],
+        ["part-decoy", DECOY],
+      ]) {
         const span = document.createElement("span");
         span.className = cls;
         span.textContent = text;
         clip.append(span);
-      };
-      add("part-cmd", p.command);
-      if (p.padding) {
-        add("part-pad", "·".repeat(p.padding));
-        add("part-decoy", p.decoy);
       }
 
-      const parts: [string, string][] = [["part-cmd", "The command that runs"]];
-      if (p.padding) {
-        parts.push(["part-pad", `${p.padding} spaces to push it out of view`]);
-        parts.push(["part-decoy", "The decoy you see"]);
-      }
       const dl = $("[data-parts]");
       dl.replaceChildren();
-      for (const [cls, label] of parts) {
+      for (const [cls, label] of [
+        ["part-cmd", "The command that runs"],
+        ["part-pad", `${PADDING} spaces to push it out of view`],
+        ["part-decoy", "The decoy you see"],
+      ]) {
         const dt = document.createElement("dt");
         dt.className = cls;
         dt.setAttribute("aria-hidden", "true");
@@ -219,7 +144,7 @@
         dd.textContent = label;
         dl.append(dt, dd);
       }
-      if (pasted !== null && pasted.trim() !== clipboardText().trim()) {
+      if (pasted !== null && pasted.trim() !== CLIPBOARD.trim()) {
         const dd = document.createElement("dd");
         dd.className = "mismatch";
         dd.textContent = "That’s not what the demo copied; your clipboard held something else. Above is what it copied.";
@@ -227,7 +152,7 @@
       }
     }
 
-    function showPasted(input: HTMLInputElement, pasted: string | null) {
+    function showPasted(pasted: string | null) {
       requestAnimationFrame(() => {
         input.scrollLeft = input.scrollWidth;
         renderReveal(pasted);
@@ -239,7 +164,7 @@
 
     $("[data-copy]").addEventListener("click", async () => {
       try {
-        await navigator.clipboard.writeText(clipboardText());
+        await navigator.clipboard.writeText(CLIPBOARD);
         copied = true;
       } catch {
         copied = false;
@@ -247,67 +172,28 @@
       setStep(3);
     });
 
-    $$<HTMLInputElement>("[data-paste]").forEach((input) => {
-      input.addEventListener("paste", (event) => {
-        const text = event.clipboardData?.getData("text") ?? null;
-        showPasted(input, text);
-      });
-      input.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-          event.preventDefault();
-          if (input.value) showPasted(input, input.value);
-        }
-      });
+    input.addEventListener("paste", (event) => showPasted(event.clipboardData?.getData("text") ?? null));
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        if (input.value) showPasted(input.value);
+      }
     });
 
     $("[data-fill]").addEventListener("click", () => {
-      const input = $$<HTMLInputElement>("[data-paste]").find((i) => !i.closest("[hidden]"))!;
-      input.value = clipboardText();
+      input.value = CLIPBOARD;
       input.focus();
-      showPasted(input, null);
+      showPasted(null);
     });
 
     $("[data-reset]").addEventListener("click", reset);
-    $$<HTMLInputElement>("input[name=demo-os]").forEach((r) =>
-      r.addEventListener("change", () => setOS(r.value as OS)),
-    );
-
-    setOS(os);
+    setStep(1);
   }
 </script>
 
 <style>
   .demo {
     margin-top: 2rem;
-  }
-
-  .os-picker {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 1.25rem;
-    margin: 0 0 1rem;
-    border: 0;
-    padding: 0;
-    font-family: var(--ui);
-    font-size: 0.9rem;
-  }
-
-  .os-picker legend {
-    float: left;
-    margin-right: 0.5rem;
-    padding: 0;
-    color: var(--muted);
-  }
-
-  .os-picker label {
-    display: inline-flex;
-    gap: 0.35rem;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  .os-picker input {
-    accent-color: var(--ink);
   }
 
   .demo-grid {
@@ -503,40 +389,6 @@
     padding: 0.35rem 0.45rem;
     background: #fff;
     font: 0.9rem var(--ui);
-  }
-
-  .term {
-    max-width: 34rem;
-    border-radius: 8px;
-    padding: 0.9rem 1rem;
-    background: #1d2126;
-    color: #e6e9ec;
-  }
-
-  .term-row {
-    display: flex;
-    gap: 0.6rem;
-    align-items: center;
-    font: 0.9rem var(--mono);
-  }
-
-  .term-prompt {
-    color: #8fd3a8;
-  }
-
-  .term-row input {
-    flex: 1;
-    min-width: 0;
-    border: 0;
-    padding: 0.2rem 0;
-    background: transparent;
-    color: inherit;
-    font: inherit;
-    caret-color: #e6e9ec;
-  }
-
-  .term-row input:focus-visible {
-    outline-offset: 6px;
   }
 
   .plain-button {

@@ -31,8 +31,12 @@
           </div>
 
           <div class="fake-panel" data-panel="instructions" hidden>
-            <p class="fake-title">Verification failed</p>
-            <p class="fake-sub">Complete these steps to prove you’re human:</p>
+            <p class="fake-title">One more step</p>
+            <p class="fake-sub">Copy your verification code, then:</p>
+            <div class="fake-code">
+              <code>HUMAN-4821</code>
+              <button class="fake-copy" type="button" data-copy>Copy</button>
+            </div>
             <ol class="fake-steps" data-for="windows">
               <li>Press <kbd>Win</kbd> + <kbd>R</kbd></li>
               <li>Press <kbd>Ctrl</kbd> + <kbd>V</kbd></li>
@@ -54,8 +58,7 @@
 
       <div class="practice" data-practice hidden>
         <p class="practice-label">
-          Paste into this box instead of your real <span data-tool-name>Run box</span>.
-          It’s part of this page and can’t run anything.
+          Paste here, not in your real <span data-tool-name>Run box</span>. Nothing here can run.
         </p>
 
         <div class="run-dialog" data-for="windows">
@@ -74,18 +77,18 @@
           </label>
         </div>
 
-        <button class="plain-button" type="button" data-fill hidden>Your browser blocked the copy. Fill the box for me.</button>
+        <button class="plain-button" type="button" data-fill hidden>Copy was blocked. Fill it in for me.</button>
       </div>
 
       <div class="reveal" data-reveal hidden aria-live="polite">
-        <p class="reveal-label">Everything the page put on your clipboard:</p>
+        <p class="reveal-label">What you actually copied:</p>
         <p class="clip" data-clip></p>
         <dl class="parts" data-parts></dl>
       </div>
     </div>
 
     <div class="notes" aria-live="polite">
-      <h3 data-note-title>Step 1: the lure</h3>
+      <h3 data-note-title>The lure</h3>
       <div data-note-body></div>
       <button class="plain-button reset" type="button" data-reset hidden>Start the demo again</button>
     </div>
@@ -94,6 +97,7 @@
 
 <script>
   type OS = "windows" | "macos" | "linux";
+  type Step = 1 | 2 | 3 | 4;
 
   const MESSAGE = "clickfix.fyi: a web page just got you to run this. This one only prints text.";
   const DECOY = "✅ I am not a robot - Verification ID: 4821";
@@ -111,21 +115,23 @@
 
   const toolName: Record<OS, string> = { windows: "Run box", macos: "Terminal", linux: "terminal" };
 
-  const notes: Record<OS, Record<1 | 2 | 3, [string, string]>> = {
+  const common: Record<1 | 2, [string, string]> = {
+    1: ["The lure", "<p>A fake check, like the ones planted on hacked sites. Click it.</p>"],
+    2: ["The ask", "<p>The check “fails” and asks you to copy a code. Click Copy.</p>"],
+  };
+
+  const later: Record<OS, Record<3 | 4, [string, string]>> = {
     windows: {
-      1: ["Step 1: the lure", "<p>This is a fake verification page, like the ones attackers put on hacked websites. Click the checkbox the way you would on a real one.</p>"],
-      2: ["Step 2: the clipboard", "<p>The page just copied text to your clipboard. You never pressed Copy. Pages are allowed to do this whenever you click something on them.</p><p>Now it tells you to press <kbd>Win</kbd> + <kbd>R</kbd>, which opens Windows’ Run box, a place that runs whatever you type into it. Use the practice box instead.</p>"],
-      3: ["Step 3: what you’d see", "<p>The Run box shows only a reassuring line about not being a robot. The command sits in front of it, pushed out of view by a run of spaces. Pressing <kbd>Enter</kbd> would run all of it.</p><p>If you did paste this into your real Run box, a PowerShell window opened and printed a message. Nothing else happened. A real attack would have installed malware at this point, usually with the window hidden.</p>"],
+      3: ["The switch", "<p>You didn’t copy <code>HUMAN-4821</code>. You copied a command. Paste it below to see.</p>"],
+      4: ["The disguise", "<p>The Run box shows only the decoy at the end. <kbd>Enter</kbd> would run everything in front of it.</p><p>Ran it for real? It only printed a message.</p>"],
     },
     macos: {
-      1: ["Step 1: the lure", "<p>This is a fake verification page, like the ones attackers put on hacked websites. Click the checkbox the way you would on a real one.</p>"],
-      2: ["Step 2: the clipboard", "<p>The page just copied text to your clipboard. You never pressed Copy. Pages are allowed to do this whenever you click something on them.</p><p>Now it tells you to open Terminal, an app that runs any command you give it. Use the practice box instead.</p>"],
-      3: ["Step 3: what you’d see", "<p>In Terminal you can see the whole command, so Mac attacks usually disguise it as a block of scrambled-looking text that’s decoded and run in one go.</p><p>If you did paste this into Terminal, it printed a message. Nothing else happened. A real attack would have downloaded and run malware, often a password and crypto-wallet stealer.</p>"],
+      3: ["The switch", "<p>You didn’t copy <code>HUMAN-4821</code>. You copied a command. Paste it below to see.</p>"],
+      4: ["The disguise", "<p>Terminal shows the whole command, so real ones are scrambled to look like gibberish.</p><p>Ran it for real? It only printed a message.</p>"],
     },
     linux: {
-      1: ["Step 1: the lure", "<p>This is a fake verification page, like the ones attackers put on hacked websites. Click the checkbox the way you would on a real one.</p>"],
-      2: ["Step 2: the clipboard", "<p>The page just copied text to your clipboard. You never pressed Copy. Pages are allowed to do this whenever you click something on them.</p><p>Now it tells you to open a terminal and paste. Use the practice box instead.</p>"],
-      3: ["Step 3: what you’d see", "<p>In a terminal you can see the whole command, so attackers usually disguise it as scrambled-looking text that’s decoded and run in one go.</p><p>If you did paste this into a terminal, it printed a message. Nothing else happened. A real attack would have downloaded and run malware.</p>"],
+      3: ["The switch", "<p>You didn’t copy <code>HUMAN-4821</code>. You copied a command. Paste it below to see.</p>"],
+      4: ["The disguise", "<p>A terminal shows the whole command, so real ones are scrambled to look like gibberish.</p><p>Ran it for real? It only printed a message.</p>"],
     },
   };
 
@@ -151,15 +157,17 @@
       return p.padding ? `${p.command}${" ".repeat(p.padding)}${p.decoy}` : p.command;
     }
 
-    function setStep(step: 1 | 2 | 3) {
+    function setStep(step: Step) {
       root!.dataset.step = String(step);
       $("[data-panel=check]").hidden = step !== 1;
       $("[data-panel=instructions]").hidden = step === 1;
-      $("[data-practice]").hidden = step === 1;
-      $("[data-reveal]").hidden = step !== 3;
+      $("[data-practice]").hidden = step < 3;
+      $("[data-reveal]").hidden = step !== 4;
       $("[data-reset]").hidden = step === 1;
-      $("[data-fill]").hidden = !(step === 2 && !copied);
-      const [title, body] = notes[os][step];
+      $("[data-fill]").hidden = !(step === 3 && !copied);
+      const copy = $<HTMLButtonElement>("[data-copy]");
+      copy.textContent = step >= 3 ? "Copied" : "Copy";
+      const [title, body] = step <= 2 ? common[step as 1 | 2] : later[os][step as 3 | 4];
       $("[data-note-title]").textContent = title;
       $("[data-note-body]").innerHTML = body;
     }
@@ -198,8 +206,8 @@
 
       const parts: [string, string][] = [["part-cmd", "The command that runs"]];
       if (p.padding) {
-        parts.push(["part-pad", `${p.padding} spaces (shown as dots) that push the command out of view`]);
-        parts.push(["part-decoy", "The only part the Run box shows. The # makes PowerShell ignore it."]);
+        parts.push(["part-pad", `${p.padding} spaces to push it out of view`]);
+        parts.push(["part-decoy", "The decoy you see"]);
       }
       const dl = $("[data-parts]");
       dl.replaceChildren();
@@ -214,7 +222,7 @@
       if (pasted !== null && pasted.trim() !== clipboardText().trim()) {
         const dd = document.createElement("dd");
         dd.className = "mismatch";
-        dd.textContent = "What you pasted doesn’t match what the demo copied, so your clipboard probably held something else. The text above is what the demo copied.";
+        dd.textContent = "That’s not what the demo copied; your clipboard held something else. Above is what it copied.";
         dl.append(dd);
       }
     }
@@ -223,18 +231,20 @@
       requestAnimationFrame(() => {
         input.scrollLeft = input.scrollWidth;
         renderReveal(pasted);
-        setStep(3);
+        setStep(4);
       });
     }
 
-    $("[data-check]").addEventListener("click", async () => {
+    $("[data-check]").addEventListener("click", () => setStep(2));
+
+    $("[data-copy]").addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(clipboardText());
         copied = true;
       } catch {
         copied = false;
       }
-      setStep(2);
+      setStep(3);
     });
 
     $$<HTMLInputElement>("[data-paste]").forEach((input) => {
@@ -400,6 +410,38 @@
     border: 2px solid #8b939c;
     border-radius: 4px;
     background: #fff;
+  }
+
+  .fake-code {
+    display: flex;
+    align-items: stretch;
+    margin-top: 1rem;
+    border: 1px solid #c9ced4;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .fake-code code {
+    flex: 1;
+    padding: 0.65rem 0.8rem;
+    background: #f9fafb;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+  }
+
+  .fake-copy {
+    border: 0;
+    padding: 0 1.1rem;
+    background: var(--lure);
+    color: #fff;
+    cursor: pointer;
+    font-family: var(--ui);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .fake-copy:hover {
+    background: #1d4fa3;
   }
 
   .fake-steps {

